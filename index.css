@@ -180,3 +180,23 @@ body {
         width: 100px;
     }
 }
+.help-table {
+    display: table;
+    margin: 10px 0;
+}
+
+.help-row {
+    display: table-row;
+}
+
+.help-command-cell {
+    display: table-cell;
+    padding-right: 20px;
+    vertical-align: top;
+    width: 100px;
+}
+
+.help-desc-cell {
+    display: table-cell;
+    vertical-align: top;
+}
