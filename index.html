@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vaishnav@dev:~$ terminal</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="terminal-button close"></div>
+                <div class="terminal-button minimize"></div>
+                <div class="terminal-button maximize"></div>
+            </div>
+            <div class="terminal-title">vaishnav@dev: ~/portfolio</div>
+        </div>
+        
+        <div class="terminal-content" id="terminal-content">
+            <pre class="ascii-art">
+╔══════════════════════════════════════════════════════════════╗
+║                Welcome to Vaishnav's Portfolio               ║
+║                                                              ║
+║  Type 'help' to see available commands                       ║
+║  Type 'ls' to see directory contents                         ║
+║  Type 'curl -O resume.pdf' to download my resume             ║
+╚══════════════════════════════════════════════════════════════╝
+            </pre>
+            
+            <div class="command-line">
+                <span class="prompt">vaishnav@dev:~/portfolio$</span>
+                <input type="text" class="user-input" id="user-input" autofocus>
+                <span class="cursor">█</span>
+            </div>
+        </div>
+    </div>
+    
+    <script src="index.js"></script>
+</body>
+</html>
