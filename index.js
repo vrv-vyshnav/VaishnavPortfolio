@@ -1,620 +1,12 @@
 class Terminal {
   constructor() {
-    this.currentPath = "/home/vaishnav/portfolio";
-    this.userName = "vaishnav";
-    this.hostName = "dev";
+    this.currentPath = "";
+    this.userName = "";
+    this.hostName = "";
     this.history = [];
     this.historyIndex = -1;
-
-    this.fileSystem = {
-      "/home/vaishnav/portfolio": {
-        type: "directory",
-        contents: {
-          "about.txt": {
-            type: "file",
-            content: `Name: Vaishnav P
-Role: Jr. Software Engineer
-Company: Eloit Innovation Private Limited
-Location: Kerala, India
-Experience: 2+ years
-Email: VaishnavP.intr@gmail.com
-Phone: +91 8129637037
-LinkedIn: linkedin.com/in/vaishnav-p
-
-About:
-======
-Passionate Jr. Software Engineer with expertise in full-stack development,
-ERP systems, and scalable application architecture. Currently working as a
-core developer for Edisapp, an AI-powered school management ERP platform
-serving 180+ institutions across four continents.
-
-I specialize in building robust, secure applications using Clean Architecture
-principles and modern web technologies. My work focuses on creating scalable
-solutions that meet international standards including ISO 27001 and ISO 9001.
-
-Specialties:
-- Full-stack web development (C#, JavaScript, Python)
-- ERP and management systems
-- Database design and optimization
-- Microservices architecture
-- Agile development practices
-- Clean Architecture implementation`,
-          },
-          "experience.txt": {
-            type: "file",
-            content: `WORK EXPERIENCE
-===============
-
-Jr. Software Engineer
-Eloit Innovation Private Limited
-March 2023 - Present
-
-• Core developer for Edisapp, Eloit's AI-powered school management ERP 
-  platform, serving 180+ institutions across four continents.
-
-• Designed and built scalable modules using Wisdom Architecture and Clean 
-  Architecture principles to ensure modularity and high performance.
-
-• Developed microservices and backend APIs using .NET MVC and RESTful 
-  API standards.
-
-• Worked extensively with MS SQL Server for database design, writing 
-  optimized stored procedures, functions, and performance tuning.
-
-• Implemented secure, high-performing web applications aligned with 
-  ISO 27001 (data security) and ISO 9001 (quality management) standards.
-
-• Collaborated in Agile Scrum teams, participating in sprint planning, 
-  peer code reviews, and continuous integration processes.
-
-INTERNSHIP
-==========
-
-Frontend Developer
-Nerchapetti
-Aug 2021 - Feb 2022
-
-• Developed Frontend Web application from scratch using React.js
-• Managed the bug report throughout the internship period
-
-ACHIEVEMENTS
-============
-
-Team Achiever Award - Eloit Innovation Private Limited
-Awarded for outstanding individual performance and significant 
-contribution to team success.`,
-          },
-          projects: {
-            type: "directory",
-            contents: {
-              "bom-manager": {
-                type: "directory",
-                contents: {
-                  "README.md": {
-                    type: "file",
-                    content: `# Component Bill of Materials Manager (BOM Manager)
-
-A centralized component BOM management system to reduce repeated manual 
-effort and duplication of components.
-
-## Duration: May 2020 - June 2021
-
-## Technologies Used:
-- Backend: PHP
-- Database: MySQL
-- Server: Apache
-- Stack: LAMP (Linux, Apache, MySQL, PHP)
-
-## Features:
-- Centralized component management
-- Reduction of manual effort and duplication
-- Streamlined BOM creation and maintenance
-- Component tracking and organization
-- User-friendly interface for component management
-
-## Description:
-Developed a comprehensive BOM management system that centralizes component 
-information and reduces manual effort in creating and maintaining bills of 
-materials. The system helps organizations track components efficiently and 
-eliminates duplication of effort across different projects.`,
-                  },
-                },
-              },
-              "lets-go-everywhere": {
-                type: "directory",
-                contents: {
-                  "README.md": {
-                    type: "file",
-                    content: `# Let's Go Everywhere
-
-A comprehensive bus travel guide application that helps travelers with 
-routes, stops, maps, and real-time tracking.
-
-## Duration: May 2021 - 2022
-
-## Technologies Used:
-- Backend: Django
-- Database: MySQL
-- Frontend: JavaScript
-- Maps Integration: Location tracking APIs
-
-## Features:
-- Route guidance for bus travelers
-- Display of all possible stops on the route to destination
-- Interactive maps with real-time location tracking
-- Estimated remaining time to reach destination
-- Comprehensive stop information
-- User-friendly interface for travel planning
-
-## Description:
-Developed a full-stack web application to assist bus travelers with 
-comprehensive route information. The application provides real-time 
-tracking, displays all stops along the route, shows interactive maps, 
-and calculates estimated arrival times to help travelers plan their 
-journeys effectively.
-
-## Key Achievements:
-- Implemented real-time location tracking
-- Created intuitive user interface for route planning
-- Integrated mapping services for visual route display
-- Developed accurate time estimation algorithms`,
-                  },
-                },
-              },
-              edisapp: {
-                type: "directory",
-                contents: {
-                  "README.md": {
-                    type: "file",
-                    content: `# Edisapp - AI-Powered School Management ERP
-
-A comprehensive school management ERP platform serving 180+ institutions 
-across four continents.
-
-## Role: Core Developer
-## Company: Eloit Innovation Private Limited
-## Duration: March 2023 - Present
-
-## Technologies Used:
-- Backend: ASP.NET Core MVC, C#
-- Frontend: Vue.js, JavaScript
-- Database: MS SQL Server
-- Architecture: Clean Architecture, Wisdom Architecture
-- Tools: Telerik Kendo UI, Git
-- Standards: ISO 27001, ISO 9001
-
-## Key Responsibilities:
-- Core development of AI-powered school management features
-- Design and implementation of scalable modules
-- Microservices development using .NET MVC
-- RESTful API development and maintenance
-- Database design and optimization
-- Performance tuning and security implementation
-
-## Features Developed:
-- Student information management
-- Academic performance tracking
-- Administrative workflows
-- Reporting and analytics
-- Multi-institution support
-- AI-powered insights and recommendations
-
-## Achievements:
-- Successfully serving 180+ institutions globally
-- Implemented ISO 27001 and ISO 9001 compliant solutions
-- Contributed to high-performance, scalable architecture
-- Participated in Agile development processes
-- Received Team Achiever Award for outstanding performance
-
-## Architecture:
-- Clean Architecture principles for maintainability
-- Wisdom Architecture for modularity
-- Microservices for scalability
-- RESTful APIs for integration`,
-                  },
-                },
-              },
-            },
-          },
-          "skills.conf": {
-            type: "file",
-            content: `# Skills Configuration File
-
-[languages]
-C#=advanced
-JavaScript=advanced
-SQL=advanced
-Python=intermediate
-HTML/CSS=intermediate
-
-[web_technologies]
-Vue.js=intermediate
-ASP.NET Core MVC=advanced
-RESTful APIs=advanced
-Microservices=intermediate
-
-[databases]
-MS SQL Server=advanced
-MySQL=intermediate
-Database Design=advanced
-Stored Procedures=advanced
-Performance Tuning=intermediate
-
-[tools_and_frameworks]
-Telerik Kendo UI=intermediate
-Git=intermediate
-Visual Studio=advanced
-Clean Architecture=intermediate
-Wisdom Architecture=intermediate
-
-[cloud_and_devops]
-AWS=beginner
-Linux=intermediate
-Apache=intermediate
-
-[development_practices]
-Agile/Scrum=intermediate
-Code Reviews=intermediate
-Continuous Integration=intermediate
-Test-Driven Development=beginner
-API Documentation=intermediate
-
-[standards_and_compliance]
-ISO 27001=intermediate
-ISO 9001=intermediate
-Data Security=intermediate
-Quality Management=intermediate
-
-[soft_skills]
-Team Collaboration=advanced
-Problem Solving=advanced
-Communication=intermediate
-Leadership=intermediate
-Mentoring=beginner`,
-          },
-          "education.txt": {
-            type: "file",
-            content: `EDUCATION
-=========
-
-Bachelor of Computer Science
-College of Applied Science
-2019 - 2022
-
-Relevant Coursework:
-- Data Structures and Algorithms
-- Database Management Systems
-- Software Engineering
-- Web Technologies
-- Object-Oriented Programming
-- Computer Networks
-- Operating Systems
-
-Higher Secondary Education
-Sreenarayana Higher Secondary School
-2017 - 2019
-
-Stream: Computer Science
-- Mathematics
-- Physics
-- Chemistry
-- Computer Science
-
-Academic Projects:
-- Component BOM Manager (Final Year Project)
-- Various web development projects
-- Database design and implementation projects`,
-          },
-          "contact.info": {
-            type: "file",
-            content: `Contact Information
-===================
-
-Email: VaishnavP.intr@gmail.com
-Phone: +91 8129637037
-Location: Kerala, India
-
-Social Links:
--------------
-LinkedIn: https://linkedin.com/in/vaishnav-p
-GitHub: https://github.com/vaishnav-p (if available)
-
-Professional Details:
---------------------
-Current Position: Jr. Software Engineer
-Company: Eloit Innovation Private Limited
-Experience: 2+ years
-Availability: Open to opportunities
-
-Preferred Contact:
------------------
-Primary: Email
-Secondary: Phone
-Response Time: Within 24 hours
-Time Zone: IST (UTC+5:30)
-
-Technical Interests:
--------------------
-- Full-stack web development
-- ERP systems development
-- Database optimization
-- Clean architecture implementation
-- Microservices development
-- Cloud technologies (AWS)
-
-Career Goals:
-------------
-- Senior Software Engineer roles
-- Technical leadership positions
-- Specialization in enterprise applications
-- Cloud architecture expertise`,
-          },
-          "resume.pdf": {
-            type: "file",
-            content: "Binary resume file - Use curl -O resume.pdf to download",
-          },
-        },
-      },
-      "/home/vaishnav/portfolio/projects": {
-        type: "directory",
-        contents: {
-          "bom-manager": {
-            type: "directory",
-            contents: {
-              "README.md": {
-                type: "file",
-                content: `# Component Bill of Materials Manager (BOM Manager)
-
-A centralized component BOM management system to reduce repeated manual 
-effort and duplication of components.
-
-## Duration: May 2020 - June 2021
-
-## Technologies Used:
-- Backend: PHP
-- Database: MySQL
-- Server: Apache
-- Stack: LAMP (Linux, Apache, MySQL, PHP)
-
-## Features:
-- Centralized component management
-- Reduction of manual effort and duplication
-- Streamlined BOM creation and maintenance
-- Component tracking and organization
-- User-friendly interface for component management
-
-## Description:
-Developed a comprehensive BOM management system that centralizes component 
-information and reduces manual effort in creating and maintaining bills of 
-materials. The system helps organizations track components efficiently and 
-eliminates duplication of effort across different projects.`,
-              },
-            },
-          },
-          "lets-go-everywhere": {
-            type: "directory",
-            contents: {
-              "README.md": {
-                type: "file",
-                content: `# Let's Go Everywhere
-
-A comprehensive bus travel guide application that helps travelers with 
-routes, stops, maps, and real-time tracking.
-
-## Duration: May 2021 - 2022
-
-## Technologies Used:
-- Backend: Django
-- Database: MySQL
-- Frontend: JavaScript
-- Maps Integration: Location tracking APIs
-
-## Features:
-- Route guidance for bus travelers
-- Display of all possible stops on the route to destination
-- Interactive maps with real-time location tracking
-- Estimated remaining time to reach destination
-- Comprehensive stop information
-- User-friendly interface for travel planning
-
-## Description:
-Developed a full-stack web application to assist bus travelers with 
-comprehensive route information. The application provides real-time 
-tracking, displays all stops along the route, shows interactive maps, 
-and calculates estimated arrival times to help travelers plan their 
-journeys effectively.
-
-## Key Achievements:
-- Implemented real-time location tracking
-- Created intuitive user interface for route planning
-- Integrated mapping services for visual route display
-- Developed accurate time estimation algorithms`,
-              },
-            },
-          },
-          edisapp: {
-            type: "directory",
-            contents: {
-              "README.md": {
-                type: "file",
-                content: `# Edisapp - AI-Powered School Management ERP
-
-A comprehensive school management ERP platform serving 180+ institutions 
-across four continents.
-
-## Role: Core Developer
-## Company: Eloit Innovation Private Limited
-## Duration: March 2023 - Present
-
-## Technologies Used:
-- Backend: ASP.NET Core MVC, C#
-- Frontend: Vue.js, JavaScript
-- Database: MS SQL Server
-- Architecture: Clean Architecture, Wisdom Architecture
-- Tools: Telerik Kendo UI, Git
-- Standards: ISO 27001, ISO 9001
-
-## Key Responsibilities:
-- Core development of AI-powered school management features
-- Design and implementation of scalable modules
-- Microservices development using .NET MVC
-- RESTful API development and maintenance
-- Database design and optimization
-- Performance tuning and security implementation
-
-## Features Developed:
-- Student information management
-- Academic performance tracking
-- Administrative workflows
-- Reporting and analytics
-- Multi-institution support
-- AI-powered insights and recommendations
-
-## Achievements:
-- Successfully serving 180+ institutions globally
-- Implemented ISO 27001 and ISO 9001 compliant solutions
-- Contributed to high-performance, scalable architecture
-- Participated in Agile development processes
-- Received Team Achiever Award for outstanding performance
-
-## Architecture:
-- Clean Architecture principles for maintainability
-- Wisdom Architecture for modularity
-- Microservices for scalability
-- RESTful APIs for integration`,
-              },
-            },
-          },
-        },
-      },
-      "/home/vaishnav/portfolio/projects/bom-manager": {
-        type: "directory",
-        contents: {
-          "README.md": {
-            type: "file",
-            content: `# Component Bill of Materials Manager (BOM Manager)
-
-A centralized component BOM management system to reduce repeated manual 
-effort and duplication of components.
-
-## Duration: May 2020 - June 2021
-
-## Technologies Used:
-- Backend: PHP
-- Database: MySQL
-- Server: Apache
-- Stack: LAMP (Linux, Apache, MySQL, PHP)
-
-## Features:
-- Centralized component management
-- Reduction of manual effort and duplication
-- Streamlined BOM creation and maintenance
-- Component tracking and organization
-- User-friendly interface for component management
-
-## Description:
-Developed a comprehensive BOM management system that centralizes component 
-information and reduces manual effort in creating and maintaining bills of 
-materials. The system helps organizations track components efficiently and 
-eliminates duplication of effort across different projects.`,
-          },
-        },
-      },
-      "/home/vaishnav/portfolio/projects/lets-go-everywhere": {
-        type: "directory",
-        contents: {
-          "README.md": {
-            type: "file",
-            content: `# Let's Go Everywhere
-
-A comprehensive bus travel guide application that helps travelers with 
-routes, stops, maps, and real-time tracking.
-
-## Duration: May 2021 - 2022
-
-## Technologies Used:
-- Backend: Django
-- Database: MySQL
-- Frontend: JavaScript
-- Maps Integration: Location tracking APIs
-
-## Features:
-- Route guidance for bus travelers
-- Display of all possible stops on the route to destination
-- Interactive maps with real-time location tracking
-- Estimated remaining time to reach destination
-- Comprehensive stop information
-- User-friendly interface for travel planning
-
-## Description:
-Developed a full-stack web application to assist bus travelers with 
-comprehensive route information. The application provides real-time 
-tracking, displays all stops along the route, shows interactive maps, 
-and calculates estimated arrival times to help travelers plan their 
-journeys effectively.
-
-## Key Achievements:
-- Implemented real-time location tracking
-- Created intuitive user interface for route planning
-- Integrated mapping services for visual route display
-- Developed accurate time estimation algorithms`,
-          },
-        },
-      },
-      "/home/vaishnav/portfolio/projects/edisapp": {
-        type: "directory",
-        contents: {
-          "README.md": {
-            type: "file",
-            content: `# Edisapp - AI-Powered School Management ERP
-
-A comprehensive school management ERP platform serving 180+ institutions 
-across four continents.
-
-## Role: Core Developer
-## Company: Eloit Innovation Private Limited
-## Duration: March 2023 - Present
-
-## Technologies Used:
-- Backend: ASP.NET Core MVC, C#
-- Frontend: Vue.js, JavaScript
-- Database: MS SQL Server
-- Architecture: Clean Architecture, Wisdom Architecture
-- Tools: Telerik Kendo UI, Git
-- Standards: ISO 27001, ISO 9001
-
-## Key Responsibilities:
-- Core development of AI-powered school management features
-- Design and implementation of scalable modules
-- Microservices development using .NET MVC
-- RESTful API development and maintenance
-- Database design and optimization
-- Performance tuning and security implementation
-
-## Features Developed:
-- Student information management
-- Academic performance tracking
-- Administrative workflows
-- Reporting and analytics
-- Multi-institution support
-- AI-powered insights and recommendations
-
-## Achievements:
-- Successfully serving 180+ institutions globally
-- Implemented ISO 27001 and ISO 9001 compliant solutions
-- Contributed to high-performance, scalable architecture
-- Participated in Agile development processes
-- Received Team Achiever Award for outstanding performance
-
-## Architecture:
-- Clean Architecture principles for maintainability
-- Wisdom Architecture for modularity
-- Microservices for scalability
-- RESTful APIs for integration`,
-          },
-        },
-      },
-    };
+    this.fileSystem = {};
+    this.isLoading = true;
 
     this.commands = {
       help: this.help.bind(this),
@@ -636,12 +28,62 @@ across four continents.
       curl: this.curl.bind(this),
     };
 
-    this.initializeTerminal();
+    this.loadPortfolioData();
+  }
+
+  async loadPortfolioData() {
+    try {
+      const response = await fetch('portfolio-data.json');
+      const data = await response.json();
+      
+      this.userName = data.user.name;
+      this.hostName = data.user.hostname;
+      this.currentPath = data.user.homePath;
+      this.fileSystem = this.expandFileSystem(data.fileSystem);
+      this.isLoading = false;
+      
+      this.initializeTerminal();
+    } catch (error) {
+      console.error('Error loading portfolio data:', error);
+      this.addOutput(`<span class="error">Error loading portfolio data. Please refresh the page.</span>`);
+    }
+  }
+
+  expandFileSystem(fileSystem) {
+    const expanded = {};
+    
+    function expandDirectory(path, contents) {
+      expanded[path] = {
+        type: "directory",
+        contents: {}
+      };
+      
+      Object.keys(contents).forEach(name => {
+        const item = contents[name];
+        if (item.type === "directory") {
+          const subPath = path + "/" + name;
+          expanded[path].contents[name] = item;
+          expandDirectory(subPath, item.contents);
+        } else {
+          expanded[path].contents[name] = item;
+        }
+      });
+    }
+    
+    Object.keys(fileSystem).forEach(path => {
+      expandDirectory(path, fileSystem[path].contents);
+    });
+    
+    return expanded;
   }
 
   initializeTerminal() {
+    if (this.isLoading) return;
+    
     const input = document.getElementById("user-input");
     const content = document.getElementById("terminal-content");
+
+    if (!input || !content) return;
 
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -673,12 +115,10 @@ across four continents.
       }
     });
 
-    // Keep input focused
     content.addEventListener("click", () => {
       input.focus();
     });
 
-    // Scroll to bottom when new content is added
     this.scrollToBottom();
   }
 
@@ -687,7 +127,6 @@ across four continents.
     const command = args[0];
     const params = args.slice(1);
 
-    // Display the command
     this.addOutput(
       `<span class="prompt">${this.getPrompt()}</span>${commandLine}`
     );
@@ -714,7 +153,6 @@ across four continents.
     output.className = "output";
     output.innerHTML = text;
 
-    // Remove the current input line
     const currentInput = content.querySelector(".command-line");
     if (currentInput) {
       currentInput.remove();
@@ -729,23 +167,21 @@ across four continents.
     const promptLine = document.createElement("div");
     promptLine.className = "command-line";
     promptLine.innerHTML = `
-                    <span class="prompt">${this.getPrompt()}</span>
-                    <input type="text" class="user-input" id="user-input" autofocus>
-                    <span class="cursor">█</span>
-                `;
+      <span class="prompt">${this.getPrompt()}</span>
+      <input type="text" class="user-input" id="user-input" autofocus>
+      <span class="cursor">█</span>
+    `;
     content.appendChild(promptLine);
 
-    // Re-initialize event listeners for new input
     const newInput = document.getElementById("user-input");
     newInput.focus();
 
-    // Copy event listeners
     this.initializeTerminal();
     this.scrollToBottom();
   }
 
   getPrompt() {
-    const shortPath = this.currentPath.replace("/home/john", "~");
+    const shortPath = this.currentPath.replace(`/home/${this.userName}`, "~");
     return `${this.userName}@${this.hostName}:${shortPath}$`;
   }
 
@@ -772,7 +208,7 @@ across four continents.
     }
   }
 
-  // Commands
+  // All the command methods remain the same...
   help() {
     this.addOutput(`<span class="success">Available Commands:</span>
                 
@@ -831,7 +267,7 @@ across four continents.
 
   cd(params) {
     if (params.length === 0) {
-      this.currentPath = "/home/john";
+      this.currentPath = `/home/${this.userName}`;
       return;
     }
 
@@ -845,7 +281,6 @@ across four continents.
     } else if (params[0] === ".") {
       targetPath = this.currentPath;
     } else {
-      // Check if directory exists in current location
       const currentDir = this.getCurrentDirectory();
       if (
         currentDir &&
@@ -1112,6 +547,7 @@ across four continents.
       );
     }
   }
+
   curl(params) {
     if (params.length === 0) {
       this.addOutput(
@@ -1121,12 +557,10 @@ across four continents.
     }
 
     if (params[0] === "-O" && params[1] === "resume.pdf") {
-      // Simulate download of resume.pdf
       const currentDir = this.getCurrentDirectory();
       if (currentDir.contents["resume.pdf"]) {
-        // Create a Blob and trigger download
         const link = document.createElement("a");
-        link.href = "Vaishnav_Resume.pdf"; // Assumes resume.pdf is in the public root
+        link.href = "Vaishnav_Resume.pdf";
         link.download = "Vaishnav_Resume.pdf";
         document.body.appendChild(link);
         link.click();
