@@ -625,15 +625,15 @@ class Terminal {
 
   showBootSequence () {
     const systemInfo = `
-      System Information:
-      ==================
-      OS: Portfolio Linux 2.0
-      Uptime: 2+ years in software engineering
-      Memory: Full-stack development skills loaded
-      Shell: /bin/vaishnav
+  System Information:
+  ==================
+  OS: Portfolio Linux 2.0
+  Uptime: 2+ years in software engineering
+  Memory: Full-stack development skills loaded
+  Shell: /bin/vaishnav
 
-      Status: Ready for new opportunities
-      Location: Kerala, India`
+  Status: Ready for new opportunities
+  Location: Kerala, India`
 
     // Create ASCII art element
     const asciiElement = document.createElement('pre')
