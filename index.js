@@ -650,12 +650,9 @@ class Terminal {
     content.appendChild(asciiElement)
     content.appendChild(systemElement)
 
-    // Type ASCII art first (fast)
-    // typeWriter(asciiElement, 5);
-
     // Then type system info (medium speed)
     setTimeout(() => {
-      typeWriter(systemInfo, systemElement, 20)
+      typeWriter(systemInfo, systemElement, 10)
     }, 1000)
 
     // Finally initialize terminal
@@ -665,7 +662,7 @@ class Terminal {
         `<span class="success">Terminal initialized. Type 'help' for available commands.</span>`
       )
       this.addNewPrompt()
-    }, 6000)
+    }, 5500)
   }
 
   // Replace your existing loadPortfolioData method's end with this:
