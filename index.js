@@ -662,7 +662,7 @@ class Terminal {
         `<span class="success">Terminal initialized. Type 'help' for available commands.</span>`
       )
       this.addNewPrompt()
-    }, 5500)
+    }, 5000)
   }
 
   // Replace your existing loadPortfolioData method's end with this:
