@@ -837,7 +837,7 @@ class Terminal {
         this.output.write(`<span class="success">Terminal initialized. Type 'help' for available commands.</span>`);
         this.output.addPrompt();
         this.setupEventListeners();
-        }, 5000);
+        }, 4000);
     }
 
 }
