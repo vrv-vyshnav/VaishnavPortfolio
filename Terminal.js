@@ -3,7 +3,6 @@ import { DOMOutput } from './core/Output.js';
 import { HistoryService } from './core/History.js';
 import { CommandRegistry } from './core/CommandRegistry.js';
 
-
 import { TerminalContext } from './core/TerminalContext.js';
 import { HelpCommand } from './commands/HelpCommand.js';
 import { ListCommand } from './commands/ListCommand.js';
