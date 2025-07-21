@@ -20,7 +20,8 @@
       "contents": {
         "about.txt": {
           "type": "file",
-          "content": "Name: Vaishnav P\nRole: Jr. Software Engineer\nCompany: Eloit Innovation Private Limited\nLocation: Kerala, India\nExperience: 2+ years\nEmail: VaishnavP.intr@gmail.com\nPhone: +91 8129637037\nLinkedIn: https://www.linkedin.com/in/vrv-vyshnav/\n\nAbout:\n======\nPassionate Jr. Software Engineer with expertise in full-stack development,\nERP systems, and scalable application architecture. Currently working as a\ncore developer for Edisapp, an AI-powered school management ERP platform\nserving 180+ institutions across four continents.\n\nI specialize in building robust, secure applications using Clean Architecture\nprinciples and modern web technologies. My work focuses on creating scalable\nsolutions that meet international standards including ISO 27001 and ISO 9001.\n\nSpecialities:\n- Full-stack web development (C#, JavaScript, Python)\n- ERP and management systems\n- Database design and optimization\n- Microservices architecture\n- Agile development practices\n- Clean Architecture implementation"
+          "renderType": "html",
+          "content": "content/about.html"
         },
         "skills.conf": {
           "type": "file",
