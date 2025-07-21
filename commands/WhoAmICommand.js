@@ -6,8 +6,7 @@ export class WhoAmICommand extends Command {
   }
 
   execute(params, context) {
-    const userInfo = `
-
+    const userInfo = ` <span> </span>
     <span class="success">========================================</span>
     <span class="success">         VAISHNAV P</span>
     <span class="success">    .NET Full Stack Developer</span>

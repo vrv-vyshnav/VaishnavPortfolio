@@ -5,20 +5,36 @@ export class CatCommand extends Command {
     super('cat', 'Display file contents');
   }
 
-  execute(params, context) {
-    if (params.length === 0) {
-      context.output.write(`<span class="error">cat: missing file operand</span>`);
+  async execute(params, context) {
+    if (!params.length) {
+      context.output.write('cat: missing file operand');
       return;
     }
 
-    const currentDir = context.fileSystem.getCurrentDirectory();
-    const fileName = params[0];
+    const name = params[0];
+    const dir = context.fileSystem.getCurrentDirectory();
+    const entry = dir.contents[name];
 
-    if (currentDir.contents[fileName] && currentDir.contents[fileName].type === 'file') {
-      const content = currentDir.contents[fileName].content;
-      context.output.write(`<span class="file">${content}</span>`);
-    } else {
-      context.output.write(`<span class="error">cat: ${fileName}: No such file</span>`);
+    if (!entry || entry.type !== 'file') {
+      context.output.write(`cat: ${name}: No such file`);
+      return;
     }
+
+   if (entry.renderType === 'html') {
+      try {
+        const res = await fetch(entry.content);
+        const html = await res.text();
+        context.output.write(html);
+      } catch {
+        context.output.write(`<span class="error">cat: ${fileName}: failed to load HTML content</span>`);
+      }
+      return;
+    }
+
+    // fallback for binary or unsupported types
+    context.output.write(
+      `<span class="">${entry.content || ''}</span>`
+    );
+        
   }
 }
