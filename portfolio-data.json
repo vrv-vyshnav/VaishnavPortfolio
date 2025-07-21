@@ -20,11 +20,18 @@
       "contents": {
         "about.txt": {
           "type": "file",
-          "content": "Name: Vaishnav P\nRole: Jr. Software Engineer\nCompany: Eloit Innovation Private Limited\nLocation: Kerala, India\nExperience: 2+ years\nEmail: VaishnavP.intr@gmail.com\nPhone: +91 8129637037\nLinkedIn: https://www.linkedin.com/in/vrv-vyshnav/\n\nAbout:\n======\nPassionate Jr. Software Engineer with expertise in full-stack development,\nERP systems, and scalable application architecture. Currently working as a\ncore developer for Edisapp, an AI-powered school management ERP platform\nserving 180+ institutions across four continents.\n\nI specialize in building robust, secure applications using Clean Architecture\nprinciples and modern web technologies. My work focuses on creating scalable\nsolutions that meet international standards including ISO 27001 and ISO 9001.\n\nSpecialties:\n- Full-stack web development (C#, JavaScript, Python)\n- ERP and management systems\n- Database design and optimization\n- Microservices architecture\n- Agile development practices\n- Clean Architecture implementation"
+          "renderType": "html",
+          "content": "content/about.html"
+        },
+        "skills.conf": {
+          "type": "file",
+          "renderType": "html",
+          "content": "content/skills.html"
         },
         "experience.txt": {
           "type": "file",
-          "content": "WORK EXPERIENCE\n===============\n\nJr. Software Engineer\nEloit Innovation Private Limited\nMarch 2023 - Present\n\n• Core developer for Edisapp, Eloit's AI-powered school management ERP \n  platform, serving 180+ institutions across four continents.\n\n• Designed and built scalable modules using Wisdom Architecture and Clean \n  Architecture principles to ensure modularity and high performance.\n\n• Developed microservices and backend APIs using .NET MVC and RESTful \n  API standards.\n\n• Worked extensively with MS SQL Server for database design, writing \n  optimized stored procedures, functions, and performance tuning.\n\n• Implemented secure, high-performing web applications aligned with \n  ISO 27001 (data security) and ISO 9001 (quality management) standards.\n\n• Collaborated in Agile Scrum teams, participating in sprint planning, \n  peer code reviews, and continuous integration processes.\n\nINTERNSHIP\n==========\n\nFrontend Developer\nNerchapetti\nAug 2021 - Feb 2022\n\n• Developed Frontend Web application from scratch using React.js\n• Managed the bug report throughout the internship period\n\nACHIEVEMENTS\n============\n\nTeam Achiever Award - Eloit Innovation Private Limited\nAwarded for outstanding individual performance and significant \ncontribution to team success."
+          "renderType": "html",
+          "content": "content/experience.html"
         },
         "projects": {
           "type": "directory",
@@ -58,22 +65,19 @@
             }
           }
         },
-
-
-      "skills.conf": {
-        "type": "file",
-        "content": "# Skills Configuration File\n\n[languages]\nC#=██████████████████░░ 90%\nJavaScript=██████████████████░░ 90%\nSQL=██████████████████░░ 90%\nPython=████████████████░░░░ 80%\nHTML/CSS=████████████████░░░░ 80%\n\n[web_technologies]\nVue.js=████████████████░░░░ 80%\nASP.NET Core MVC=██████████████████░░ 90%\nRESTful APIs=██████████████████░░ 90%\nMicroservices=████████████████░░░░ 80%\n\n[databases]\nMS SQL Server=██████████████████░░ 90%\nMySQL=████████████████░░░░ 80%\nDatabase Design=██████████████████░░ 90%\nStored Procedures=██████████████████░░ 90%\nPerformance Tuning=████████████████░░░░ 80%\n\n[tools_and_frameworks]\nTelerik Kendo UI=████████████████░░░░ 80%\nGit=████████████████░░░░ 80%\nVisual Studio=██████████████████░░ 90%\nClean Architecture=███████████████░░░░░ 75%\nWisdom Architecture=███████████████░░░░░ 75%\n\n[cloud_and_devops]\nAWS=████████░░░░░░░░░░░░ 40%\nLinux=████████████████░░░░ 80%\nApache=████████████████░░░░ 80%\n\n[development_practices]\nAgile/Scrum=████████████████░░░░ 80%\nCode Reviews=████████████████░░░░ 80%\nContinuous Integration=████████████████░░░░ 80%\nTest-Driven Development=████████░░░░░░░░░░░░ 40%\nAPI Documentation=████████████████░░░░ 80%\n\n[standards_and_compliance]\nISO 27001=█████████████░░░░░░░ 65%\nISO 9001=█████████████░░░░░░░ 65%\nData Security=█████████████░░░░░░░ 65%\nQuality Management=█████████████░░░░░░░ 65%\n\n[soft_skills]\nTeam Collaboration=██████████████████░░ 90%\nProblem Solving=██████████████████░░ 90%\nCommunication=████████████████░░░░ 80%\nLeadership=████████████████░░░░ 80%\nMentoring=████████░░░░░░░░░░░░ 40%"
-      },
         "education.txt": {
           "type": "file",
-          "content": "EDUCATION\n=========\n\nBachelor of Computer Science\nCollege of Applied Science\n2019 - 2022\n\nRelevant Coursework:\n- Data Structures and Algorithms\n- Database Management Systems\n- Software Engineering\n- Web Technologies\n- Object-Oriented Programming\n- Computer Networks\n- Operating Systems\n\nHigher Secondary Education\nSreenarayana Higher Secondary School\n2017 - 2019\n\nStream: Computer Science\n- Mathematics\n- Physics\n- Chemistry\n- Computer Science\n\nAcademic Projects:\n- Component BOM Manager (Final Year Project)\n- Various web development projects\n- Database design and implementation projects"
+          "renderType": "html",
+          "content": "content/education.html"
         },
         "contact.info": {
           "type": "file",
-          "content": "Contact Information\n===================\n\nEmail: VaishnavP.intr@gmail.com\nPhone: +91 8129637037\nLocation: Kerala, India\n\nSocial Links:\n-------------\nLinkedIn: https://www.linkedin.com/in/vrv-vyshnav/ \n\nProfessional Details:\n--------------------\nCurrent Position: Jr. Software Engineer\nCompany: Eloit Innovation Private Limited\nExperience: 2+ years\nAvailability: Open to opportunities\n\nPreferred Contact:\n-----------------\nPrimary: Email\nSecondary: Phone\nResponse Time: Within 24 hours\nTime Zone: IST (UTC+5:30)\n\nTechnical Interests:\n-------------------\n- Full-stack web development\n- ERP systems development\n- Database optimization\n- Clean architecture implementation\n- Microservices development\n- Cloud technologies (AWS)\n\nCareer Goals:\n------------\n- Senior Software Engineer roles\n- Technical leadership positions\n- Specialization in enterprise applications\n- Cloud architecture expertise"
+          "renderType": "html",
+          "content": "content/contact.html"
         },
         "resume.pdf": {
           "type": "file",
+          "renderType": "text",
           "content": "Binary resume file - Use curl -O resume.pdf to download"
         }
       }

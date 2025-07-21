@@ -13,16 +13,22 @@ export class DOMOutput {
   write(text) {
     const output = document.createElement('div');
     output.className = 'output';
-    output.innerHTML = text;
+
+    const isHTML = /<\/?[a-z][\s\S]*>/i.test(text);
+    if (isHTML) {
+      const clean = this.sanitizeHTML(text);
+      output.innerHTML = clean;
+    } else {
+      output.textContent = text;
+    }
 
     const currentInput = this.contentElement.querySelector('.command-line');
-    if (currentInput) {
-      currentInput.remove();  // Remove the current input field before appending new output
-    }
+    if (currentInput) currentInput.remove();
 
     this.contentElement.appendChild(output);
     this.scrollToBottom();
   }
+
 
   // Clear the terminal content
   clear() {
@@ -48,5 +54,35 @@ export class DOMOutput {
   // Scroll the terminal content to the bottom
   scrollToBottom() {
     this.contentElement.scrollTop = this.contentElement.scrollHeight;
+  }
+  sanitizeHTML(str) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(str, 'text/html');
+    const body = doc.body || document.createElement('body');
+
+    // Remove <script> elements
+    body.querySelectorAll('script').forEach(el => el.remove());
+
+    function clean(node) {
+      // Attribute cleanup
+      if (node.attributes) {
+        [...node.attributes].forEach(attr => {
+          const { name, value } = attr;
+          const val = value.trim().toLowerCase();
+          if (
+            name.startsWith('on') ||
+            (['src', 'href', 'xlink:href'].includes(name) &&
+              (val.startsWith('javascript:') || val.startsWith('data:')))
+          ) {
+            node.removeAttribute(name);
+          }
+        });
+      }
+      // Recurse into children
+      node.childNodes.forEach(child => clean(child));
+    }
+
+    clean(body);
+    return body.innerHTML;
   }
 }

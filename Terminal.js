@@ -3,7 +3,6 @@ import { DOMOutput } from './core/Output.js';
 import { HistoryService } from './core/History.js';
 import { CommandRegistry } from './core/CommandRegistry.js';
 
-
 import { TerminalContext } from './core/TerminalContext.js';
 import { HelpCommand } from './commands/HelpCommand.js';
 import { ListCommand } from './commands/ListCommand.js';
@@ -144,7 +143,7 @@ export class Terminal {
     content.addEventListener('click', this.handleClick);
   }
 
-  executeCommand(commandLine) {
+  async executeCommand(commandLine) {
     const args = commandLine.split(' ');
     const commandName = args[0];
     const params = args.slice(1);
@@ -154,13 +153,13 @@ export class Terminal {
     if (commandName === '') {
       // Empty command
     } else if (this.commandRegistry.has(commandName)) {
-      this.history.add(commandLine);
       const command = this.commandRegistry.get(commandName);
-      command.execute(params, this.context);
+      await command.execute(params, this.context);
     } else {
       this.output.write(`<span class="error">Command not found: ${commandName}</span>`);
       this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
     }
+    this.history.add(commandLine);
 
     this.output.addPrompt();
     this.setupEventListeners();
