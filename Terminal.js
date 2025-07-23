@@ -23,6 +23,7 @@ import { TailCommand } from './commands/TailCommand.js';
 import { CurlCommand } from './commands/CurlCommand.js';
 import { typeWriter } from './utils/typeWriter.js'; 
 import { ExitCommand } from './commands/ExitCommand.js';
+import { RmCommand } from './commands/RmCommand.js';
 
 export class Terminal {
   constructor() {
@@ -58,14 +59,16 @@ export class Terminal {
     this.commandRegistry.register(new TailCommand());
     this.commandRegistry.register(new CurlCommand());
     this.commandRegistry.register(new ExitCommand());
+    this.commandRegistry.register(new RmCommand());
+
   }
 
   async initialize() {
     try {
+      this.showBootSequence();
       await this.fileSystem.initialize();
       this.output.setFileSystem(this.fileSystem);
       this.isLoading = false;
-      this.showBootSequence();
     } catch (error) {
       this.output.write(`<span class="error">Error loading portfolio data. Please refresh the page.</span>`);
     }
@@ -143,24 +146,32 @@ export class Terminal {
     content.addEventListener('click', this.handleClick);
   }
 
-  async executeCommand(commandLine) {
-    const args = commandLine.split(' ');
-    const commandName = args[0];
-    const params = args.slice(1);
-
+ async executeCommand(commandLine) {
+    const trimmed = commandLine.trim();
     this.output.write(`<span class="prompt">${this.fileSystem.getPrompt()}</span>${commandLine}`);
 
-    if (commandName === '') {
-      // Empty command
-    } else if (this.commandRegistry.has(commandName)) {
-      const command = this.commandRegistry.get(commandName);
-      await command.execute(params, this.context);
+    if (trimmed === '') {
+        // Empty command
+    } else if (this.commandRegistry.has(trimmed)) {
+        // Check for exact match first (handles "rm -rf", "ls", etc.)
+        const command = this.commandRegistry.get(trimmed);
+        await command.execute([], this.context); // No additional params for exact matches
     } else {
-      this.output.write(`<span class="error">Command not found: ${commandName}</span>`);
-      this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+        // Fall back to single-word command with parameters
+        const args = trimmed.split(' ');
+        const commandName = args[0];
+        const params = args.slice(1);
+        
+        if (this.commandRegistry.has(commandName)) {
+            const command = this.commandRegistry.get(commandName);
+            await command.execute(params, this.context);
+        } else {
+            this.output.write(`<span class="error">Command not found: ${commandName}</span>`);
+            this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+        }
     }
+    
     this.history.add(commandLine);
-
     this.output.addPrompt();
     this.setupEventListeners();
   }
