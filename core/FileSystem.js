@@ -50,43 +50,83 @@ export class PortfolioFileSystem {
     return expanded;
   }
 
-  // Get the current directory object
   getCurrentDirectory() {
     return this.fileSystem[this.currentPath];
   }
 
-  // Resolve a path to its absolute path
-  resolvePath(path) {
-    if (path.startsWith('/')) {
-      return path;  // Absolute path
-    } else if (path === '..') {
-      const parts = this.currentPath.split('/');
-      parts.pop();
-      return parts.join('/') || '/';
-    } else if (path === '.') {
-      return this.currentPath;  // Current directory
-    } else {
-      return this.currentPath + '/' + path;  // Relative path
-    }
+resolvePath(path) {
+  if (path.startsWith('/')) {
+    return this.normalizePath(path);  // Absolute path
+  } else if (path === '..') {
+    const parts = this.currentPath.split('/');
+    parts.pop(); // Go up one level
+    return this.normalizePath(parts.join('/') || '/');  // Prevent going above root
+  } else if (path === '.') {
+    return this.currentPath;  // Current directory
+  } else {
+    return this.normalizePath(this.currentPath + '/' + path);  // Relative path
+  }
+}
+
+  normalizePath(path) {
+    // Ensure there is no leading or trailing slash unless it's the root path
+    return path.replace(/\/+/g, '/').replace(/\/$/, '') || '/';
   }
 
-  // Check if a given path exists in the file system
-  exists(path) {
-    return !!this.fileSystem[path];
-  }
 
-  // Retrieve an item (file or directory) from the file system
-  getItem(path) {
+exists(path) {
+  try {
+    return this.getItem(path) !== null;
+  } catch (error) {
+    return false;
+  }
+}
+
+getItem(path) {
+  // Handle exact path lookup first
+  if (this.fileSystem[path]) {
     return this.fileSystem[path];
   }
+  
+  const pathParts = path.split('/').filter(part => part !== '');
+  
+  let builtPath = '';
+  let current = null;
+  let lastFoundIndex = -1;
+  
+  for (let i = 0; i < pathParts.length; i++) {
+    builtPath += '/' + pathParts[i];
+    if (this.fileSystem[builtPath]) {
+      current = this.fileSystem[builtPath];
+      lastFoundIndex = i;
+    }
+  }
+  
+  if (current === null) {
+    return null;
+  }
+  
+  if (lastFoundIndex === pathParts.length - 1) {
+    return current;
+  }
+  
+  for (let i = lastFoundIndex + 1; i < pathParts.length; i++) {
+    const part = pathParts[i];
+    if (current && current.contents && current.contents[part]) {
+      current = current.contents[part];
+    } else {
+      return null;
+    }
+  }
+  
+  return current;
+}
 
-  // List contents of a directory (defaults to the current directory)
   list(path = this.currentPath) {
     const dir = this.fileSystem[path];
     return dir && dir.type === 'directory' ? dir.contents : {};
   }
 
-  // Change the current directory
   changeDirectory(path) {
     const resolvedPath = this.resolvePath(path);
     if (this.exists(resolvedPath) && this.getItem(resolvedPath).type === 'directory') {
@@ -96,7 +136,6 @@ export class PortfolioFileSystem {
     return false;
   }
 
-  // Get the terminal prompt, which includes the user's home directory shorthand
   getPrompt() {
     const shortPath = this.currentPath.replace(`/home/${this.userName}`, '~');
     return `${this.userName}@${this.hostName}:${shortPath}$`;
