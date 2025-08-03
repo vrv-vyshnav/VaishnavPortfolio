@@ -2,8 +2,9 @@ import { PortfolioFileSystem } from './core/FileSystem.js';
 import { DOMOutput } from './core/Output.js';
 import { HistoryService } from './core/History.js';
 import { CommandRegistry } from './core/CommandRegistry.js';
-
 import { TerminalContext } from './core/TerminalContext.js';
+
+// Command imports
 import { HelpCommand } from './commands/HelpCommand.js';
 import { ListCommand } from './commands/ListCommand.js';
 import { ChangeDirectoryCommand } from './commands/ChangeDirectoryCommand.js';
@@ -21,12 +22,22 @@ import { WordCountCommand } from './commands/WordCountCommand.js';
 import { HeadCommand } from './commands/HeadCommand.js';
 import { TailCommand } from './commands/TailCommand.js';
 import { CurlCommand } from './commands/CurlCommand.js';
-import { typeWriter } from './utils/typeWriter.js'; 
 import { ExitCommand } from './commands/ExitCommand.js';
 import { RmCommand } from './commands/RmCommand.js';
 
+// Utility imports
+import { typeWriter } from './utils/typeWriter.js';
+import { EventManager } from './utils/EventManager.js';
+import { ErrorHandler } from './utils/ErrorHandler.js';
+import { SecurityManager } from './utils/security.js';
+import { CONFIG } from './config/constants.js';
+
 export class Terminal {
   constructor() {
+    // Initialize error handler and event manager
+    this.errorHandler = new ErrorHandler();
+    this.eventManager = new EventManager();
+    
     // Initialize all dependencies in the constructor or setup method
     this.fileSystem = new PortfolioFileSystem();
     this.output = new DOMOutput('terminal-content');
@@ -65,12 +76,15 @@ export class Terminal {
 
   async initialize() {
     try {
+      this.errorHandler.validateInput(this.fileSystem, 'object', 'fileSystem');
+      this.errorHandler.validateInput(this.output, 'object', 'output');
+      
       this.showBootSequence();
       await this.fileSystem.initialize();
       this.output.setFileSystem(this.fileSystem);
       this.isLoading = false;
     } catch (error) {
-      this.output.write(`<span class="error">Error loading portfolio data. Please refresh the page.</span>`);
+      this.errorHandler.handleError(error, 'initialization', { silent: false });
     }
   }
 
@@ -78,51 +92,78 @@ export class Terminal {
     const systemInfo = `
     System Information:
     ==================
-    OS: Portfolio Linux 2.0
-    Uptime: 2+ years in software engineering
-    Memory: Full-stack development skills loaded
-    Shell: /bin/vaishnav
+    OS: ${CONFIG.SYSTEM_INFO.OS}
+    Uptime: ${CONFIG.SYSTEM_INFO.UPTIME}
+    Memory: ${CONFIG.SYSTEM_INFO.MEMORY}
+    Shell: ${CONFIG.SYSTEM_INFO.SHELL}
 
-    Status: Ready for new opportunities
-    Location: Kerala, India`;
+    Status: ${CONFIG.SYSTEM_INFO.STATUS}
+    Location: ${CONFIG.SYSTEM_INFO.LOCATION}`;
 
     const asciiElement = document.createElement('pre');
     asciiElement.className = 'ascii-art';
-    asciiElement.style.color = '#00ff00';
-    asciiElement.style.textShadow = '0 0 5px #00ff00';
+    asciiElement.style.color = CONFIG.TERMINAL.SUCCESS_COLOR;
+    asciiElement.style.textShadow = `0 0 5px ${CONFIG.TERMINAL.SUCCESS_COLOR}`;
 
     const systemElement = document.createElement('div');
     systemElement.className = 'output';
-    systemElement.style.color = '#8be9fd';
+    systemElement.style.color = CONFIG.TERMINAL.INFO_COLOR;
 
     const content = document.getElementById('terminal-content');
-    content.appendChild(asciiElement);
-    content.appendChild(systemElement);
+    if (content) {
+      content.appendChild(asciiElement);
+      content.appendChild(systemElement);
 
-    setTimeout(() => {
-      typeWriter(systemInfo, systemElement, 10);
-    }, 1000);
+      setTimeout(() => {
+        typeWriter(systemInfo, systemElement, CONFIG.TYPING_SPEED);
+      }, CONFIG.BOOT_DELAY);
 
-    setTimeout(() => {
-      this.output.write(`<span class="success">Terminal initialized. Type 'help' for available commands.</span>`);
-      this.output.addPrompt();
-      this.setupEventListeners();
-    }, 4000);
+      setTimeout(() => {
+        this.output.write(`<span class="success">${CONFIG.SUCCESS_MESSAGES.TERMINAL_READY}</span>`);
+        this.output.addPrompt();
+        this.setupEventListeners();
+      }, CONFIG.INIT_DELAY);
+    } else {
+      this.errorHandler.handleError(
+        this.errorHandler.createError('Terminal content element not found', 'boot_sequence', 'ReferenceError'),
+        'boot_sequence'
+      );
+    }
   }
 
   setupEventListeners() {
     const content = document.getElementById('terminal-content');
+    if (!content) {
+      this.errorHandler.handleError(
+        this.errorHandler.createError('Terminal content element not found', 'event_setup', 'ReferenceError'),
+        'event_setup'
+      );
+      return;
+    }
 
-    content.removeEventListener('keydown', this.handleKeyDown);
-    content.removeEventListener('click', this.handleClick);
+    // Clean up existing listeners
+    this.eventManager.removeAllListeners(content);
 
-    this.handleKeyDown = (e) => {
+    // Create bound event handlers
+    this.handleKeyDown = this.eventManager.bind(this, 'handleKeyDown');
+    this.handleClick = this.eventManager.bind(this, 'handleClick');
+
+    // Add new listeners
+    this.eventManager.addListener(content, 'keydown', this.handleKeyDown);
+    this.eventManager.addListener(content, 'click', this.handleClick);
+  }
+
+  handleKeyDown(e) {
+    try {
       const input = document.getElementById('user-input');
       if (!input) return;
 
       if (e.key === 'Enter') {
-        this.executeCommand(input.value.trim());
-        input.value = '';
+        const command = input.value.trim();
+        if (command) {
+          this.executeCommand(command);
+          input.value = '';
+        }
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         const prev = this.history.getPrevious();
@@ -130,81 +171,137 @@ export class Terminal {
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         const next = this.history.getNext();
-        input.value = next;
+        if (next) input.value = next;
       } else if (e.key === 'Tab') {
         e.preventDefault();
         this.autoComplete(input);
       }
-    };
-
-    this.handleClick = () => {
-      const input = document.getElementById('user-input');
-      if (input) input.focus();
-    };
-
-    content.addEventListener('keydown', this.handleKeyDown);
-    content.addEventListener('click', this.handleClick);
+    } catch (error) {
+      this.errorHandler.handleError(error, 'keyboard_input');
+    }
   }
 
- async executeCommand(commandLine) {
-    const trimmed = commandLine.trim();
-    this.output.write(`<span class="prompt">${this.fileSystem.getPrompt()}</span>${commandLine}`);
+  handleClick() {
+    try {
+      const input = document.getElementById('user-input');
+      if (input) input.focus();
+    } catch (error) {
+      this.errorHandler.handleError(error, 'mouse_click');
+    }
+  }
 
-    if (trimmed === '') {
-        // Empty command
-    } else if (this.commandRegistry.has(trimmed)) {
-        // Check for exact match first (handles "rm -rf", "ls", etc.)
+  async executeCommand(commandLine) {
+    try {
+      // Validate input
+      this.errorHandler.validateInput(commandLine, 'string', 'commandLine');
+      
+      // Security validation
+      if (!SecurityManager.validateCommand(commandLine)) {
+        this.errorHandler.handleError(
+          this.errorHandler.createError('Security violation: Invalid command', 'command_execution', 'SecurityError'),
+          'security'
+        );
+        return;
+      }
+
+      const trimmed = commandLine.trim();
+      this.output.write(`<span class="prompt">${this.fileSystem.getPrompt()}</span>${commandLine}`);
+
+      if (trimmed === '') {
+        // Empty command - do nothing
+        return;
+      }
+
+      // Try exact match first (handles "rm -rf", "ls", etc.)
+      if (this.commandRegistry.has(trimmed)) {
         const command = this.commandRegistry.get(trimmed);
-        await command.execute([], this.context); // No additional params for exact matches
-    } else {
+        await command.execute([], this.context);
+      } else {
         // Fall back to single-word command with parameters
         const args = trimmed.split(' ');
         const commandName = args[0];
         const params = args.slice(1);
         
         if (this.commandRegistry.has(commandName)) {
-            const command = this.commandRegistry.get(commandName);
-            await command.execute(params, this.context);
+          const command = this.commandRegistry.get(commandName);
+          await command.execute(params, this.context);
         } else {
-            this.output.write(`<span class="error">Command not found: ${commandName}</span>`);
-            this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+          this.output.write(`<span class="error">${CONFIG.ERROR_MESSAGES.COMMAND_NOT_FOUND}: ${commandName}</span>`);
+          this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
         }
+      }
+      
+      this.history.add(commandLine);
+      
+    } catch (error) {
+      this.errorHandler.handleError(error, 'command_execution');
+    } finally {
+      this.output.addPrompt();
+      this.setupEventListeners();
     }
-    
-    this.history.add(commandLine);
-    this.output.addPrompt();
-    this.setupEventListeners();
   }
 
   autoComplete(input) {
-    const value = input.value;
-    const parts = value.split(' ');
-    const lastPart = parts[parts.length - 1];
+    try {
+      this.errorHandler.validateInput(input, 'object', 'input');
+      
+      const value = input.value;
+      const parts = value.split(' ');
+      const lastPart = parts[parts.length - 1];
 
-    if (parts.length === 1) {
-      const commands = this.commandRegistry.list().map(cmd => cmd.name);
-      const matches = commands.filter(cmd => cmd.startsWith(lastPart));
+      if (parts.length === 1) {
+        const commands = this.commandRegistry.list().map(cmd => cmd.name);
+        const matches = commands.filter(cmd => cmd.startsWith(lastPart));
 
-      if (matches.length === 1) {
-        input.value = matches[0];
-      } else if (matches.length > 1) {
-        this.output.write(`<span class="info">${matches.join('  ')}</span>`);
-        this.output.addPrompt();
-        this.setupEventListeners();
+        if (matches.length === 1) {
+          input.value = matches[0];
+        } else if (matches.length > 1) {
+          this.output.write(`<span class="info">${matches.join('  ')}</span>`);
+          this.output.addPrompt();
+          this.setupEventListeners();
+        }
+      } else {
+        const items = this.fileSystem.list();
+        const itemNames = Object.keys(items);
+        const matches = itemNames.filter(item => item.startsWith(lastPart));
+
+        if (matches.length === 1) {
+          parts[parts.length - 1] = matches[0];
+          input.value = parts.join(' ');
+        } else if (matches.length > 1) {
+          this.output.write(`<span class="info">${matches.join('  ')}</span>`);
+          this.output.addPrompt();
+          this.setupEventListeners();
+        }
       }
-    } else {
-      const items = this.fileSystem.list();
-      const itemNames = Object.keys(items);
-      const matches = itemNames.filter(item => item.startsWith(lastPart));
+    } catch (error) {
+      this.errorHandler.handleError(error, 'autocomplete');
+    }
+  }
 
-      if (matches.length === 1) {
-        parts[parts.length - 1] = matches[0];
-        input.value = parts.join(' ');
-      } else if (matches.length > 1) {
-        this.output.write(`<span class="info">${matches.join('  ')}</span>`);
-        this.output.addPrompt();
-        this.setupEventListeners();
+  /**
+   * Cleanup method to prevent memory leaks
+   * Should be called when the terminal is destroyed
+   */
+  cleanup() {
+    try {
+      // Clean up event listeners
+      this.eventManager.cleanup();
+      
+      // Reset error handler
+      this.errorHandler.reset();
+      
+      // Clear any pending timeouts
+      if (this.bootTimeout) {
+        clearTimeout(this.bootTimeout);
       }
+      if (this.initTimeout) {
+        clearTimeout(this.initTimeout);
+      }
+      
+      console.log('Terminal cleanup completed');
+    } catch (error) {
+      console.error('Error during terminal cleanup:', error);
     }
   }
 }

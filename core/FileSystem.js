@@ -1,6 +1,8 @@
+import { CONFIG } from '../config/constants.js';
+
 export class PortfolioFileSystem {
   constructor() {
-    this.currentPath = '';  // Current path where the user is located
+    this.currentPath = CONFIG.FILE_SYSTEM.DEFAULT_PATH;  // Current path where the user is located
     this.userName = '';      // User's name
     this.hostName = '';      // Hostname of the system
     this.fileSystem = {};    // The file system, represented as an object
@@ -9,15 +11,23 @@ export class PortfolioFileSystem {
   // Initialize the file system by loading data from a JSON file
   async initialize() {
     try {
-      const response = await fetch('portfolio-data.json'); // Replace with actual path to JSON file
+      const response = await fetch(CONFIG.FILE_SYSTEM.DATA_FILE);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
+      
+      if (!data.user || !data.fileSystem) {
+        throw new Error('Invalid portfolio data format');
+      }
       
       this.userName = data.user.name;
       this.hostName = data.user.hostname;
-      this.currentPath = data.user.homePath;
-      this.fileSystem = this.expandFileSystem(data.fileSystem); // Expands the file system structure
+      this.currentPath = data.user.homePath || CONFIG.FILE_SYSTEM.DEFAULT_PATH;
+      this.fileSystem = this.expandFileSystem(data.fileSystem);
     } catch (error) {
-      throw new Error('Failed to load portfolio data');
+      throw new Error(`Failed to load portfolio data: ${error.message}`);
     }
   }
 
