@@ -1,0 +1,25 @@
+# Node modules and build output
+node_modules/
+dist/
+build/
+*.log
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Ignore coverage output
+coverage/
+
+# Ignore environment files
+.env
+.env.local
+
+# Do NOT ignore content, config, or source files
+!content/
+!*.html
+!*.js
+!*.json
+!*.cjs
