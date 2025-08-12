@@ -1,4 +1,5 @@
 import { Command } from '../core/Command.js';
+import { FileIcons } from '../utils/fileIcons.js';
 
 export class FindCommand extends Command {
   constructor() {
@@ -20,7 +21,9 @@ export class FindCommand extends Command {
       Object.keys(dir.contents).forEach(item => {
         const itemPath = path + '/' + item;
         if (item.includes(searchTerm)) {
-          results.push(itemPath);
+          const itemObj = dir.contents[item];
+          const icon = FileIcons.getIcon(item, itemObj.type);
+          results.push({ path: itemPath, name: item, type: itemObj.type, icon });
         }
 
         if (dir.contents[item].type === 'directory') {
@@ -36,7 +39,14 @@ export class FindCommand extends Command {
       context.output.write(`<span class="warning">No files found matching '${searchTerm}'</span>`);
     } else {
       results.forEach(result => {
-        context.output.write(`<span class="info">${result}</span>`);
+        let colorClass = 'file';
+        if (result.type === 'directory') {
+          colorClass = 'directory';
+        } else if (FileIcons.isExecutable(result.name)) {
+          colorClass = 'executable';
+        }
+        
+        context.output.write(`<span class="${colorClass}">${result.icon} ${result.path}</span>`);
       });
     }
   }

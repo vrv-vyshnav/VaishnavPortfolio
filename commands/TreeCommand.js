@@ -1,4 +1,5 @@
 import { Command } from '../core/Command.js';
+import { FileIcons } from '../utils/fileIcons.js';
 
 export class TreeCommand extends Command {
   constructor() {
@@ -18,9 +19,16 @@ export class TreeCommand extends Command {
         const itemObj = dir.contents[item];
 
         const connector = isLastItem ? '└── ' : '├── ';
-        const color = itemObj.type === 'directory' ? 'directory' : 'file';
+        const icon = FileIcons.getIcon(item, itemObj.type);
+        
+        let colorClass = 'file';
+        if (itemObj.type === 'directory') {
+          colorClass = 'directory';
+        } else if (FileIcons.isExecutable(item)) {
+          colorClass = 'executable';
+        }
 
-        result += `${prefix}${connector}<span class="${color}">${item}</span>\n`;
+        result += `${prefix}${connector}<span class="${colorClass}">${icon} ${item}</span>\n`;
 
         if (itemObj.type === 'directory') {
           const nextPrefix = prefix + (isLastItem ? '    ' : '│   ');
@@ -32,6 +40,6 @@ export class TreeCommand extends Command {
     };
 
     const treeOutput = showTree(context.fileSystem.currentPath);
-    context.output.write(`<span class="directory">.</span>\n${treeOutput}`);
+    context.output.write(`<span class="directory">📁 .</span>\n${treeOutput}`);
   }
 }

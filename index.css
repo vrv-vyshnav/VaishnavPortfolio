@@ -13,7 +13,12 @@ body {
     height: 100vh;
     overflow: hidden;
     text-align: justify;
-    
+    position: relative;
+}
+
+/* Clean, simple background */
+body {
+    background: #0d1117;
 }
 
 .terminal {
@@ -143,6 +148,13 @@ section{
 
 .executable {
     color: #7ee787;
+}
+
+/* File icon styling */
+.directory, .file, .executable {
+    display: inline-block;
+    margin-right: 8px;
+    white-space: nowrap;
 }
 
 .cursor {
@@ -409,6 +421,13 @@ section{
     .terminal-content::-webkit-scrollbar-thumb {
         background: #484f58;
         border-radius: 6px;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .ascii-art {
+        animation: none;
     }
 }
 .info a {
