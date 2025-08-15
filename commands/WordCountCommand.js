@@ -15,6 +15,12 @@ export class WordCountCommand extends Command {
     const currentDir = context.fileSystem.getCurrentDirectory();
 
     if (currentDir.contents[fileName] && currentDir.contents[fileName].type === 'file') {
+
+      if (currentDir.contents[fileName].renderType == "html") {
+        context.output.write(`<span class="error">wc is only availabe for README.md files</span>`);
+        return;
+      }
+
       const content = currentDir.contents[fileName].content;
       const lines = content.split('\n').length;
       const words = content.split(/\s+/).filter(w => w.length > 0).length;

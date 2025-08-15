@@ -41,6 +41,7 @@
               "contents": {
                 "README.md": {
                   "type": "file",
+                  "renderType": "text",
                   "content": "# Component Bill of Materials Manager (BOM Manager)\n\nA centralized component BOM management system to reduce repeated manual \neffort and duplication of components.\n\n## Duration: May 2020 - June 2021\n\n## Technologies Used:\n- Backend: PHP\n- Database: MySQL\n- Server: Apache\n- Stack: LAMP (Linux, Apache, MySQL, PHP)\n\n## Features:\n- Centralized component management\n- Reduction of manual effort and duplication\n- Streamlined BOM creation and maintenance\n- Component tracking and organization\n- User-friendly interface for component management\n\n## Description:\nDeveloped a comprehensive BOM management system that centralizes component \ninformation and reduces manual effort in creating and maintaining bills of \nmaterials. The system helps organizations track components efficiently and \neliminates duplication of effort across different projects."
                 }
               }
@@ -50,6 +51,7 @@
               "contents": {
                 "README.md": {
                   "type": "file",
+                  "renderType": "text",
                   "content": "# Let's Go Everywhere\n\nA comprehensive bus travel guide application that helps travelers with \nroutes, stops, maps, and real-time tracking.\n\n## Duration: May 2021 - 2022\n\n## Technologies Used:\n- Backend: Django\n- Database: MySQL\n- Frontend: JavaScript\n- Maps Integration: Location tracking APIs\n\n## Features:\n- Route guidance for bus travelers\n- Display of all possible stops on the route to destination\n- Interactive maps with real-time location tracking\n- Estimated remaining time to reach destination\n- Comprehensive stop information\n- User-friendly interface for travel planning\n\n## Description:\nDeveloped a full-stack web application to assist bus travelers with \ncomprehensive route information. The application provides real-time \ntracking, displays all stops along the route, shows interactive maps, \nand calculates estimated arrival times to help travelers plan their \njourneys effectively.\n\n## Key Achievements:\n- Implemented real-time location tracking\n- Created intuitive user interface for route planning\n- Integrated mapping services for visual route display\n- Developed accurate time estimation algorithms"
                 }
               }
@@ -59,6 +61,7 @@
               "contents": {
                 "README.md": {
                   "type": "file",
+                  "renderType": "text",
                   "content": "# Edisapp - AI-Powered School Management ERP\n\nA comprehensive school management ERP platform serving 180+ institutions \nacross four continents.\n\n## Role: Core Developer\n## Company: Eloit Innovation Private Limited\n## Duration: March 2023 - Present\n\n## Technologies Used:\n- Backend: ASP.NET Core MVC, C#\n- Frontend: Vue.js, JavaScript\n- Database: MS SQL Server\n- Architecture: Clean Architecture, Wisdom Architecture\n- Tools: Telerik Kendo UI, Git\n- Standards: ISO 27001, ISO 9001\n\n## Key Responsibilities:\n- Core development of AI-powered school management features\n- Design and implementation of scalable modules\n- Microservices development using .NET MVC\n- RESTful API development and maintenance\n- Database design and optimization\n- Performance tuning and security implementation\n\n## Features Developed:\n- Student information management\n- Academic performance tracking\n- Administrative workflows\n- Reporting and analytics\n- Multi-institution support\n- AI-powered insights and recommendations\n\n## Achievements:\n- Successfully serving 180+ institutions globally\n- Implemented ISO 27001 and ISO 9001 compliant solutions\n- Contributed to high-performance, scalable architecture\n- Participated in Agile development processes\n- Received Team Achiever Award for outstanding performance\n\n## Architecture:\n- Clean Architecture principles for maintainability\n- Wisdom Architecture for modularity\n- Microservices for scalability\n- RESTful APIs for integration"
                 }
               }

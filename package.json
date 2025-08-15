@@ -1,0 +1,85 @@
+{
+  "name": "vaishnav-portfolio-terminal",
+  "version": "2.0.0",
+  "description": "An interactive terminal-style portfolio showcasing Vaishnav's skills and projects with enhanced security and error handling",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write .",
+    "security:audit": "npm audit",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "echo 'Deploy to your hosting service'"
+  },
+  "keywords": [
+    "portfolio",
+    "terminal",
+    "interactive",
+    "web-development",
+    "javascript",
+    "es6",
+    "command-line",
+    "developer-portfolio"
+  ],
+  "author": "Vaishnav P",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vyshnavvishnu/VaishnavPortfolio.git"
+  },
+  "homepage": "https://vyshnavvishnu.live",
+  "bugs": {
+    "url": "https://github.com/vyshnavvishnu/VaishnavPortfolio/issues"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^27.6.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2022": true,
+      "node": true,
+      "jest": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2022,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-unused-vars": "error",
+      "prefer-const": "error",
+      "no-var": "error"
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 80,
+    "tabWidth": 2
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -15,6 +15,12 @@ export class TailCommand extends Command {
     const currentDir = context.fileSystem.getCurrentDirectory();
 
     if (currentDir.contents[fileName] && currentDir.contents[fileName].type === 'file') {
+
+      if (currentDir.contents[fileName].renderType == "html") {
+        context.output.write(`<span class="error">tail is only availabe for README.md files</span>`);
+        return;
+      }
+
       const content = currentDir.contents[fileName].content;
       const lines = content.split('\n').slice(-10);
       context.output.write(`<span class="file">${lines.join('\n')}</span>`);
