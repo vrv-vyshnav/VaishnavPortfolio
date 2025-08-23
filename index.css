@@ -96,7 +96,7 @@ body {
 }
 
 .prompt {
-    color: #7ee787;
+    color: #0f0;
     margin-right: 8px;
     flex-shrink: 0;
 }
@@ -126,7 +126,7 @@ section{
 }
 
 .success {
-    color: #7ee787;
+    color: #0f0;
 }
 
 .info {
@@ -197,7 +197,7 @@ section{
 }
 
 .ascii-art {
-    color: #7ee787;
+    color: #0f0;
     font-size: 12px;
     line-height: 1.2;
     margin: 10px 0;
