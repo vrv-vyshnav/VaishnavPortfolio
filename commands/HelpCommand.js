@@ -7,8 +7,7 @@ export class HelpCommand extends Command {
 
   execute(params, context) {
     const commands = context.commandRegistry.list();
-    let output = `<span class="success">Available Commands:</span>\n\n`;
-    output += '<div class="help-table">';
+    let output = '<div class="help-table">';
 
     commands.forEach(cmd => {
       output += `<div class="help-row">

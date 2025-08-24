@@ -1,0 +1,25 @@
+
+.terminal-output {
+  background-color: #161b22;
+  color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 20px;
+}
+
+.terminal-pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.terminal-prompt {
+  color: #0f0;
+}
+
+.terminal-heading {
+  color: #0f0;
+  font-weight: bold;
+}
+
+.terminal-key {
+  color: #0ff;
+}
