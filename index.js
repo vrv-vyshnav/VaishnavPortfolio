@@ -1,6 +1,6 @@
-import { Terminal } from '/Terminal.js';
+import { TerminalManager } from './core/TerminalManager.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const terminal = new Terminal();
-  terminal.initialize();
+  const terminalManager = new TerminalManager();
+  terminalManager.initializeTerminals();
 });

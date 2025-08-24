@@ -33,14 +33,17 @@ import { SecurityManager } from './utils/security.js';
 import { CONFIG } from './config/constants.js';
 
 export class Terminal {
-  constructor() {
+  constructor(terminalId) {
     // Initialize error handler and event manager
     this.errorHandler = new ErrorHandler();
     this.eventManager = new EventManager();
     
+    // Store terminal ID
+    this.terminalId = terminalId;
+    
     // Initialize all dependencies in the constructor or setup method
     this.fileSystem = new PortfolioFileSystem();
-    this.output = new DOMOutput('terminal-content');
+    this.output = new DOMOutput(`${terminalId}-content`);
     this.history = new HistoryService();
     this.commandRegistry = new CommandRegistry();
     this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry);
@@ -83,6 +86,9 @@ export class Terminal {
       await this.fileSystem.initialize();
       this.output.setFileSystem(this.fileSystem);
       this.isLoading = false;
+      
+      // Set up event listeners after initialization
+      this.setupEventListeners();
     } catch (error) {
       this.errorHandler.handleError(error, 'initialization', { silent: false });
     }
@@ -109,7 +115,8 @@ export class Terminal {
     systemElement.className = 'output';
     systemElement.style.color = CONFIG.TERMINAL.INFO_COLOR;
 
-    const content = document.getElementById('terminal-content');
+    const contentId = `${this.terminalId}-content`;
+    const content = document.getElementById(contentId);
     if (content) {
       content.appendChild(asciiElement);
       content.appendChild(systemElement);
@@ -121,7 +128,7 @@ export class Terminal {
       setTimeout(() => {
         this.output.write(`<span class="success">${CONFIG.SUCCESS_MESSAGES.TERMINAL_READY}</span>`);
         this.output.addPrompt();
-        this.setupEventListeners();
+        // Remove setupEventListeners call from here since it's now in initialize
       }, CONFIG.INIT_DELAY);
     } else {
       this.errorHandler.handleError(
@@ -132,7 +139,8 @@ export class Terminal {
   }
 
   setupEventListeners() {
-    const content = document.getElementById('terminal-content');
+    const contentId = `${this.terminalId}-content`;
+    const content = document.getElementById(contentId);
     if (!content) {
       this.errorHandler.handleError(
         this.errorHandler.createError('Terminal content element not found', 'event_setup', 'ReferenceError'),
@@ -155,7 +163,9 @@ export class Terminal {
 
   handleKeyDown(e) {
     try {
-      const input = document.getElementById('user-input');
+      // Use the unique input ID based on the terminal ID
+      const inputId = `${this.terminalId}-content-input`;
+      const input = document.getElementById(inputId);
       if (!input) return;
 
       if (e.key === 'Enter') {
@@ -183,7 +193,9 @@ export class Terminal {
 
   handleClick() {
     try {
-      const input = document.getElementById('user-input');
+      // Use the unique input ID based on the terminal ID
+      const inputId = `${this.terminalId}-content-input`;
+      const input = document.getElementById(inputId);
       if (input) input.focus();
     } catch (error) {
       this.errorHandler.handleError(error, 'mouse_click');
@@ -237,7 +249,7 @@ export class Terminal {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
       this.output.addPrompt();
-      this.setupEventListeners();
+      // Remove setupEventListeners call from here since it's now in initialize
     }
   }
 
@@ -258,7 +270,7 @@ export class Terminal {
         } else if (matches.length > 1) {
           this.output.write(`<span class="info">${matches.join('  ')}</span>`);
           this.output.addPrompt();
-          this.setupEventListeners();
+          // Remove setupEventListeners call from here since it's now in initialize
         }
       } else {
         const items = this.fileSystem.list();
@@ -271,7 +283,7 @@ export class Terminal {
         } else if (matches.length > 1) {
           this.output.write(`<span class="info">${matches.join('  ')}</span>`);
           this.output.addPrompt();
-          this.setupEventListeners();
+          // Remove setupEventListeners call from here since it's now in initialize
         }
       }
     } catch (error) {
