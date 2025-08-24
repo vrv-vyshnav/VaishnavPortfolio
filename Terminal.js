@@ -46,7 +46,7 @@ export class Terminal {
     this.output = new DOMOutput(`${terminalId}-content`);
     this.history = new HistoryService();
     this.commandRegistry = new CommandRegistry();
-    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry);
+    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId);
 
     this.isLoading = true;
     this.registerCommands();

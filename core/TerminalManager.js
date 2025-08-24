@@ -11,6 +11,17 @@ export class TerminalManager {
     
     // Add button to create new terminals
     this.addNewTerminalButton();
+    
+    // Listen for terminal exit events
+    window.addEventListener('terminalExit', (event) => {
+      const { terminalId } = event.detail;
+      this.removeTerminal(terminalId);
+    });
+    
+    // Listen for terminal exit all events
+    window.addEventListener('terminalExitAll', () => {
+      this.removeAllTerminals();
+    });
   }
 
   /**
@@ -112,6 +123,8 @@ export class TerminalManager {
   removeTerminal(terminalId) {
     // Prevent removing the last terminal
     if (this.terminals.size <= 1) {
+      // For the last terminal, close the window directly
+      window.close();
       return;
     }
     
@@ -143,6 +156,30 @@ export class TerminalManager {
         }
       }
     }
+  }
+
+  /**
+   * Remove all terminal instances
+   */
+  removeAllTerminals() {
+    // Clean up all terminals
+    for (const [terminalId, terminal] of this.terminals) {
+      terminal.cleanup();
+      
+      // Remove UI elements
+      const tab = document.getElementById(`${terminalId}-tab`);
+      const view = document.getElementById(terminalId);
+      
+      if (tab) tab.remove();
+      if (view) view.remove();
+    }
+    
+    // Clear storage
+    this.terminals.clear();
+    this.activeTerminalId = null;
+    
+    // Close the window
+    window.close();
   }
 
   /**
