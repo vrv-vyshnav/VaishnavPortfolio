@@ -23,3 +23,66 @@
 .terminal-key {
   color: #0ff;
 }
+
+.highlight {
+  background-color: #0f0;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Mobile-specific responsive improvements */
+@media (max-width: 768px) {
+    .terminal-heading {
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .terminal-key {
+        display: inline-block;
+        min-width: 80px;
+        word-break: break-word;
+    }
+    
+    /* Better spacing for mobile */
+    .grid > div {
+        margin-bottom: 1rem;
+    }
+    
+    /* Improve ASCII art on mobile */
+    .ascii-art {
+        font-size: 8px;
+        overflow-x: auto;
+        white-space: pre;
+    }
+    
+    /* Better skill bar display */
+    .languages, .databases, .web-technologies, .tools-frameworks, 
+    .standards-compliance, .soft-skills, .cloud-devops {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ascii-art {
+        font-size: 6px;
+    }
+    
+    .terminal-key {
+        min-width: 60px;
+        font-size: 12px;
+    }
+    
+    .terminal-heading {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Stack layout for very small screens */
+    .grid {
+        display: block !important;
+    }
+    
+    .grid > div {
+        margin-bottom: 1.5rem;
+    }
+}

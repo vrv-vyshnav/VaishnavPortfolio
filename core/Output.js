@@ -2,6 +2,7 @@ import { SecurityManager } from '../utils/security.js';
 
 export class DOMOutput {
   constructor(contentId) {
+    this.contentId = contentId;  // Store the content ID
     this.contentElement = document.getElementById(contentId);
     this.fileSystem = null;  // Will hold the file system instance
   }
@@ -14,6 +15,9 @@ export class DOMOutput {
   // Write text to the terminal
   write(text) {
     try {
+      // Re-fetch the element in case it was recreated
+      this.contentElement = document.getElementById(this.contentId);
+      
       if (!this.contentElement) {
         console.error('Content element not found');
         return;
@@ -50,6 +54,9 @@ export class DOMOutput {
   // Clear the terminal content
   clear() {
     try {
+      // Re-fetch the element in case it was recreated
+      this.contentElement = document.getElementById(this.contentId);
+      
       if (this.contentElement) {
         this.contentElement.innerHTML = '';
       }
@@ -61,6 +68,9 @@ export class DOMOutput {
   // Add the command prompt with input field
   addPrompt() {
     try {
+      // Re-fetch the element in case it was recreated
+      this.contentElement = document.getElementById(this.contentId);
+      
       if (!this.contentElement) {
         console.error('Content element not found');
         return;
@@ -69,16 +79,18 @@ export class DOMOutput {
       const promptLine = document.createElement('div');
       promptLine.className = 'command-line';
       
+      // Generate a unique ID for the input field based on the content ID
+      const inputId = `${this.contentId}-input`;
       const promptText = this.fileSystem ? this.fileSystem.getPrompt() : 'user@system:~$';
       promptLine.innerHTML = `
         <span class="prompt">${promptText}</span>
-        <input type="text" class="user-input" id="user-input" autofocus>
+        <input type="text" class="user-input" id="${inputId}" autofocus>
         <span class="cursor">█</span>
       `;
       
       this.contentElement.appendChild(promptLine);
       
-      const newInput = document.getElementById('user-input');
+      const newInput = document.getElementById(inputId);
       if (newInput) {
         newInput.focus();
       }
@@ -91,6 +103,9 @@ export class DOMOutput {
   // Scroll the terminal content to the bottom
   scrollToBottom() {
     // try {
+    //   // Re-fetch the element in case it was recreated
+    //   this.contentElement = document.getElementById(this.contentId);
+    //   
     //   if (this.contentElement) {
     //     this.contentElement.scrollTop = this.contentElement.scrollHeight;
     //   }

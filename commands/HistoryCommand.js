@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class HistoryCommand extends Command {
   constructor() {
-    super('history', 'Show command history');
+    super('history', 'Show command history (--clear, --size, --help available)');
   }
 
   execute(params, context) {
