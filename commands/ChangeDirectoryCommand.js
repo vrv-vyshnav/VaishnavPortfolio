@@ -7,7 +7,8 @@ export class ChangeDirectoryCommand extends Command {
 
   execute(params, context) {
     if (params.length === 0) {
-      context.fileSystem.currentPath = `/home/${context.fileSystem.userName}`;
+      // Go to portfolio directory instead of empty home directory
+      context.fileSystem.currentPath = `/home/${context.fileSystem.userName}/portfolio`;
       return;
     }
 
