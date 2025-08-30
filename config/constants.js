@@ -16,10 +16,10 @@ export const CONFIG = {
     
     // Terminal configuration
     TERMINAL: {
-        PROMPT_COLOR: '#7ee787',
+        PROMPT_COLOR: '#0f0',
         ERROR_COLOR: '#ff7b72',
-        SUCCESS_COLOR: '#7ee787',
-        INFO_COLOR: '#58a6ff',
+        SUCCESS_COLOR: '#0f0',
+        INFO_COLOR: '#0ff',
         WARNING_COLOR: '#ffa657'
     },
     

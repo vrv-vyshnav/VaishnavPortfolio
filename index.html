@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- Primary Meta Tags -->
     <title>Vaishnav Vishnu | Portfolio</title>
@@ -66,29 +66,16 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="terminal-content.css">
 </head>
 <body>
-
-    
-    <div class="terminal">
-        <div class="terminal-header">
-            <div class="terminal-buttons">
-                <div class="terminal-button close"></div>
-                <div class="terminal-button minimize"></div>
-                <div class="terminal-button maximize"></div>
-            </div>
-            <div class="terminal-title">vaishnav@dev: ~/portfolio</div>
+    <div class="terminal-container">
+        <div class="terminal-tabs" id="terminal-tabs">
+            <!-- Terminal tabs will be added here dynamically -->
         </div>
         
-        <div class="terminal-content" id="terminal-content">
-            <pre class="ascii-art">
-            ██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
-            ██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
-            ██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
-            ╚██╗ ██╔╝██╔══██║██║╚════██║██╔══██║██║╚██╗██║██╔══██║╚██╗ ██╔╝
-             ╚████╔╝ ██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║ ╚████╔╝ 
-              ╚═══╝  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝  ╚═══╝  
-            </pre>
+        <div class="terminal-views" id="terminal-views">
+            <!-- Terminal views will be added here dynamically -->
         </div>
     </div>
     

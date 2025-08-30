@@ -24,6 +24,9 @@ import { TailCommand } from './commands/TailCommand.js';
 import { CurlCommand } from './commands/CurlCommand.js';
 import { ExitCommand } from './commands/ExitCommand.js';
 import { RmCommand } from './commands/RmCommand.js';
+import { NewTabCommand } from './commands/NewTabCommand.js';
+import { SwitchTabCommand } from './commands/SwitchTabCommand.js';
+import { ListTabsCommand } from './commands/ListTabsCommand.js';
 
 // Utility imports
 import { typeWriter } from './utils/typeWriter.js';
@@ -33,17 +36,21 @@ import { SecurityManager } from './utils/security.js';
 import { CONFIG } from './config/constants.js';
 
 export class Terminal {
-  constructor() {
+  constructor(terminalId, isFirstTerminal = false) {
     // Initialize error handler and event manager
     this.errorHandler = new ErrorHandler();
     this.eventManager = new EventManager();
     
+    // Store terminal ID and whether this is the first terminal
+    this.terminalId = terminalId;
+    this.isFirstTerminal = isFirstTerminal;
+    
     // Initialize all dependencies in the constructor or setup method
     this.fileSystem = new PortfolioFileSystem();
-    this.output = new DOMOutput('terminal-content');
+    this.output = new DOMOutput(`${terminalId}-content`);
     this.history = new HistoryService();
     this.commandRegistry = new CommandRegistry();
-    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry);
+    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId);
 
     this.isLoading = true;
     this.registerCommands();
@@ -71,6 +78,9 @@ export class Terminal {
     this.commandRegistry.register(new CurlCommand());
     this.commandRegistry.register(new ExitCommand());
     this.commandRegistry.register(new RmCommand());
+    this.commandRegistry.register(new NewTabCommand());
+    this.commandRegistry.register(new SwitchTabCommand());
+    this.commandRegistry.register(new ListTabsCommand());
 
   }
 
@@ -79,10 +89,17 @@ export class Terminal {
       this.errorHandler.validateInput(this.fileSystem, 'object', 'fileSystem');
       this.errorHandler.validateInput(this.output, 'object', 'output');
       
-      this.showBootSequence();
+      if (this.isFirstTerminal) {
+        this.showBootSequence();
+      } else {
+        this.showQuickStart();
+      }
       await this.fileSystem.initialize();
       this.output.setFileSystem(this.fileSystem);
       this.isLoading = false;
+      
+      // Set up event listeners after initialization
+      this.setupEventListeners();
     } catch (error) {
       this.errorHandler.handleError(error, 'initialization', { silent: false });
     }
@@ -101,7 +118,7 @@ export class Terminal {
     Location: ${CONFIG.SYSTEM_INFO.LOCATION}`;
 
     const asciiElement = document.createElement('pre');
-    asciiElement.className = 'ascii-art';
+    asciiElement.className = 'ascii-art main-banner';
     asciiElement.style.color = CONFIG.TERMINAL.SUCCESS_COLOR;
     asciiElement.style.textShadow = `0 0 5px ${CONFIG.TERMINAL.SUCCESS_COLOR}`;
 
@@ -109,7 +126,8 @@ export class Terminal {
     systemElement.className = 'output';
     systemElement.style.color = CONFIG.TERMINAL.INFO_COLOR;
 
-    const content = document.getElementById('terminal-content');
+    const contentId = `${this.terminalId}-content`;
+    const content = document.getElementById(contentId);
     if (content) {
       content.appendChild(asciiElement);
       content.appendChild(systemElement);
@@ -121,7 +139,7 @@ export class Terminal {
       setTimeout(() => {
         this.output.write(`<span class="success">${CONFIG.SUCCESS_MESSAGES.TERMINAL_READY}</span>`);
         this.output.addPrompt();
-        this.setupEventListeners();
+        // Remove setupEventListeners call from here since it's now in initialize
       }, CONFIG.INIT_DELAY);
     } else {
       this.errorHandler.handleError(
@@ -131,8 +149,16 @@ export class Terminal {
     }
   }
 
+  showQuickStart() {
+    // For new tabs, just show the prompt immediately without any boot sequence
+    setTimeout(() => {
+      this.output.addPrompt();
+    }, 100); // Small delay to ensure DOM is ready
+  }
+
   setupEventListeners() {
-    const content = document.getElementById('terminal-content');
+    const contentId = `${this.terminalId}-content`;
+    const content = document.getElementById(contentId);
     if (!content) {
       this.errorHandler.handleError(
         this.errorHandler.createError('Terminal content element not found', 'event_setup', 'ReferenceError'),
@@ -155,7 +181,9 @@ export class Terminal {
 
   handleKeyDown(e) {
     try {
-      const input = document.getElementById('user-input');
+      // Use the unique input ID based on the terminal ID
+      const inputId = `${this.terminalId}-content-input`;
+      const input = document.getElementById(inputId);
       if (!input) return;
 
       if (e.key === 'Enter') {
@@ -183,7 +211,9 @@ export class Terminal {
 
   handleClick() {
     try {
-      const input = document.getElementById('user-input');
+      // Use the unique input ID based on the terminal ID
+      const inputId = `${this.terminalId}-content-input`;
+      const input = document.getElementById(inputId);
       if (input) input.focus();
     } catch (error) {
       this.errorHandler.handleError(error, 'mouse_click');
@@ -237,7 +267,7 @@ export class Terminal {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
       this.output.addPrompt();
-      this.setupEventListeners();
+      // Remove setupEventListeners call from here since it's now in initialize
     }
   }
 
@@ -258,7 +288,7 @@ export class Terminal {
         } else if (matches.length > 1) {
           this.output.write(`<span class="info">${matches.join('  ')}</span>`);
           this.output.addPrompt();
-          this.setupEventListeners();
+          // Remove setupEventListeners call from here since it's now in initialize
         }
       } else {
         const items = this.fileSystem.list();
@@ -271,7 +301,7 @@ export class Terminal {
         } else if (matches.length > 1) {
           this.output.write(`<span class="info">${matches.join('  ')}</span>`);
           this.output.addPrompt();
-          this.setupEventListeners();
+          // Remove setupEventListeners call from here since it's now in initialize
         }
       }
     } catch (error) {
