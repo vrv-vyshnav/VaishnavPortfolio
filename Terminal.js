@@ -118,7 +118,7 @@ export class Terminal {
     Location: ${CONFIG.SYSTEM_INFO.LOCATION}`;
 
     const asciiElement = document.createElement('pre');
-    asciiElement.className = 'ascii-art';
+    asciiElement.className = 'ascii-art main-banner';
     asciiElement.style.color = CONFIG.TERMINAL.SUCCESS_COLOR;
     asciiElement.style.textShadow = `0 0 5px ${CONFIG.TERMINAL.SUCCESS_COLOR}`;
 

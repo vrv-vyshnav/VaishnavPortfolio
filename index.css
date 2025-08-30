@@ -28,6 +28,45 @@ body {
     padding: 20px;
 }
 
+@media (max-width: 768px) {
+    .terminal-container {
+        padding: 10px;
+    }
+    
+    .terminal-content {
+        padding: 15px;
+        font-size: 13px;
+        line-height: 1.4;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .terminal-tab {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .terminal-tabs {
+        padding: 0 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .terminal-container {
+        padding: 5px;
+    }
+    
+    .terminal-content {
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    .terminal-tab {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
 .terminal-tabs {
     display: flex;
     background: #21262d;

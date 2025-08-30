@@ -97,7 +97,7 @@ export class TerminalManager {
     
     // Conditionally include banner
     const bannerHTML = showBanner ? `
-        <pre class="ascii-art">
+        <pre class="ascii-art main-banner">
         ██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
         ██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
         ██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
