@@ -24,6 +24,12 @@
   color: #0ff;
 }
 
+.highlight {
+  background-color: #0f0;
+  color: #000;
+  font-weight: bold;
+}
+
 /* Mobile-specific responsive improvements */
 @media (max-width: 768px) {
     .terminal-heading {

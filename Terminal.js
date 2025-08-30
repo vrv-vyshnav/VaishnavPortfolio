@@ -24,6 +24,9 @@ import { TailCommand } from './commands/TailCommand.js';
 import { CurlCommand } from './commands/CurlCommand.js';
 import { ExitCommand } from './commands/ExitCommand.js';
 import { RmCommand } from './commands/RmCommand.js';
+import { NewTabCommand } from './commands/NewTabCommand.js';
+import { SwitchTabCommand } from './commands/SwitchTabCommand.js';
+import { ListTabsCommand } from './commands/ListTabsCommand.js';
 
 // Utility imports
 import { typeWriter } from './utils/typeWriter.js';
@@ -33,13 +36,14 @@ import { SecurityManager } from './utils/security.js';
 import { CONFIG } from './config/constants.js';
 
 export class Terminal {
-  constructor(terminalId) {
+  constructor(terminalId, isFirstTerminal = false) {
     // Initialize error handler and event manager
     this.errorHandler = new ErrorHandler();
     this.eventManager = new EventManager();
     
-    // Store terminal ID
+    // Store terminal ID and whether this is the first terminal
     this.terminalId = terminalId;
+    this.isFirstTerminal = isFirstTerminal;
     
     // Initialize all dependencies in the constructor or setup method
     this.fileSystem = new PortfolioFileSystem();
@@ -74,6 +78,9 @@ export class Terminal {
     this.commandRegistry.register(new CurlCommand());
     this.commandRegistry.register(new ExitCommand());
     this.commandRegistry.register(new RmCommand());
+    this.commandRegistry.register(new NewTabCommand());
+    this.commandRegistry.register(new SwitchTabCommand());
+    this.commandRegistry.register(new ListTabsCommand());
 
   }
 
@@ -82,7 +89,11 @@ export class Terminal {
       this.errorHandler.validateInput(this.fileSystem, 'object', 'fileSystem');
       this.errorHandler.validateInput(this.output, 'object', 'output');
       
-      this.showBootSequence();
+      if (this.isFirstTerminal) {
+        this.showBootSequence();
+      } else {
+        this.showQuickStart();
+      }
       await this.fileSystem.initialize();
       this.output.setFileSystem(this.fileSystem);
       this.isLoading = false;
@@ -136,6 +147,13 @@ export class Terminal {
         'boot_sequence'
       );
     }
+  }
+
+  showQuickStart() {
+    // For new tabs, just show the prompt immediately without any boot sequence
+    setTimeout(() => {
+      this.output.addPrompt();
+    }, 100); // Small delay to ensure DOM is ready
   }
 
   setupEventListeners() {

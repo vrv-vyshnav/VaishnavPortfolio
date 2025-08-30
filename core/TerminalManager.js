@@ -40,14 +40,15 @@ export class TerminalManager {
 
   /**
    * Create a new terminal instance
+   * @param {boolean} isFirstTerminal - Whether this is the first terminal (shows banner)
    * @returns {string} The ID of the created terminal
    */
-  createTerminal() {
+  createTerminal(isFirstTerminal = false) {
     const terminalId = `terminal-${this.nextTerminalId++}`;
-    const terminal = new Terminal(terminalId);
+    const terminal = new Terminal(terminalId, isFirstTerminal);
     
     // Create UI elements for the terminal
-    this.createTerminalUI(terminalId);
+    this.createTerminalUI(terminalId, isFirstTerminal);
     
     // Store the terminal instance
     this.terminals.set(terminalId, terminal);
@@ -64,8 +65,9 @@ export class TerminalManager {
   /**
    * Create UI elements for a terminal
    * @param {string} terminalId - The ID of the terminal
+   * @param {boolean} showBanner - Whether to show the ASCII banner
    */
-  createTerminalUI(terminalId) {
+  createTerminalUI(terminalId, showBanner = false) {
     // Create tab
     const tab = document.createElement('div');
     tab.className = 'terminal-tab';
@@ -92,6 +94,18 @@ export class TerminalManager {
     const terminalView = document.createElement('div');
     terminalView.className = 'terminal';
     terminalView.id = terminalId;
+    
+    // Conditionally include banner
+    const bannerHTML = showBanner ? `
+        <pre class="ascii-art">
+        ██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
+        ██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
+        ██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
+        ╚██╗ ██╔╝██╔══██║██║╚════██║██╔══██║██║╚██╗██║██╔══██║╚██╗ ██╔╝
+         ╚████╔╝ ██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║ ╚████╔╝ 
+          ╚═══╝  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝  ╚═══╝  
+        </pre>` : '';
+    
     terminalView.innerHTML = `
       <div class="terminal-header">
         <div class="terminal-buttons">
@@ -102,14 +116,7 @@ export class TerminalManager {
         <div class="terminal-title">vaishnav@dev: ~/portfolio</div>
       </div>
       <div class="terminal-content" id="${terminalId}-content">
-        <pre class="ascii-art">
-        ██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
-        ██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
-        ██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
-        ╚██╗ ██╔╝██╔══██║██║╚════██║██╔══██║██║╚██╗██║██╔══██║╚██╗ ██╔╝
-         ╚████╔╝ ██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║ ╚████╔╝ 
-          ╚═══╝  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝  ╚═══╝  
-        </pre>
+        ${bannerHTML}
       </div>
     `;
     
@@ -258,7 +265,7 @@ export class TerminalManager {
   async initializeTerminals() {
     // Create the first terminal if none exist
     if (this.terminals.size === 0) {
-      const terminalId = this.createTerminal();
+      const terminalId = this.createTerminal(true); // Show banner for first terminal
       // The terminal is initialized in createTerminal
     } else {
       // Initialize all existing terminals
@@ -266,5 +273,71 @@ export class TerminalManager {
         await terminal.initialize();
       }
     }
+  }
+
+  /**
+   * Get the tab number for a specific terminal ID
+   * @param {string} terminalId - The terminal ID
+   * @returns {number} The tab number (1-based)
+   */
+  getTabNumber(terminalId) {
+    const terminalIds = Array.from(this.terminals.keys());
+    const index = terminalIds.indexOf(terminalId);
+    return index !== -1 ? index + 1 : 0;
+  }
+
+  /**
+   * Get the current active tab number
+   * @returns {number} The current tab number (1-based)
+   */
+  getCurrentTabNumber() {
+    if (!this.activeTerminalId) return 0;
+    return this.getTabNumber(this.activeTerminalId);
+  }
+
+  /**
+   * Get total number of tabs
+   * @returns {number} Total tab count
+   */
+  getTotalTabCount() {
+    return this.terminals.size;
+  }
+
+  /**
+   * Switch to a tab by number
+   * @param {number} tabNumber - The tab number (1-based)
+   * @returns {boolean} True if successful, false if tab doesn't exist
+   */
+  switchToTabByNumber(tabNumber) {
+    const terminalIds = Array.from(this.terminals.keys());
+    const index = tabNumber - 1; // Convert to 0-based index
+    
+    if (index >= 0 && index < terminalIds.length) {
+      const terminalId = terminalIds[index];
+      this.setActiveTerminal(terminalId);
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Get information about all tabs
+   * @returns {Array} Array of tab information objects
+   */
+  getAllTabsInfo() {
+    const tabs = [];
+    const terminalIds = Array.from(this.terminals.keys());
+    
+    terminalIds.forEach((id, index) => {
+      tabs.push({
+        id: id,
+        number: index + 1,
+        title: `Terminal ${index + 1}`,
+        isActive: id === this.activeTerminalId
+      });
+    });
+    
+    return tabs;
   }
 }
