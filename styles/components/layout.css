@@ -1,0 +1,39 @@
+/* Layout Components */
+
+.terminal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+}
+
+.terminal-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    gap: 10px;
+}
+
+.terminal-views {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Mobile Layout */
+@media (max-width: 768px) {
+    .terminal-container {
+        padding: 10px;
+    }
+    
+    .terminal-main {
+        gap: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .terminal-container {
+        padding: 5px;
+    }
+}

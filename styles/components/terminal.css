@@ -1,0 +1,126 @@
+/* Terminal Component Styles */
+
+.terminal {
+    background: var(--gradient-primary);
+    border: var(--border-primary);
+    border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-large);
+    display: none;
+}
+
+.terminal.active {
+    display: flex;
+}
+
+/* Terminal Header */
+.terminal-header {
+    background: var(--gradient-secondary);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    border-bottom: var(--border-primary);
+    flex-shrink: 0;
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+}
+
+.terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.terminal-button:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-small);
+}
+
+.terminal-button.close { 
+    background: var(--color-btn-close);
+}
+
+.terminal-button.minimize { 
+    background: var(--color-btn-minimize);
+}
+
+.terminal-button.maximize { 
+    background: var(--color-btn-maximize);
+}
+
+.terminal-title {
+    color: var(--color-accent-blue);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+}
+
+/* Terminal Content */
+.terminal-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    font-size: var(--font-size-base);
+    line-height: 1.4;
+    background: var(--gradient-tertiary);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+    border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+}
+
+/* Terminal Content Elements */
+.terminal-output {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+    padding: 20px;
+}
+
+.terminal-pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.terminal-prompt {
+    color: var(--color-accent-green);
+}
+
+.terminal-heading {
+    color: var(--color-accent-green);
+    font-weight: bold;
+}
+
+.terminal-key {
+    color: #0ff;
+}
+
+.highlight {
+    background-color: var(--color-accent-green);
+    color: #000;
+    font-weight: bold;
+}
+
+/* Mobile Terminal */
+@media (max-width: 768px) {
+    .terminal-content {
+        padding: 15px;
+        font-size: 13px;
+        line-height: 1.4;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (max-width: 480px) {
+    .terminal-content {
+        padding: 10px;
+        font-size: var(--font-size-sm);
+    }
+}

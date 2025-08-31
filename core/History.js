@@ -80,4 +80,19 @@ export class HistoryService {
   size() {
     return this.commands.length;
   }
+
+  // Search command history (for Ctrl+R functionality)
+  search(term) {
+    if (!term) return [];
+    const searchTerm = term.toLowerCase();
+    return this.commands
+      .map((cmd, index) => ({ cmd, index }))
+      .filter(item => item.cmd.toLowerCase().includes(searchTerm))
+      .reverse(); // Most recent first
+  }
+
+  // Get command by index
+  getByIndex(index) {
+    return this.commands[index] || null;
+  }
 }

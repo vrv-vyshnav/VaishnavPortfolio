@@ -1,0 +1,72 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  /* Colors */
+  --color-bg-primary: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-bg-tertiary: #21262d;
+  --color-bg-quaternary: #30363d;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(145deg, #161b22, #1a1f2e);
+  --gradient-secondary: linear-gradient(145deg, #21262d, #30363d);
+  --gradient-tertiary: linear-gradient(145deg, #0d1117, #161b22);
+  
+  /* Text Colors */
+  --color-text-primary: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-text-tertiary: #6e7681;
+  
+  /* Accent Colors */
+  --color-accent-blue: #58a6ff;
+  --color-accent-green: #0f0;
+  --color-accent-red: #f85149;
+  --color-accent-orange: #ff6b00;
+  --color-accent-purple: #7c3aed;
+  --color-accent-yellow: #f79000;
+  
+  /* Button Colors */
+  --color-btn-close: linear-gradient(145deg, #ff5f56, #ff4444);
+  --color-btn-minimize: linear-gradient(145deg, #ffbd2e, #ffaa00);
+  --color-btn-maximize: linear-gradient(145deg, #27ca3f, #22aa33);
+  
+  /* Scrollbar Colors */
+  --color-scrollbar-track: #161b22;
+  --color-scrollbar-thumb: #30363d;
+  --color-scrollbar-thumb-hover: #484f58;
+  
+  /* Borders */
+  --border-primary: 1px solid var(--color-bg-quaternary);
+  --border-radius-small: 6px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Typography */
+  --font-family-mono: 'JetBrains Mono', monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  
+  /* Shadows */
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.4);
+  
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* Z-index */
+  --z-index-dropdown: 1000;
+  --z-index-modal: 1100;
+  --z-index-tooltip: 1200;
+}

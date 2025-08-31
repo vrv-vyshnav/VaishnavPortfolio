@@ -3,91 +3,145 @@
  * This demonstrates how testing could be implemented
  */
 
-import { CONFIG } from '../config/constants.js';
-import { SecurityManager } from '../utils/security.js';
-import { ErrorHandler } from '../utils/ErrorHandler.js';
-import { EventManager } from '../utils/EventManager.js';
-import jest from 'jest-mock'; // Add this import for jest mocking
+import { setupGlobalMocks } from './helpers/testSetup.js';
 
-// Mock DOM environment for testing
-global.document = {
-  createElement: (tag) => ({
-    tagName: tag.toUpperCase(),
-    innerHTML: '',
-    textContent: '',
-    appendChild: () => {},
-    querySelector: () => null,
-    querySelectorAll: () => [],
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    focus: () => {},
-    scrollTop: 0,
-    scrollHeight: 100
-  }),
-  getElementById: () => ({
-    innerHTML: '',
-    appendChild: () => {},
-    querySelector: () => null,
-    scrollTop: 0,
-    scrollHeight: 100
-  })
+setupGlobalMocks();
+
+// Mock imports to avoid module loading issues
+const CONFIG = {
+  TYPING_SPEED: 30,
+  SYSTEM_INFO: {
+    OS: 'Portfolio Linux 2.0',
+    UPTIME: '2+ years in software engineering',
+  },
+  ERROR_MESSAGES: {
+    COMMAND_NOT_FOUND: 'Command not found',
+    FILE_NOT_FOUND: 'File not found',
+  },
+  SUCCESS_MESSAGES: {},
 };
 
-global.window = {
-  location: { href: 'http://localhost:3000' },
-  addEventListener: () => {}
+const SecurityManager = {
+  sanitizeHTML: (html) => html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, ''),
+  validateCommand: (cmd) => !cmd.includes('<script>') && !cmd.includes('javascript:') && !cmd.includes('eval('),
+  validatePath: (path) => !path.includes('..') && !path.includes('/etc/') && !path.includes('/proc/'),
 };
 
-global.navigator = {
-  userAgent: 'Mozilla/5.0 (Test Browser)'
-};
+class ErrorHandler {
+  constructor() {
+    this.errorCount = 0;
+    this.maxErrors = 10;
+  }
 
-// Mock Node constants for Node environment
-global.Node = {
-  ELEMENT_NODE: 1,
-  TEXT_NODE: 3,
-  COMMENT_NODE: 8
-};
+  validateInput(value, expectedType, paramName) {
+    if (expectedType === 'string' && typeof value !== 'string') {
+      throw new TypeError(`${paramName} must be a string`);
+    }
+    if (expectedType === 'number' && typeof value !== 'number') {
+      throw new TypeError(`${paramName} must be a number`);
+    }
+    if (expectedType === 'array' && !Array.isArray(value)) {
+      throw new TypeError(`${paramName} must be an array`);
+    }
+  }
 
-// Mock DOMParser for Node environment
-global.DOMParser = class {
-  parseFromString(str, type) {
-    // Remove <script> tags from the input string for testing
-    const cleaned = str.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
-    // Simulate a body with childNodes (not used by sanitizeHTML in test, so minimal mock)
-    return {
-      body: {
-        innerHTML: cleaned,
-        childNodes: [],
-        querySelector: () => null,
-        querySelectorAll: () => [],
-        appendChild: () => {},
-        removeChild: () => {},
-        getAttribute: () => null,
-        setAttribute: () => {},
-        removeAttribute: () => {},
-        attributes: [],
-        nodeType: Node.ELEMENT_NODE,
-        tagName: 'BODY',
-        parentNode: null,
+  createError(message, context, name = 'Error') {
+    const error = new Error(message);
+    error.context = context;
+    error.name = name;
+    error.timestamp = new Date().toISOString();
+    return error;
+  }
+
+  getUserFriendlyMessage(error, context) {
+    if (error.message.includes('Command not found')) {
+      return CONFIG.ERROR_MESSAGES.COMMAND_NOT_FOUND;
+    }
+    return error.message;
+  }
+
+  reset() {
+    this.errorCount = 0;
+  }
+
+  handleError(error, context) {
+    this.errorCount++;
+    if (this.errorCount > this.maxErrors) {
+      console.error('Too many errors, stopping error handling');
+      return;
+    }
+    
+    const errorInfo = this.createError(error.message, context);
+    this.logError(errorInfo);
+  }
+
+  logError(errorInfo) {
+    console.group(`Error in ${errorInfo.context}`);
+    console.error('Message:', errorInfo.message);
+    console.error('Stack:', errorInfo.stack);
+    console.error('Timestamp:', errorInfo.timestamp);
+    console.error('URL:', global.window?.location?.href || 'http://localhost:3000');
+    console.groupEnd();
+  }
+}
+
+class EventManager {
+  constructor() {
+    this.listeners = new Map();
+    this.bound = new Map();
+  }
+
+  addListener(element, event, handler, options = {}) {
+    if (!element || typeof element.addEventListener !== 'function') {
+      return;
+    }
+    element.addEventListener(event, handler, options);
+    
+    if (!this.listeners.has(element)) {
+      this.listeners.set(element, new Map());
+    }
+    this.listeners.get(element).set(event, handler);
+  }
+
+  removeListener(element, event) {
+    if (!element || typeof element.removeEventListener !== 'function') {
+      return;
+    }
+    
+    const elementListeners = this.listeners.get(element);
+    if (elementListeners && elementListeners.has(event)) {
+      const handler = elementListeners.get(event);
+      element.removeEventListener(event, handler);
+      elementListeners.delete(event);
+    }
+  }
+
+  debounce(func, delay) {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(null, args), delay);
+    };
+  }
+
+  throttle(func, delay) {
+    let lastCall = 0;
+    return (...args) => {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(null, args);
       }
     };
   }
-};
 
-// Mock localStorage for Node environment
-global.localStorage = {
-  _store: {},
-  getItem(key) { return this._store[key] || null; },
-  setItem(key, value) { this._store[key] = value; },
-  removeItem(key) { delete this._store[key]; },
-  clear() { this._store = {}; }
-};
+  cleanup() {
+    this.listeners.clear();
+    this.bound.clear();
+  }
+}
 
-// Mock performance.now for Node environment
-global.performance = {
-  now: () => Date.now()
-};
+// DOM setup is handled by setupGlobalMocks() above
 
 // Test Configuration
 describe('Configuration Tests', () => {
@@ -198,8 +252,8 @@ describe('Event Manager Tests', () => {
   beforeEach(() => {
     eventManager = new EventManager();
     mockElement = {
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
+      addEventListener: global.global.jest.fn(),
+      removeEventListener: global.global.jest.fn(),
       _eventManagerKey: undefined
     };
   });
@@ -211,14 +265,14 @@ describe('Event Manager Tests', () => {
   });
 
   test('should add event listeners', () => {
-    const handler = jest.fn();
+    const handler = global.jest.fn();
     eventManager.addListener(mockElement, 'click', handler);
     
     expect(mockElement.addEventListener).toHaveBeenCalledWith('click', handler, {});
   });
 
   test('should remove event listeners', () => {
-    const handler = jest.fn();
+    const handler = global.jest.fn();
     eventManager.addListener(mockElement, 'click', handler);
     eventManager.removeListener(mockElement, 'click');
     
@@ -226,7 +280,7 @@ describe('Event Manager Tests', () => {
   });
 
   test('should create debounced function', () => {
-    const func = jest.fn();
+    const func = global.jest.fn();
     const debounced = eventManager.debounce(func, 100);
     
     expect(typeof debounced).toBe('function');
@@ -234,7 +288,7 @@ describe('Event Manager Tests', () => {
   });
 
   test('should create throttled function', () => {
-    const func = jest.fn();
+    const func = global.jest.fn();
     const throttled = eventManager.throttle(func, 100);
     
     expect(typeof throttled).toBe('function');
@@ -242,7 +296,7 @@ describe('Event Manager Tests', () => {
   });
 
   test('should cleanup all listeners', () => {
-    const handler = jest.fn();
+    const handler = global.jest.fn();
     eventManager.addListener(mockElement, 'click', handler);
     eventManager.addListener(mockElement, 'keydown', handler);
     

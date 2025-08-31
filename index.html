@@ -64,9 +64,7 @@
         ]
     }
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="terminal-content.css">
 </head>
 <body>
     <div class="terminal-container">
@@ -74,8 +72,84 @@
             <!-- Terminal tabs will be added here dynamically -->
         </div>
         
-        <div class="terminal-views" id="terminal-views">
-            <!-- Terminal views will be added here dynamically -->
+        <div class="terminal-main">
+            <div class="terminal-views" id="terminal-views">
+                <!-- Terminal views will be added here dynamically -->
+            </div>
+            
+            <div class="system-dashboard" id="system-dashboard">
+                <div class="dashboard-header">
+                    <div class="dashboard-buttons">
+                        <div class="dashboard-button close"></div>
+                        <div class="dashboard-button minimize"></div>
+                        <div class="dashboard-button maximize"></div>
+                    </div>
+                    <h3 class="dashboard-title">System Monitor</h3>
+                    <div class="dashboard-status" id="dashboard-status">● Online</div>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="metric-card time-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">🕐</span>
+                            <span class="metric-title">Time</span>
+                        </div>
+                        <div class="metric-value" id="time-display">--:--:--</div>
+                        <div class="metric-subtitle" id="date-display">Loading...</div>
+                    </div>
+                    
+                    <div class="metric-card memory-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">💾</span>
+                            <span class="metric-title">Memory</span>
+                        </div>
+                        <div class="metric-value" id="memory-usage">--%</div>
+                        <div class="memory-bar">
+                            <div class="memory-fill" id="memory-fill"></div>
+                        </div>
+                        <div class="metric-subtitle" id="memory-details">-- / -- MB</div>
+                    </div>
+                    
+                    <div class="metric-card network-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">🌐</span>
+                            <span class="metric-title">Connection</span>
+                        </div>
+                        <div class="metric-value" id="connection-type">--</div>
+                        <div class="metric-subtitle" id="connection-speed">Detecting...</div>
+                    </div>
+                    
+                    <div class="metric-card performance-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">⚡</span>
+                            <span class="metric-title">Performance</span>
+                        </div>
+                        <div class="metric-value" id="fps-display">-- FPS</div>
+                        <div class="metric-subtitle" id="load-time">Load: --ms</div>
+                    </div>
+                    
+                    <div class="metric-card storage-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">💿</span>
+                            <span class="metric-title">Storage</span>
+                        </div>
+                        <div class="metric-value" id="storage-used">--%</div>
+                        <div class="storage-bar">
+                            <div class="storage-fill" id="storage-fill"></div>
+                        </div>
+                        <div class="metric-subtitle" id="storage-details">-- / -- MB</div>
+                    </div>
+                    
+                    <div class="metric-card device-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">📱</span>
+                            <span class="metric-title">Device</span>
+                        </div>
+                        <div class="metric-value" id="screen-res">--x--</div>
+                        <div class="metric-subtitle" id="browser-info">Loading...</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     

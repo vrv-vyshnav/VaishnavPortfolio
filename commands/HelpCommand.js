@@ -22,7 +22,13 @@ export class HelpCommand extends Command {
     - Use 'cd projects' to explore projects
     - Use 'cat about.txt' to learn more
     - Use Tab for auto-completion
-    - Use Up/Down arrows for command history`;
+    - Use Up/Down arrows for command history
+    
+<span class="info">Advanced Features:</span>
+    - Use 'command &' to run commands in background
+    - Use 'jobs' to list active background processes
+    - Use Ctrl+R for interactive command history search
+    - Use Escape to exit history search mode`;
 
     context.output.write(output);
   }

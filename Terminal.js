@@ -27,6 +27,7 @@ import { RmCommand } from './commands/RmCommand.js';
 import { NewTabCommand } from './commands/NewTabCommand.js';
 import { SwitchTabCommand } from './commands/SwitchTabCommand.js';
 import { ListTabsCommand } from './commands/ListTabsCommand.js';
+import { JobsCommand } from './commands/JobsCommand.js';
 
 // Utility imports
 import { typeWriter } from './utils/typeWriter.js';
@@ -50,7 +51,17 @@ export class Terminal {
     this.output = new DOMOutput(`${terminalId}-content`);
     this.history = new HistoryService();
     this.commandRegistry = new CommandRegistry();
-    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId);
+    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId, this);
+
+    // Background processes management
+    this.backgroundProcesses = new Map();
+    this.nextProcessId = 1;
+
+    // History search state
+    this.isSearchingHistory = false;
+    this.searchTerm = '';
+    this.searchResults = [];
+    this.searchIndex = 0;
 
     this.isLoading = true;
     this.registerCommands();
@@ -81,6 +92,7 @@ export class Terminal {
     this.commandRegistry.register(new NewTabCommand());
     this.commandRegistry.register(new SwitchTabCommand());
     this.commandRegistry.register(new ListTabsCommand());
+    this.commandRegistry.register(new JobsCommand());
 
   }
 
@@ -186,6 +198,42 @@ export class Terminal {
       const input = document.getElementById(inputId);
       if (!input) return;
 
+      // Handle Ctrl+R for history search
+      if (e.ctrlKey && e.key === 'r') {
+        e.preventDefault();
+        this.startHistorySearch(input);
+        return;
+      }
+
+      // Handle escape to exit history search
+      if (e.key === 'Escape' && this.isSearchingHistory) {
+        e.preventDefault();
+        this.exitHistorySearch(input);
+        return;
+      }
+
+      // If we're in history search mode
+      if (this.isSearchingHistory) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.selectSearchResult(input);
+        } else if (e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')) {
+          e.preventDefault();
+          this.navigateSearchResults(-1, input);
+        } else if (e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'n')) {
+          e.preventDefault();
+          this.navigateSearchResults(1, input);
+        } else if (e.key === 'Backspace') {
+          // Allow backspace to modify search term
+          this.updateSearchTerm(input);
+        } else if (e.key.length === 1) {
+          // Regular character input updates search term
+          setTimeout(() => this.updateSearchTerm(input), 0);
+        }
+        return;
+      }
+
+      // Normal terminal input handling
       if (e.key === 'Enter') {
         const command = input.value.trim();
         if (command) {
@@ -220,6 +268,142 @@ export class Terminal {
     }
   }
 
+  startHistorySearch(input) {
+    this.isSearchingHistory = true;
+    this.searchTerm = '';
+    this.searchResults = [];
+    this.searchIndex = 0;
+    
+    // Save original input value
+    this.originalInput = input.value;
+    
+    // Show search prompt
+    this.updateSearchDisplay(input);
+  }
+
+  exitHistorySearch(input) {
+    this.isSearchingHistory = false;
+    this.searchTerm = '';
+    this.searchResults = [];
+    this.searchIndex = 0;
+    
+    // Remove search display
+    const existingDisplay = document.getElementById(`${this.terminalId}-search-display`);
+    if (existingDisplay) {
+      existingDisplay.remove();
+    }
+    
+    // Restore original input
+    input.value = this.originalInput || '';
+    input.style.backgroundColor = '';
+    input.placeholder = '';
+  }
+
+  updateSearchTerm(input) {
+    this.searchTerm = input.value;
+    this.searchResults = this.history.search(this.searchTerm);
+    this.searchIndex = 0;
+    this.updateSearchDisplay(input);
+  }
+
+  updateSearchDisplay(input) {
+    input.value = this.searchTerm;
+    
+    // Remove any existing search results display
+    const existingDisplay = document.getElementById(`${this.terminalId}-search-display`);
+    if (existingDisplay) {
+      existingDisplay.remove();
+    }
+    
+    if (this.searchResults.length > 0) {
+      input.style.backgroundColor = '#2a4a3a';
+      this.showSearchResultsInOutput();
+    } else {
+      input.style.backgroundColor = '#4a2a2a';
+      this.showNoMatchesMessage();
+    }
+    
+    input.placeholder = '';
+  }
+
+  showSearchResultsInOutput() {
+    const searchDisplayId = `${this.terminalId}-search-display`;
+    let searchDisplay = document.getElementById(searchDisplayId);
+    
+    if (!searchDisplay) {
+      searchDisplay = document.createElement('div');
+      searchDisplay.id = searchDisplayId;
+      searchDisplay.className = 'search-results-display';
+      
+      // Insert before the current input line
+      const inputLine = this.output.contentElement.lastElementChild;
+      this.output.contentElement.insertBefore(searchDisplay, inputLine);
+    }
+    
+    // Show up to 5 results
+    const displayResults = this.searchResults.slice(0, 5);
+    const resultsHtml = displayResults.map((result, index) => {
+      const isSelected = index === this.searchIndex;
+      const className = isSelected ? 'search-result selected' : 'search-result';
+      return `<div class="${className}"><span class="search-term-highlight">${this.searchTerm}</span> → ${result.cmd}</div>`;
+    }).join('');
+    
+    searchDisplay.innerHTML = `
+      <div class="search-header">(reverse-i-search) '${this.searchTerm}':</div>
+      ${resultsHtml}
+    `;
+  }
+
+  showNoMatchesMessage() {
+    const searchDisplayId = `${this.terminalId}-search-display`;
+    let searchDisplay = document.getElementById(searchDisplayId);
+    
+    if (!searchDisplay) {
+      searchDisplay = document.createElement('div');
+      searchDisplay.id = searchDisplayId;
+      searchDisplay.className = 'search-results-display';
+      
+      // Insert before the current input line
+      const inputLine = this.output.contentElement.lastElementChild;
+      this.output.contentElement.insertBefore(searchDisplay, inputLine);
+    }
+    
+    searchDisplay.innerHTML = `
+      <div class="search-header">(reverse-i-search) '${this.searchTerm}': <span class="no-matches">(no matches)</span></div>
+    `;
+  }
+
+  navigateSearchResults(direction, input) {
+    if (this.searchResults.length === 0) return;
+    
+    this.searchIndex += direction;
+    if (this.searchIndex < 0) this.searchIndex = this.searchResults.length - 1;
+    if (this.searchIndex >= this.searchResults.length) this.searchIndex = 0;
+    
+    this.updateSearchDisplay(input);
+  }
+
+  selectSearchResult(input) {
+    if (this.searchResults.length > 0) {
+      const selectedCommand = this.searchResults[this.searchIndex].cmd;
+      input.value = selectedCommand;
+    }
+    
+    // Remove search display
+    const existingDisplay = document.getElementById(`${this.terminalId}-search-display`);
+    if (existingDisplay) {
+      existingDisplay.remove();
+    }
+    
+    // Don't call exitHistorySearch here as it overwrites the input value
+    this.isSearchingHistory = false;
+    this.searchTerm = '';
+    this.searchResults = [];
+    this.searchIndex = 0;
+    input.style.backgroundColor = '';
+    input.placeholder = '';
+  }
+
   async executeCommand(commandLine) {
     try {
       // Validate input
@@ -235,29 +419,21 @@ export class Terminal {
       }
 
       const trimmed = commandLine.trim();
+      
+      // Check for command chaining with &
+      const commands = trimmed.split('&').map(cmd => cmd.trim()).filter(cmd => cmd !== '');
+      
       this.output.write(`<span class="prompt">${this.fileSystem.getPrompt()}</span>${commandLine}`);
 
-      if (trimmed === '') {
+      if (commands.length === 0) {
         // Empty command - do nothing
         return;
       }
 
-      // Try exact match first (handles "rm -rf", "ls", etc.)
-      if (this.commandRegistry.has(trimmed)) {
-        const command = this.commandRegistry.get(trimmed);
-        await command.execute([], this.context);
-      } else {
-        // Fall back to single-word command with parameters
-        const args = trimmed.split(' ');
-        const commandName = args[0];
-        const params = args.slice(1);
-        
-        if (this.commandRegistry.has(commandName)) {
-          const command = this.commandRegistry.get(commandName);
-          await command.execute(params, this.context);
-        } else {
-          this.output.write(`<span class="error">${CONFIG.ERROR_MESSAGES.COMMAND_NOT_FOUND}: ${commandName}</span>`);
-          this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+      // Execute each command sequentially
+      for (const command of commands) {
+        if (command !== '') {
+          await this.executeForegroundProcess(command);
         }
       }
       
@@ -267,8 +443,82 @@ export class Terminal {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
       this.output.addPrompt();
-      // Remove setupEventListeners call from here since it's now in initialize
     }
+  }
+
+  async executeForegroundProcess(commandLine) {
+    return this.executeForegroundProcessWithContext(commandLine, this.context);
+  }
+
+  async executeForegroundProcessWithContext(commandLine, context) {
+    // Try exact match first (handles "rm -rf", "ls", etc.)
+    if (this.commandRegistry.has(commandLine)) {
+      const command = this.commandRegistry.get(commandLine);
+      await command.execute([], context);
+    } else {
+      // Fall back to single-word command with parameters
+      const args = commandLine.split(' ');
+      const commandName = args[0];
+      const params = args.slice(1);
+      
+      if (this.commandRegistry.has(commandName)) {
+        const command = this.commandRegistry.get(commandName);
+        await command.execute(params, context);
+      } else {
+        context.output.write(`<span class="error">${CONFIG.ERROR_MESSAGES.COMMAND_NOT_FOUND}: ${commandName}</span>`);
+        context.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+      }
+    }
+  }
+
+  async executeBackgroundProcess(commandLine) {
+    const processId = this.nextProcessId++;
+    const processInfo = {
+      id: processId,
+      command: commandLine,
+      startTime: new Date(),
+      status: 'running'
+    };
+
+    this.backgroundProcesses.set(processId, processInfo);
+    this.output.write(`<span class="info">[${processId}] ${processId} ${commandLine}</span>`);
+    this.output.addPrompt();
+
+    // Simulate background execution
+    setTimeout(async () => {
+      try {
+        // Create a background output context that doesn't interfere with current terminal
+        const backgroundOutput = {
+          write: (content) => {
+            // Store output for jobs command to display later
+            if (!processInfo.output) processInfo.output = [];
+            processInfo.output.push(content);
+          },
+          addPrompt: () => {},
+          addError: (error) => {
+            if (!processInfo.output) processInfo.output = [];
+            processInfo.output.push(`<span class="error">${error}</span>`);
+          }
+        };
+
+        const backgroundContext = {
+          ...this.context,
+          output: backgroundOutput
+        };
+
+        await this.executeForegroundProcessWithContext(commandLine, backgroundContext);
+        processInfo.status = 'completed';
+        processInfo.endTime = new Date();
+        
+        // Notify user that background process completed
+        this.output.write(`<span class="info">[${processId}]+ Done                    ${commandLine}</span>`);
+      } catch (error) {
+        processInfo.status = 'failed';
+        processInfo.endTime = new Date();
+        processInfo.error = error.message;
+        this.output.write(`<span class="error">[${processId}]+ Failed                  ${commandLine}</span>`);
+      }
+    }, Math.random() * 3000 + 1000); // Random delay between 1-4 seconds to simulate work
   }
 
   autoComplete(input) {

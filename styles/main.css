@@ -1,0 +1,18 @@
+/* Main CSS File - Import all components */
+
+/* Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+@import './base/variables.css';
+@import './base/reset.css';
+@import './base/scrollbars.css';
+
+/* Layout Components */
+@import './components/layout.css';
+
+/* UI Components */
+@import './components/terminal-tabs.css';
+@import './components/terminal.css';
+@import './components/dashboard.css';
+
+/* Content-specific Styles */
+@import './components/terminal-content.css';

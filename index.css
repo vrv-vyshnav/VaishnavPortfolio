@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+@import url('./terminal-content.css');
 
 * {
     margin: 0;
@@ -14,6 +15,37 @@ body {
     overflow: hidden;
     text-align: justify;
     position: relative;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #161b22;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 4px;
+    border: 1px solid #21262d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #484f58;
+}
+
+::-webkit-scrollbar-corner {
+    background: #161b22;
+}
+
+/* Firefox scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #30363d #161b22;
 }
 
 /* Clean, simple background */
@@ -69,8 +101,8 @@ body {
 
 .terminal-tabs {
     display: flex;
-    background: #21262d;
-    border-radius: 6px 6px 0 0;
+    background: linear-gradient(145deg, #21262d, #30363d);
+    border-radius: 12px 12px 0 0;
     border: 1px solid #30363d;
     border-bottom: none;
     padding: 0 10px;
@@ -78,7 +110,7 @@ body {
 }
 
 .terminal-tab {
-    padding: 10px 15px;
+    padding: 12px 15px;
     cursor: pointer;
     border-right: 1px solid #30363d;
     color: #8b949e;
@@ -86,11 +118,22 @@ body {
     white-space: nowrap;
     display: flex;
     align-items: center;
+    transition: all 0.2s ease;
+    border-radius: 8px 8px 0 0;
+    margin: 4px 2px 0 2px;
+}
+
+.terminal-tab:hover {
+    background: rgba(88, 166, 255, 0.1);
+    color: #c9d1d9;
 }
 
 .terminal-tab.active {
-    color: #c9d1d9;
-    background: #161b22;
+    color: #58a6ff;
+    background: linear-gradient(145deg, #161b22, #1a1f2e);
+    font-weight: 600;
+    border: 1px solid #30363d;
+    border-bottom: none;
 }
 
 .terminal-tab:last-child {
@@ -101,6 +144,12 @@ body {
     color: #58a6ff;
     font-weight: bold;
     border-right: none;
+    background: rgba(88, 166, 255, 0.1);
+}
+
+.terminal-tab.new-tab:hover {
+    background: rgba(88, 166, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .terminal-tab .close-tab {
@@ -113,6 +162,13 @@ body {
     color: #ff5f56;
 }
 
+.terminal-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    gap: 10px;
+}
+
 .terminal-views {
     flex: 1;
     display: flex;
@@ -120,10 +176,175 @@ body {
     overflow: hidden;
 }
 
-.terminal {
-    background: #161b22;
+.system-dashboard {
+    width: 320px;
+    background: linear-gradient(145deg, #161b22, #1a1f2e);
     border: 1px solid #30363d;
-    border-radius: 0 0 6px 6px;
+    border-radius: 0 0 12px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #c9d1d9;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    height: 100%;
+}
+
+.dashboard-header {
+    background: linear-gradient(145deg, #21262d, #30363d);
+    padding: 12px 16px;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-buttons {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+}
+
+.dashboard-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dashboard-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-button.close { 
+    background: linear-gradient(145deg, #ff5f56, #ff4444);
+}
+.dashboard-button.minimize { 
+    background: linear-gradient(145deg, #ffbd2e, #ffaa00);
+}
+.dashboard-button.maximize { 
+    background: linear-gradient(145deg, #27ca3f, #22aa33);
+}
+
+.dashboard-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #58a6ff;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.dashboard-status {
+    font-size: 12px;
+    color: #0f0;
+    font-weight: 500;
+}
+
+.dashboard-content {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.metric-card {
+    background: rgba(33, 38, 45, 0.8);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+    background: rgba(33, 38, 45, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.metric-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.metric-icon {
+    font-size: 16px;
+}
+
+.metric-title {
+    font-size: 12px;
+    color: #8b949e;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #c9d1d9;
+    margin-bottom: 0.5rem;
+}
+
+.metric-subtitle {
+    font-size: 11px;
+    color: #6e7681;
+}
+
+.memory-bar, .storage-bar {
+    height: 6px;
+    background: #21262d;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+    position: relative;
+}
+
+.memory-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0f0, #ff6b00);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.storage-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #58a6ff, #7c3aed);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* Specific card colors */
+.time-card .metric-value { color: #58a6ff; }
+.memory-card .metric-value { color: #ff6b00; }
+.network-card .metric-value { color: #0f0; }
+.performance-card .metric-value { color: #f79000; }
+.storage-card .metric-value { color: #7c3aed; }
+.device-card .metric-value { color: #ff7b72; }
+
+/* Hide dashboard on mobile */
+@media (max-width: 768px) {
+    .system-dashboard {
+        display: none;
+    }
+    
+    .terminal-main {
+        gap: 0;
+    }
+}
+
+.terminal {
+    background: linear-gradient(145deg, #161b22, #1a1f2e);
+    border: 1px solid #30363d;
+    border-radius: 0 0 12px 12px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -136,7 +357,7 @@ body {
 }
 
 .terminal-header {
-    background: #21262d;
+    background: linear-gradient(145deg, #21262d, #30363d);
     padding: 12px 16px;
     display: flex;
     align-items: center;
@@ -155,15 +376,28 @@ body {
     height: 12px;
     border-radius: 50%;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.close { background: #ff5f56; }
-.minimize { background: #ffbd2e; }
-.maximize { background: #27ca3f; }
+.terminal-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.close { 
+    background: linear-gradient(145deg, #ff5f56, #ff4444);
+}
+.minimize { 
+    background: linear-gradient(145deg, #ffbd2e, #ffaa00);
+}
+.maximize { 
+    background: linear-gradient(145deg, #27ca3f, #22aa33);
+}
 
 .terminal-title {
-    color: #8b949e;
+    color: #58a6ff;
     font-size: 14px;
+    font-weight: 600;
 }
 
 .terminal-content {
@@ -172,6 +406,10 @@ body {
     overflow-y: auto;
     font-size: 14px;
     line-height: 1.4;
+    background: linear-gradient(145deg, #0d1117, #161b22);
+    color: #c9d1d9;
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 0 0 12px 12px;
 }
 
 .terminal-content::-webkit-scrollbar {
@@ -540,4 +778,48 @@ section{
   grid-template-columns: auto 1fr;
   gap: 4px 16px;
   margin-bottom: 20px;
+}
+
+/* Search results display styles */
+.search-results-display {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #58a6ff;
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  opacity: 0.8;
+}
+
+.search-header {
+  color: #58a6ff;
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 0.9em;
+}
+
+.search-result {
+  padding: 4px 8px;
+  margin: 2px 0;
+  border-radius: 3px;
+  color: #8b949e;
+  font-size: 0.9em;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.search-result.selected {
+  background: rgba(88, 166, 255, 0.2);
+  color: #c9d1d9;
+  border-left: 2px solid #58a6ff;
+  padding-left: 6px;
+}
+
+.search-term-highlight {
+  color: #ffa657;
+  font-weight: bold;
+}
+
+.no-matches {
+  color: #ff7b72;
+  font-style: italic;
 }
