@@ -1,0 +1,534 @@
+/* Vim Editor Styles - Enhanced Dark Mode */
+.vim-editor {
+  width: 100%;
+  height: 100vh;
+  background: #0d1117;
+  color: #f0f6fc;
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #21262d;
+}
+
+.vim-content {
+  flex: 1;
+  position: relative;
+  padding: 10px 0 0 0;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  outline: none;
+  background: #0d1117;
+  scrollbar-width: thin;
+  scrollbar-color: #30363d #0d1117;
+}
+
+.vim-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.vim-content::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+.vim-content::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+
+.vim-content::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+.vim-lines {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  will-change: transform;
+  background: #0d1117;
+  min-height: 100%;
+}
+
+.vim-line {
+  position: absolute;
+  height: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  white-space: pre;
+  padding: 0;
+  margin: 0;
+  will-change: transform;
+  background: #0d1117;
+}
+
+.vim-line-number {
+  width: 40px;
+  text-align: right;
+  padding-right: 8px;
+  color: #7d8590;
+  background: #161b22;
+  border-right: 1px solid #30363d;
+  user-select: none;
+  flex-shrink: 0;
+  font-weight: 400;
+}
+
+.vim-line-content {
+  flex: 1;
+  padding-left: 8px;
+  white-space: pre;
+  color: #f0f6fc;
+}
+
+/* Cursor styles */
+.vim-cursor {
+  position: absolute;
+  width: 8px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.vim-cursor-view {
+  background: #58a6ff;
+  opacity: 0.8;
+  border-radius: 1px;
+}
+
+.vim-cursor-command {
+  background: #f0883e;
+  opacity: 0.8;
+  border-radius: 1px;
+}
+
+/* Blinking animation */
+.vim-cursor {
+  animation: vim-blink 1s infinite;
+}
+
+@keyframes vim-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* Status line */
+.vim-status {
+  height: 24px;
+  background: #21262d;
+  color: #f0f6fc;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-weight: 500;
+  border-top: 1px solid #30363d;
+  box-shadow: 0 -1px 0 #30363d;
+}
+
+.vim-mode {
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+.vim-mode-view {
+  background: #238636;
+  color: white;
+  font-weight: 600;
+}
+
+.vim-mode-command {
+  background: #da3633;
+  color: white;
+  font-weight: 600;
+}
+
+.vim-filename {
+  flex: 1;
+  text-align: center;
+  font-style: italic;
+}
+
+.vim-position {
+  font-family: monospace;
+}
+
+/* Command line */
+.vim-command-line {
+  height: 24px;
+  background: #0d1117;
+  color: #f0f6fc;
+  border-top: 1px solid #30363d;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-family: monospace;
+}
+
+.vim-command-prompt {
+  color: #f0883e;
+  margin-right: 4px;
+}
+
+.vim-command-input {
+  flex: 1;
+  color: #f0f6fc;
+}
+
+/* Help bar at the bottom */
+.vim-help-bar {
+  height: 20px;
+  background: #161b22;
+  color: #8b949e;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 11px;
+  border-top: 1px solid #21262d;
+  overflow: hidden;
+}
+
+.vim-help-item {
+  margin-right: 15px;
+  white-space: nowrap;
+}
+
+.vim-help-item:last-child {
+  margin-right: 0;
+}
+
+/* Loading styles */
+.loading {
+  color: #f0883e;
+  animation: loading-dots 1.5s infinite;
+}
+
+.vim-loading-message {
+  padding: 8px;
+  text-align: center;
+}
+
+@keyframes loading-dots {
+  0%, 20% {
+    color: #ffaf00;
+    text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent;
+  }
+  40% {
+    color: #ffaf00;
+    text-shadow: 0.25em 0 0 #ffaf00, 0.5em 0 0 transparent;
+  }
+  60% {
+    text-shadow: 0.25em 0 0 #ffaf00, 0.5em 0 0 #ffaf00;
+  }
+  80%, 100% {
+    text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent;
+  }
+}
+
+/* Enhanced syntax highlighting for dark mode */
+.vim-line-content .keyword {
+  color: #ff7b72;
+  font-weight: bold;
+}
+
+.vim-line-content .string {
+  color: #a5d6ff;
+}
+
+.vim-line-content .comment {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.vim-line-content .number {
+  color: #79c0ff;
+}
+
+.vim-line-content .header {
+  color: #7ee787;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(126, 231, 135, 0.3);
+}
+
+.vim-line-content .section {
+  color: #ffa657;
+  font-weight: bold;
+}
+
+.vim-line-content .key {
+  color: #79c0ff;
+  font-weight: 600;
+}
+
+/* Special vim highlighting */
+.vim-search-highlight {
+  background: #fd7e14;
+  color: #0d1117;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.vim-selection {
+  background: #264f78;
+}
+
+/* View-only indicator */
+.vim-readonly-indicator {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: #da3633;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  z-index: 100;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .vim-editor {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .vim-line {
+    height: 18px;
+  }
+  
+  .vim-cursor {
+    height: 18px;
+    width: 7px;
+  }
+  
+  .vim-cursor-insert {
+    width: 2px;
+  }
+  
+  .vim-line-number {
+    width: 35px;
+    font-size: 11px;
+  }
+  
+  .vim-status, .vim-command-line {
+    height: 20px;
+    font-size: 11px;
+  }
+  
+  .vim-help-bar {
+    display: none; /* Hide help bar on tablets for more space */
+  }
+}
+
+@media (max-width: 480px) {
+  .vim-editor {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  
+  .vim-line {
+    height: 16px;
+  }
+  
+  .vim-cursor {
+    height: 16px;
+    width: 6px;
+  }
+  
+  .vim-line-number {
+    display: none; /* Hide line numbers on mobile for more space */
+  }
+  
+  .vim-line-content {
+    padding-left: 4px; /* Reduce padding since no line numbers */
+  }
+  
+  .vim-status, .vim-command-line {
+    height: 18px;
+    font-size: 10px;
+  }
+  
+  .vim-help-bar {
+    font-size: 9px;
+    height: 16px;
+    flex-wrap: wrap;
+    padding: 2px 4px;
+  }
+  
+  .vim-help-item {
+    margin-right: 8px;
+    margin-bottom: 2px;
+  }
+  
+  /* Better mobile touch interaction */
+  .vim-content {
+    -webkit-touch-callout: none;
+    -webkit-user-select: text;
+    user-select: text;
+    touch-action: pan-y;
+  }
+  
+  /* Mobile-friendly status line */
+  .vim-status {
+    flex-wrap: wrap;
+    min-height: 18px;
+  }
+  
+  .vim-filename {
+    font-size: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 320px) {
+  .vim-editor {
+    font-size: 10px;
+    line-height: 16px;
+  }
+  
+  .vim-line {
+    height: 16px;
+  }
+  
+  .vim-cursor {
+    height: 16px;
+    width: 5px;
+  }
+  
+  .vim-line-number {
+    display: none; /* No line numbers on very small screens */
+  }
+  
+  .vim-line-content {
+    padding-left: 2px;
+    font-size: 10px;
+  }
+  
+  .vim-status, .vim-command-line {
+    height: 16px;
+    font-size: 9px;
+  }
+  
+  .vim-help-bar {
+    font-size: 8px;
+    height: 14px;
+    overflow: hidden;
+  }
+  
+  .vim-filename {
+    max-width: 100px;
+    font-size: 8px;
+  }
+  
+  /* Ultra-compact command line for very small screens */
+  .vim-command-line {
+    padding: 0 4px;
+  }
+  
+  .vim-status {
+    padding: 0 4px;
+  }
+}
+
+/* Dark theme variants */
+.vim-editor.theme-desert {
+  background: #333333;
+  color: #ffffff;
+}
+
+.vim-editor.theme-desert .vim-content {
+  background: #333333;
+}
+
+.vim-editor.theme-desert .vim-line-number {
+  background: #2d2d2d;
+  color: #ffff00;
+}
+
+.vim-editor.theme-slate {
+  background: #293739;
+  color: #e6e1dc;
+}
+
+.vim-editor.theme-slate .vim-content {
+  background: #293739;
+}
+
+.vim-editor.theme-slate .vim-line-number {
+  background: #1f2b2d;
+  color: #bc9458;
+}
+
+/* Animation for opening vim */
+.vim-editor {
+  animation: vim-open 0.3s ease-out;
+}
+
+@keyframes vim-open {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Help overlay */
+.vim-help-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(30, 30, 30, 0.95);
+  border: 2px solid #528bff;
+  border-radius: 8px;
+  padding: 20px;
+  color: #d4d4d4;
+  font-family: monospace;
+  z-index: 1000;
+  max-width: 80%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.vim-help-title {
+  color: #528bff;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.vim-help-section {
+  margin-bottom: 15px;
+}
+
+.vim-help-section h4 {
+  color: #ffaf00;
+  margin-bottom: 5px;
+}
+
+.vim-help-commands {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 5px 15px;
+  font-size: 12px;
+}
+
+.vim-help-key {
+  color: #4ec9b0;
+  font-weight: bold;
+}
+
+.vim-help-desc {
+  color: #d4d4d4;
+}

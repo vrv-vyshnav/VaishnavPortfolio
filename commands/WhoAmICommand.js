@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class WhoAmICommand extends Command {
   constructor() {
-    super('whoami', 'Display current user and professional summary');
+    super('whoami', 'Display current user and professional summary', { category: 'System Information' });
   }
 
   async execute(params, context) {

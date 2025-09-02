@@ -2,34 +2,38 @@ import { Command } from '../core/Command.js';
 
 export class HelpCommand extends Command {
   constructor() {
-    super('help', 'Show this help message');
+    super('help', 'Show this help message', { category: 'Help' });
   }
 
   execute(params, context) {
-    const commands = context.commandRegistry.list();
-    let output = '<div class="help-table">';
+    const allCommands = context.commandRegistry.list();
+    const visibleCommands = allCommands.filter(cmd => !cmd.hidden);
+    
+    // Sort commands alphabetically
+    const sortedCommands = visibleCommands.sort((a, b) => a.name.localeCompare(b.name));
+    
+    let output = '<div class="claude-help">';
+    output += '<div class="help-header">Available commands:</div>';
+    output += '<div class="help-commands">';
 
-    commands.forEach(cmd => {
-      output += `<div class="help-row">
-        <div class="help-command-cell"><span class="help-command">${cmd.name}</span></div>
-        <div class="help-desc-cell">${cmd.description}</div>
+    sortedCommands.forEach(cmd => {
+      output += `<div class="help-item">
+        <span class="cmd-name">${cmd.name}</span>
+        <span class="cmd-desc">${cmd.description}</span>
       </div>`;
     });
 
     output += '</div>';
-    output += `\n<span class="info">Navigation Tips:</span>
-    - Use 'ls' to see what's available
-    - Use 'cd projects' to explore projects
-    - Use 'cat about.txt' to learn more
-    - Use Tab for auto-completion
-    - Use Up/Down arrows for command history
     
-<span class="info">Advanced Features:</span>
-    - Use 'command &' to run commands in background
-    - Use 'jobs' to list active background processes
-    - Use Ctrl+R for interactive command history search
-    - Use Escape to exit history search mode`;
+    output += `<div class="help-footer">
+<div class="help-tips">Tips:</div>
+• Use Tab for auto-completion
+• Use ↑/↓ arrows for command history  
+• Use 'ls' to see what's available
+• Use 'cat about.txt' to learn more about me
+• Use Ctrl+R for interactive history search</div>`;
 
+    output += '</div>';
     context.output.write(output);
   }
 }

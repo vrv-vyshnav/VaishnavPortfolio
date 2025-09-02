@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class ListTabsCommand extends Command {
   constructor() {
-    super('listtabs', 'List all open terminal tabs');
+    super('listtabs', 'List all open terminal tabs', { category: 'Terminal Management' });
   }
 
   async execute(args, context) {

@@ -3,7 +3,7 @@ import { FileIcons } from '../utils/fileIcons.js';
 
 export class TreeCommand extends Command {
   constructor() {
-    super('tree', 'Show directory tree');
+    super('tree', 'Show directory tree', { category: 'File System' });
   }
 
   execute(params, context) {

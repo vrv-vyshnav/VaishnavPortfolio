@@ -20,18 +20,18 @@
       "contents": {
         "about.txt": {
           "type": "file",
-          "renderType": "html",
-          "content": "content/about.html"
+          "renderType": "text",
+          "content": "content/about.txt"
         },
         "skills.conf": {
           "type": "file",
-          "renderType": "html",
-          "content": "content/skills.html"
+          "renderType": "text",
+          "content": "content/skills.conf"
         },
         "experience.txt": {
           "type": "file",
-          "renderType": "html",
-          "content": "content/experience.html"
+          "renderType": "text",
+          "content": "content/experience.txt"
         },
         "projects": {
           "type": "directory",
@@ -70,13 +70,13 @@
         },
         "education.txt": {
           "type": "file",
-          "renderType": "html",
-          "content": "content/education.html"
+          "renderType": "text",
+          "content": "content/education.txt"
         },
         "contact.info": {
           "type": "file",
-          "renderType": "html",
-          "content": "content/contact.html"
+          "renderType": "text",
+          "content": "content/contact.info"
         },
         "resume.pdf": {
           "type": "file",

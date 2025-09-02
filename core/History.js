@@ -85,10 +85,20 @@ export class HistoryService {
   search(term) {
     if (!term) return [];
     const searchTerm = term.toLowerCase();
-    return this.commands
+    const matchingCommands = this.commands
       .map((cmd, index) => ({ cmd, index }))
-      .filter(item => item.cmd.toLowerCase().includes(searchTerm))
+      .filter(item => item.cmd.toLowerCase().startsWith(searchTerm))
       .reverse(); // Most recent first
+    
+    // Remove duplicates, keeping the most recent occurrence of each command
+    const seen = new Set();
+    return matchingCommands.filter(item => {
+      if (seen.has(item.cmd)) {
+        return false;
+      }
+      seen.add(item.cmd);
+      return true;
+    });
   }
 
   // Get command by index

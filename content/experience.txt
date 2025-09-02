@@ -1,0 +1,76 @@
+=== PROFESSIONAL EXPERIENCE ===
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Jr. Software Engineer | Eloit Innovation Private Limited                    │
+│ March 2023 - Present | Kerala, India                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Project: Edisapp - AI-Powered School Management ERP
+Role: Core Developer
+Impact: Serving 180+ institutions across four continents
+
+KEY RESPONSIBILITIES:
+• Design and develop scalable modules using ASP.NET Core MVC and C#
+• Implement Clean Architecture and Wisdom Architecture principles
+• Build and maintain RESTful APIs for multi-platform integration
+• Collaborate with cross-functional teams in Agile/Scrum environment
+• Perform database design and optimization for high-performance applications
+• Ensure compliance with ISO 27001 and ISO 9001 standards
+
+TECHNICAL ACHIEVEMENTS:
+• Successfully contributed to a platform serving 180+ educational institutions
+• Developed high-performance, secure applications meeting international standards
+• Implemented microservices architecture for improved scalability
+• Optimized database queries resulting in 40% performance improvement
+• Mentored junior developers on Clean Architecture best practices
+
+TECHNOLOGIES USED:
+• Backend: ASP.NET Core MVC, C#
+• Frontend: Vue.js, JavaScript
+• Database: MS SQL Server
+• Tools: Telerik Kendo UI, Git, Visual Studio
+• Architecture: Clean Architecture, Wisdom Architecture
+
+RECOGNITION:
+★ Team Achiever Award for outstanding performance and contribution
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Previous Projects & Learning Experience                                      │
+│ 2020 - 2023 | Self-directed & Academic Projects                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+BOM Manager (Component Bill of Materials Manager)
+Duration: May 2020 - June 2021
+• Developed centralized component BOM management system
+• Reduced manual effort and eliminated component duplication
+• Technologies: PHP, MySQL, Apache (LAMP Stack)
+
+Let's Go Everywhere (Bus Travel Guide)
+Duration: May 2021 - 2022
+• Created comprehensive bus travel application with route guidance
+• Implemented real-time location tracking and ETA calculations
+• Technologies: Django, MySQL, JavaScript, Location APIs
+
+SKILLS DEVELOPED:
+• Full-stack web development
+• Database design and optimization  
+• API development and integration
+• Project planning and execution
+• Problem-solving and analytical thinking
+
+=== CAREER PROGRESSION ===
+
+2020     Started with LAMP stack development
+  │      → Learned PHP, MySQL, Apache basics
+  ▼
+2021     Expanded to Python and Django
+  │      → Built complex web applications
+  ▼
+2022     Deepened frontend skills
+  │      → JavaScript, responsive design
+  ▼
+2023     Professional .NET development
+  │      → C#, ASP.NET Core, Clean Architecture
+  ▼
+2024     Advanced architecture patterns
+         → Microservices, Enterprise solutions

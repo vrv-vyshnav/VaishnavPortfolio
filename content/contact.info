@@ -1,0 +1,60 @@
+# Contact Information
+# Vaishnav P - Jr. Software Engineer
+# Last Updated: 2024
+
+[Personal Details]
+full_name = "Vaishnav P"
+professional_title = "Jr. Software Engineer"
+location = "Kerala, India"
+timezone = "IST (UTC+5:30)"
+availability = "Open to opportunities"
+
+[Primary Contact]
+email = "VaishnavP.intr@gmail.com"
+phone = "+91 8129637037"
+preferred_contact = "email"
+response_time = "24-48 hours"
+
+[Professional Profiles]
+linkedin = "https://linkedin.com/in/vrv-vyshnav"
+github = "https://github.com/vaishnav-p" 
+portfolio = "https://vaishnav-portfolio.dev"
+
+[Work Availability]
+current_status = "Employed at Eloit Innovation Pvt Ltd"
+open_to = ["Full-time opportunities", "Freelance projects", "Consulting"]
+notice_period = "30 days"
+preferred_work = "Remote/Hybrid"
+
+[Areas of Interest]
+primary = ["Full-stack Development", "ERP Systems", "Clean Architecture"]
+secondary = ["Microservices", "Cloud Technologies", "AI/ML Integration"]
+industries = ["EdTech", "Enterprise Software", "SaaS Platforms"]
+
+[Technical Consultation]
+services = ["Code Review", "Architecture Design", "Technical Mentoring"]
+hourly_rate = "Negotiable based on project scope"
+project_types = ["Web Applications", "API Development", "Database Design"]
+
+[Communication Preferences]
+languages = ["English (Fluent)", "Malayalam (Native)", "Hindi (Conversational)"]
+meeting_platforms = ["Google Meet", "Zoom", "Microsoft Teams"]
+documentation = "Detailed project briefs preferred"
+
+[Social Media]
+twitter = "@vaishnav_dev"
+dev_community = "Active on Stack Overflow"
+tech_blogs = "Medium publications"
+
+[Professional Interests]
+conferences = ["Interested in .NET and Vue.js conferences"]
+communities = ["Local developer meetups", "Online tech communities"]
+contributions = ["Open source contributions", "Technical blog writing"]
+
+[Availability Schedule]
+weekdays = "9:00 AM - 6:00 PM IST (Working hours)"
+weekends = "Available for urgent consultations"
+holidays = "Responsive to emails"
+
+# Note: Always verify identity through official channels before sharing sensitive information
+# This contact information is for professional inquiries only

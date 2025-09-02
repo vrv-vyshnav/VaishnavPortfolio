@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class GrepCommand extends Command {
   constructor() {
-    super('grep', 'Search text in files');
+    super('grep', 'Search text in files', { category: 'Text Processing' });
   }
 
   execute(params, context) {

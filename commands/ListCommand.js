@@ -3,7 +3,7 @@ import { FileIcons } from '../utils/fileIcons.js';
 
 export class ListCommand extends Command {
   constructor() {
-    super('ls', 'List directory contents');
+    super('ls', 'List directory contents', { category: 'File System' });
   }
 
   execute(params, context) {

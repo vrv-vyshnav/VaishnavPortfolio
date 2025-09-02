@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class TailCommand extends Command {
   constructor() {
-    super('tail', 'Show last lines of file');
+    super('tail', 'Show last lines of file', { category: 'Text Processing' });
   }
 
   execute(params, context) {

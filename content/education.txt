@@ -1,0 +1,77 @@
+=== EDUCATIONAL BACKGROUND ===
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Bachelor of Computer Applications (BCA)                                     │
+│ 2019 - 2022 | Mahatma Gandhi University, Kerala                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ACADEMIC FOCUS:
+• Computer Science Fundamentals
+• Software Engineering Principles  
+• Database Management Systems
+• Web Development Technologies
+• Object-Oriented Programming
+• Data Structures and Algorithms
+
+COURSEWORK HIGHLIGHTS:
+• Programming Languages: C, C++, Java, Python
+• Database Systems: MySQL, Oracle
+• Web Technologies: HTML, CSS, JavaScript, PHP
+• Software Engineering: SDLC, Testing, Documentation
+• Computer Networks: TCP/IP, Network Security
+• Operating Systems: Linux, Windows Administration
+
+PROJECTS & PRACTICAL EXPERIENCE:
+• Final Year Project: Component BOM Management System
+• Web Development Projects using LAMP stack
+• Database design and optimization projects
+• Team-based software development exercises
+
+ACHIEVEMENTS:
+• Consistent academic performance throughout the program
+• Hands-on experience with industry-standard tools and technologies
+• Strong foundation in computer science principles
+• Practical exposure to software development lifecycle
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Continuous Learning & Certifications                                        │
+│ 2022 - Present | Self-directed Professional Development                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PROFESSIONAL DEVELOPMENT:
+• ASP.NET Core and C# Advanced Concepts
+• Clean Architecture and Design Patterns
+• Vue.js and Modern Frontend Development
+• Microservices Architecture
+• Agile and Scrum Methodologies
+• ISO 27001 and ISO 9001 Standards
+
+LEARNING APPROACH:
+• Hands-on project-based learning
+• Contributing to real-world applications
+• Mentorship from senior developers
+• Staying updated with industry trends
+• Participating in code reviews and best practices
+
+TECHNICAL CERTIFICATIONS:
+• Microsoft .NET Development (In Progress)
+• Agile/Scrum Team Participation
+• ISO Standards Compliance Training
+
+=== LEARNING PHILOSOPHY ===
+
+"Continuous learning and practical application drive professional growth."
+
+CORE BELIEFS:
+• Theory must be backed by practical implementation
+• Learning from real-world projects accelerates growth
+• Collaboration and mentorship enhance skill development
+• Staying curious and adaptable in a rapidly evolving field
+• Quality and best practices should never be compromised
+
+FUTURE LEARNING GOALS:
+• Advanced Cloud Technologies (Azure, AWS)
+• Docker and Containerization
+• TypeScript and Advanced JavaScript
+• System Design and Architecture
+• Machine Learning Fundamentals

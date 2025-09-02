@@ -24,10 +24,20 @@ class MockHistoryWithSearch {
   search(term) {
     if (!term) return [];
     const searchTerm = term.toLowerCase();
-    return this.commands
+    const matchingCommands = this.commands
       .map((cmd, index) => ({ cmd, index }))
-      .filter(item => item.cmd.toLowerCase().includes(searchTerm))
+      .filter(item => item.cmd.toLowerCase().startsWith(searchTerm))
       .reverse(); // Most recent first
+    
+    // Remove duplicates, keeping the most recent occurrence of each command
+    const seen = new Set();
+    return matchingCommands.filter(item => {
+      if (seen.has(item.cmd)) {
+        return false;
+      }
+      seen.add(item.cmd);
+      return true;
+    });
   }
 
   getByIndex(index) {
@@ -205,11 +215,39 @@ describe('History Search Functionality', () => {
       expect(results).toHaveLength(0);
     });
 
-    test('should search for partial matches', () => {
-      const results = history.search('file');
+    test('should search only for commands starting with term', () => {
+      const results = history.search('cat');
+      expect(results).toHaveLength(1);
+      expect(results[0].cmd).toBe('cat file.txt');
+    });
+
+    test('should not match substrings within commands', () => {
+      history.add('skills file');
+      const results = history.search('ls');
       expect(results).toHaveLength(2);
-      expect(results.some(r => r.cmd === 'cat file.txt')).toBe(true);
-      expect(results.some(r => r.cmd === 'grep pattern file.txt')).toBe(true);
+      expect(results[0].cmd).toBe('ls projects');
+      expect(results[1].cmd).toBe('ls -la');
+      // Should not include 'skills file' even though it contains 'ls'
+      expect(results.some(r => r.cmd === 'skills file')).toBe(false);
+    });
+
+    test('should remove duplicate commands from search results', () => {
+      // Add the same command multiple times with other commands in between
+      history.add('ls -la'); // This should be overridden by the one already in history
+      history.add('cd temp');
+      history.add('ls projects'); // This should be overridden by the one already in history
+      history.add('pwd');
+      history.add('ls -la'); // Duplicate
+      
+      const results = history.search('ls');
+      expect(results).toHaveLength(2); // Should only show unique commands
+      expect(results[0].cmd).toBe('ls -la'); // Most recent occurrence
+      expect(results[1].cmd).toBe('ls projects'); // Most recent occurrence
+      
+      // Verify no duplicates
+      const commandTexts = results.map(r => r.cmd);
+      const uniqueCommands = [...new Set(commandTexts)];
+      expect(commandTexts.length).toBe(uniqueCommands.length);
     });
   });
 
@@ -474,13 +512,13 @@ describe('History Search Functionality', () => {
     });
 
     test('should handle special characters in search term', () => {
-      terminal.history.add('grep "test pattern" file.txt');
+      terminal.history.add('"test pattern" file.txt');
       terminal.startHistorySearch(mockInput);
       mockInput.value = '"test';
       terminal.updateSearchTerm(mockInput);
       
       expect(terminal.searchResults).toHaveLength(1);
-      expect(terminal.searchResults[0].cmd).toBe('grep "test pattern" file.txt');
+      expect(terminal.searchResults[0].cmd).toBe('"test pattern" file.txt');
     });
 
     test('should handle very long search terms', () => {

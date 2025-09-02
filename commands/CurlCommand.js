@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class CurlCommand extends Command {
   constructor() {
-    super('curl', 'Download file');
+    super('curl', 'Download file', { category: 'Downloads' });
   }
 
   execute(params, context) {
