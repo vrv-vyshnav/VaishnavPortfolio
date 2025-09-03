@@ -43,6 +43,12 @@ export class CatCommand extends Command {
           // Content is embedded directly (like project files)
           text = entry.content || '';
         }
+        
+        // Remove ASCII borders on mobile devices (including device rotation)
+        if (window.innerWidth <= 768) {
+          text = this.removeMobileASCIIBorders(text);
+        }
+        
         context.output.write(`<pre class="file-content">${text}</pre>`);
       } catch {
         context.output.write(`<span class="error">cat: ${params[0]}: failed to load text content</span>`);
@@ -55,5 +61,27 @@ export class CatCommand extends Command {
       `<span class="">${entry.content || ''}</span>`
     );
         
+  }
+  
+  removeMobileASCIIBorders(text) {
+    // Remove ASCII border lines that cause horizontal overflow on mobile
+    const lines = text.split('\n');
+    const filteredLines = lines.filter(line => {
+      // Remove lines that contain only ASCII border characters
+      const trimmedLine = line.trim();
+      
+      // Match lines with only box drawing characters and spaces/dashes
+      const borderPattern = /^[┌┐└┘│─\s]+$/;
+      const isOnlyBorders = borderPattern.test(trimmedLine);
+      
+      // Also remove empty lines that are adjacent to borders for better spacing
+      if (isOnlyBorders) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    return filteredLines.join('\n');
   }
 }

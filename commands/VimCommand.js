@@ -63,6 +63,11 @@ export class VimCommand extends Command {
         } else {
           content = entry.content || '';
         }
+        
+        // Remove ASCII borders on mobile devices for better readability
+        if (window.innerWidth <= 768) {
+          content = this.removeMobileASCIIBorders(content);
+        }
 
         // Cache the content
         contentCache.set(cacheKey, content);
@@ -215,6 +220,28 @@ export class VimCommand extends Command {
       'vim <file>': 'Open file in vim editor',
       'vi <file>': 'Alias for vim command'
     };
+  }
+  
+  removeMobileASCIIBorders(text) {
+    // Remove ASCII border lines that cause horizontal overflow on mobile
+    const lines = text.split('\n');
+    const filteredLines = lines.filter(line => {
+      // Remove lines that contain only ASCII border characters
+      const trimmedLine = line.trim();
+      
+      // Match lines with only box drawing characters and spaces/dashes
+      const borderPattern = /^[┌┐└┘│─\s]+$/;
+      const isOnlyBorders = borderPattern.test(trimmedLine);
+      
+      // Also remove empty lines that are adjacent to borders for better spacing
+      if (isOnlyBorders) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    return filteredLines.join('\n');
   }
 }
 
