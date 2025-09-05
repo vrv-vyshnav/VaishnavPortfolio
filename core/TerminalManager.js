@@ -1,4 +1,5 @@
 import { Terminal } from '../Terminal.js';
+import { typeWriter } from '../utils/typeWriter.js';
 
 export class TerminalManager {
   constructor() {
@@ -8,6 +9,10 @@ export class TerminalManager {
     this.terminalContainer = document.querySelector('.terminal-container');
     this.terminalTabs = document.getElementById('terminal-tabs');
     this.terminalViews = document.getElementById('terminal-views');
+    this.isSplitMode = false; // Track layout mode
+    
+    // Add layout toggle button
+    this.addLayoutToggle();
     
     // Add button to create new terminals
     this.addNewTerminalButton();
@@ -22,6 +27,59 @@ export class TerminalManager {
     window.addEventListener('terminalExitAll', () => {
       this.removeAllTerminals();
     });
+  }
+
+  /**
+   * Add layout toggle button
+   */
+  addLayoutToggle() {
+    const layoutToggle = document.getElementById('layout-toggle');
+    if (layoutToggle) {
+      layoutToggle.addEventListener('click', () => {
+        this.toggleLayout();
+      });
+    }
+  }
+
+  /**
+   * Toggle between tabbed and split layout modes
+   */
+  toggleLayout() {
+    this.isSplitMode = !this.isSplitMode;
+    this.updateLayout();
+    
+    // Update toggle button appearance
+    const layoutToggle = document.getElementById('layout-toggle');
+    const toggleIcon = layoutToggle.querySelector('.toggle-icon');
+    
+    if (this.isSplitMode) {
+      layoutToggle.classList.add('active');
+      toggleIcon.textContent = '⊞'; // Split icon
+      layoutToggle.title = 'Switch to Tabbed Layout';
+    } else {
+      layoutToggle.classList.remove('active');
+      toggleIcon.textContent = '⚏'; // Tabbed icon
+      layoutToggle.title = 'Switch to Split Layout';
+    }
+  }
+
+  /**
+   * Update the layout based on current mode
+   */
+  updateLayout() {
+    const terminalCount = this.terminals.size;
+    
+    if (this.isSplitMode) {
+      // Enable split mode
+      this.terminalContainer.classList.add('split-layout');
+      this.terminalViews.classList.add('split-mode');
+      this.terminalViews.className = `terminal-views split-mode terminals-${terminalCount}`;
+    } else {
+      // Enable tabbed mode
+      this.terminalContainer.classList.remove('split-layout');
+      this.terminalViews.classList.remove('split-mode');
+      this.terminalViews.className = 'terminal-views';
+    }
   }
 
   /**
@@ -59,6 +117,9 @@ export class TerminalManager {
     // Initialize the terminal
     terminal.initialize();
     
+    // Update layout after adding terminal
+    this.updateLayout();
+    
     return terminalId;
   }
 
@@ -95,16 +156,8 @@ export class TerminalManager {
     terminalView.className = 'terminal';
     terminalView.id = terminalId;
     
-    // Conditionally include banner
-    const bannerHTML = showBanner ? `
-        <pre class="ascii-art main-banner">
-        ██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
-        ██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
-        ██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
-        ╚██╗ ██╔╝██╔══██║██║╚════██║██╔══██║██║╚██╗██║██╔══██║╚██╗ ██╔╝
-         ╚████╔╝ ██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║ ╚████╔╝ 
-          ╚═══╝  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝  ╚═══╝  
-        </pre>` : '';
+    // Conditionally include banner with mobile-friendly version
+    const bannerHTML = showBanner ? this.getBannerHTML() : '';
     
     terminalView.innerHTML = `
       <div class="terminal-header">
@@ -121,6 +174,75 @@ export class TerminalManager {
     `;
     
     this.terminalViews.appendChild(terminalView);
+
+    // Add typewriter effect for banner if present
+    if (showBanner) {
+      setTimeout(() => {
+        const bannerElement = terminalView.querySelector('.ascii-art.main-banner');
+        if (bannerElement) {
+          this.animateBanner(bannerElement);
+        }
+      }, 100);
+    }
+  }
+
+  /**
+   * Get banner HTML based on screen size
+   */
+  getBannerHTML() {
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Simple text banner for mobile
+      return `
+        <div class="ascii-art main-banner mobile-banner">
+          <div class="banner-text">VAISHNAV</div>
+          <div class="banner-subtitle">Portfolio Terminal v2.0</div>
+        </div>`;
+    } else {
+      // Full ASCII art for desktop
+      return `
+        <pre class="ascii-art main-banner">
+██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
+██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
+██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
+╚██╗ ██╔╝██╔══██║██║╚════██║██╔══██║██║╚██╗██║██╔══██║╚██╗ ██╔╝
+ ╚████╔╝ ██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║ ╚████╔╝ 
+  ╚═══╝  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝  ╚═══╝  
+        </pre>`;
+    }
+  }
+
+  /**
+   * Animate banner with typewriter effect
+   */
+  animateBanner(bannerElement) {
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Animate mobile banner
+      const bannerText = bannerElement.querySelector('.banner-text');
+      const subtitle = bannerElement.querySelector('.banner-subtitle');
+      
+      if (bannerText && subtitle) {
+        bannerText.style.opacity = '0';
+        subtitle.style.opacity = '0';
+        
+        typeWriter('VAISHNAV', bannerText, 80);
+        setTimeout(() => {
+          typeWriter('Portfolio Terminal v2.0', subtitle, 40);
+        }, 800);
+        
+        bannerText.style.opacity = '1';
+        setTimeout(() => {
+          subtitle.style.opacity = '1';
+        }, 800);
+      }
+    } else {
+      // Animate ASCII art with faster speed
+      const originalText = bannerElement.textContent;
+      typeWriter(originalText, bannerElement, 8);
+    }
   }
 
   /**
@@ -162,6 +284,9 @@ export class TerminalManager {
           this.activeTerminalId = null;
         }
       }
+      
+      // Update layout after removing terminal
+      this.updateLayout();
     }
   }
 

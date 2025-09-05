@@ -1,18 +1,16 @@
- ______    _                   _   _             
-|  ____|  | |                 | | (_)            
-| |__   __| |_   _  ___ __ _  | |_ _  ___  _ __  
-|  __| / _` | | | |/ __/ _` | | __| |/ _ \| '_ \ 
-| |___| (_| | |_| | (_| (_| | | |_| | (_) | | | |
-|______\__,_|\__,_|\___\__,_|  \__|_|\___/|_| |_|
-                                                 
+  ______    _                   _   _             
+ |  ____|  | |                 | | (_)            
+ | |__   __| |_   _  ___ __ _  | |_ _  ___  _ __  
+ |  __| / _` | | | |/ __/ _` | | __| |/ _ \| '_ \ 
+ | |___| (_| | |_| | (_| (_| | | |_| | (_) | | | |
+ |______\__,_|\__,_|\___\__,_|  \__|_|\___/|_| |_|
+                                                  
         Education
 
 === EDUCATIONAL BACKGROUND ===
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ Bachelor of Computer Applications (BCA)                                     │
-│ 2019 - 2022 | Mahatma Gandhi University, Kerala                           │
-└─────────────────────────────────────────────────────────────────────────────┘
+Bachelor of Computer Applications (BCA)
+2019 - 2022 | Mahatma Gandhi University, Kerala
 
 ACADEMIC FOCUS:
 • Computer Science Fundamentals
@@ -42,10 +40,8 @@ ACHIEVEMENTS:
 • Strong foundation in computer science principles
 • Practical exposure to software development lifecycle
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ Continuous Learning & Certifications                                        │
-│ 2022 - Present | Self-directed Professional Development                     │
-└─────────────────────────────────────────────────────────────────────────────┘
+Continuous Learning & Certifications
+2022 - Present | Self-directed Professional Development
 
 PROFESSIONAL DEVELOPMENT:
 • ASP.NET Core and C# Advanced Concepts
@@ -67,7 +63,7 @@ TECHNICAL CERTIFICATIONS:
 • Agile/Scrum Team Participation
 • ISO Standards Compliance Training
 
-=== LEARNING PHILOSOPHY ===
+LEARNING PHILOSOPHY
 
 "Continuous learning and practical application drive professional growth."
 

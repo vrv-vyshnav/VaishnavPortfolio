@@ -54,7 +54,7 @@ TECH STACK:
 • Tools: Git, AWS, Telerik Kendo UI, Reporting
 
 EXPERTISE:
-• Microservices Architecture & Clean Architecture
+• Knowledge in Monolithic, Clean Architecture & Microservices
 • ISO 27001 & ISO 9001 compliant applications
 • Agile Scrum methodology
 • Database optimization & performance tuning

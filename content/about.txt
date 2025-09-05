@@ -26,15 +26,15 @@ systems, and scalable application architecture. Currently working as a core
 developer for Edisapp, an AI-powered school management ERP platform serving 
 180+ institutions across four continents.
 
-I specialize in building robust, secure applications using Clean Architecture 
-principles and modern web technologies. My work focuses on creating scalable 
+I work on building reliable, secure applications following industry best 
+practices and modern development standards. My work focuses on creating scalable 
 solutions that meet international standards including ISO 27001 and ISO 9001.
 
 === CORE SPECIALTIES ===
 
+• Architecture Knowledge (Monolithic, Clean, Microservices)
 • Full-Stack Development (C#, JavaScript, Python)
 • ERP Systems (Management & automation)
 • Database Design (Design & optimization)
-• Microservices (Scalable architecture)
 • Agile Development (Scrum, CI/CD)
-• Clean Architecture (Best practices)
+• System Design & Best Practices
