@@ -10,10 +10,8 @@
 
 === PROFESSIONAL EXPERIENCE ===
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ Jr. Software Engineer | Eloit Innovation Private Limited                    │
-│ March 2023 - Present | Kerala, India                                        │
-└─────────────────────────────────────────────────────────────────────────────┘
+Associate Software Developer | Eloit Innovation Private Limited
+March 2023 - Present | Kerala, India
 
 Project: Edisapp - AI-Powered School Management ERP
 Role: Core Developer
@@ -21,7 +19,7 @@ Impact: Serving 180+ institutions across four continents
 
 KEY RESPONSIBILITIES:
 • Design and develop scalable modules using ASP.NET Core MVC and C#
-• Implement Clean Architecture and Wisdom Architecture principles
+• Work on monolithic architecture with selective microservice modules
 • Build and maintain RESTful APIs for multi-platform integration
 • Collaborate with cross-functional teams in Agile/Scrum environment
 • Perform database design and optimization for high-performance applications
@@ -30,24 +28,22 @@ KEY RESPONSIBILITIES:
 TECHNICAL ACHIEVEMENTS:
 • Successfully contributed to a platform serving 180+ educational institutions
 • Developed high-performance, secure applications meeting international standards
-• Implemented microservices architecture for improved scalability
+• Contributed to selective microservice modules within monolithic architecture
 • Optimized database queries resulting in 40% performance improvement
-• Mentored junior developers on Clean Architecture best practices
+• Applied Clean Architecture principles in personal development projects
 
 TECHNOLOGIES USED:
 • Backend: ASP.NET Core MVC, C#
 • Frontend: Vue.js, JavaScript
 • Database: MS SQL Server
 • Tools: Telerik Kendo UI, Git, Visual Studio
-• Architecture: Clean Architecture, Wisdom Architecture
+• Architecture: Hybrid monolithic-microservices approach
 
 RECOGNITION:
 ★ Team Achiever Award for outstanding performance and contribution
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ Previous Projects & Learning Experience                                      │
-│ 2020 - 2023 | Self-directed & Academic Projects                            │
-└─────────────────────────────────────────────────────────────────────────────┘
+Previous Projects & Learning Experience
+2020 - 2023 | Self-directed & Academic Projects
 
 BOM Manager (Component Bill of Materials Manager)
 Duration: May 2020 - June 2021
@@ -55,11 +51,6 @@ Duration: May 2020 - June 2021
 • Reduced manual effort and eliminated component duplication
 • Technologies: PHP, MySQL, Apache (LAMP Stack)
 
-Let's Go Everywhere (Bus Travel Guide)
-Duration: May 2021 - 2022
-• Created comprehensive bus travel application with route guidance
-• Implemented real-time location tracking and ETA calculations
-• Technologies: Django, MySQL, JavaScript, Location APIs
 
 SKILLS DEVELOPED:
 • Full-stack web development
