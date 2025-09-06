@@ -1,0 +1,69 @@
+/* Custom Scrollbars */
+
+/* Webkit Scrollbars (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-scrollbar-track);
+    border-radius: var(--border-radius-small);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--color-bg-tertiary);
+    transition: background-color var(--transition-normal);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--color-scrollbar-track);
+}
+
+/* Firefox Scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
+}
+
+/* Terminal Content Specific Scrollbars */
+.terminal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-content::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+}
+
+.terminal-content::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: var(--border-radius-small);
+}
+
+.terminal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--color-scrollbar-thumb-hover);
+}
+
+/* Dashboard Content Specific Scrollbars */
+.dashboard-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dashboard-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: var(--border-radius-small);
+}
+
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+    background: var(--color-scrollbar-thumb-hover);
+}

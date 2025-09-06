@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class SwitchTabCommand extends Command {
   constructor() {
-    super('switchtab', 'Switch to a specific terminal tab');
+    super('switchtab', 'Switch to a specific terminal tab', { category: 'Terminal Management' });
   }
 
   async execute(args, context) {

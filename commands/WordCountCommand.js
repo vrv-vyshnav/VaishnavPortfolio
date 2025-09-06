@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class WordCountCommand extends Command {
   constructor() {
-    super('wc', 'Count lines, words, characters');
+    super('wc', 'Count lines, words, characters', { category: 'Text Processing' });
   }
 
   execute(params, context) {

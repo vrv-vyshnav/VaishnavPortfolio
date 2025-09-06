@@ -64,18 +64,23 @@
         ]
     }
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="terminal-content.css">
 </head>
 <body>
+    
     <div class="terminal-container">
         <div class="terminal-tabs" id="terminal-tabs">
+            <div class="layout-toggle" id="layout-toggle" title="Toggle Split Layout">
+                <span class="toggle-icon">⚏</span>
+            </div>
             <!-- Terminal tabs will be added here dynamically -->
         </div>
         
-        <div class="terminal-views" id="terminal-views">
-            <!-- Terminal views will be added here dynamically -->
+        <div class="terminal-main">
+            <div class="terminal-views" id="terminal-views">
+                <!-- Terminal views will be added here dynamically -->
+            </div>
+            
         </div>
     </div>
     

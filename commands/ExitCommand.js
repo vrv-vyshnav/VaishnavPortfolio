@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class ExitCommand extends Command {
   constructor() {
-    super('exit', 'Exit the terminal and close the tab. Use "exit -all" to close all terminals.');
+    super('exit', 'Exit the terminal and close the tab. Use "exit -all" to close all terminals.', { category: 'Terminal Management' });
   }
 
   execute(params, context) {

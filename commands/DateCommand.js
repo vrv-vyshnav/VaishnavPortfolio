@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class DateCommand extends Command {
   constructor() {
-    super('date', 'Show current date and time');
+    super('date', 'Show current date and time', { category: 'System Information' });
   }
 
   execute(params, context) {

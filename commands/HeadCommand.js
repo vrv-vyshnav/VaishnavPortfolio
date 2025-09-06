@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class HeadCommand extends Command {
   constructor() {
-    super('head', 'Show first lines of file');
+    super('head', 'Show first lines of file', { category: 'Text Processing' });
   }
 
   execute(params, context) {

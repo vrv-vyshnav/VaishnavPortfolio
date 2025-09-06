@@ -1,7 +1,8 @@
-export class RmCommand {
+import { Command } from '../core/Command.js';
+
+export class RmCommand extends Command {
   constructor() {
-    this.name = 'rm';
-    this.description = 'Delete a file or directory. Use -rf to remove directories and their contents.';
+    super('rm', 'Delete a file or directory. Use -rf to remove directories and their contents.', { category: 'File Operations' });
   }
 
   async execute(args, context) {

@@ -12,7 +12,7 @@ import { CatCommand } from './commands/CatCommand.js';
 import { PrintWorkingDirectoryCommand } from './commands/PrintWorkingDirectoryCommand.js';
 import { WhoAmICommand } from './commands/WhoAmICommand.js';
 import { ClearCommand } from './commands/ClearCommand.js';
-import { HistoryCommand } from './commands/HistoryCommand.js';
+// History command removed
 import { TreeCommand } from './commands/TreeCommand.js';
 import { FindCommand } from './commands/FindCommand.js';
 import { GrepCommand } from './commands/GrepCommand.js';
@@ -27,12 +27,14 @@ import { RmCommand } from './commands/RmCommand.js';
 import { NewTabCommand } from './commands/NewTabCommand.js';
 import { SwitchTabCommand } from './commands/SwitchTabCommand.js';
 import { ListTabsCommand } from './commands/ListTabsCommand.js';
+import { VimCommand, ViCommand } from './commands/VimCommand.js';
 
 // Utility imports
 import { typeWriter } from './utils/typeWriter.js';
 import { EventManager } from './utils/EventManager.js';
 import { ErrorHandler } from './utils/ErrorHandler.js';
 import { SecurityManager } from './utils/security.js';
+import { SmartSuggestions } from './utils/SmartSuggestions.js';
 import { CONFIG } from './config/constants.js';
 
 export class Terminal {
@@ -50,7 +52,14 @@ export class Terminal {
     this.output = new DOMOutput(`${terminalId}-content`);
     this.history = new HistoryService();
     this.commandRegistry = new CommandRegistry();
-    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId);
+    this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId, this);
+
+    // Initialize smart suggestions after other services
+    this.smartSuggestions = null; // Will be initialized after fileSystem is ready
+
+    // Unified search suggestions state
+    this.suggestions = [];
+    this.suggestionIndex = -1;
 
     this.isLoading = true;
     this.registerCommands();
@@ -66,7 +75,7 @@ export class Terminal {
     this.commandRegistry.register(new PrintWorkingDirectoryCommand());
     this.commandRegistry.register(new WhoAmICommand());
     this.commandRegistry.register(new ClearCommand());
-    this.commandRegistry.register(new HistoryCommand());
+    // History command registration removed
     this.commandRegistry.register(new TreeCommand());
     this.commandRegistry.register(new FindCommand());
     this.commandRegistry.register(new GrepCommand());
@@ -81,6 +90,8 @@ export class Terminal {
     this.commandRegistry.register(new NewTabCommand());
     this.commandRegistry.register(new SwitchTabCommand());
     this.commandRegistry.register(new ListTabsCommand());
+    this.commandRegistry.register(new VimCommand());
+    this.commandRegistry.register(new ViCommand());
 
   }
 
@@ -96,6 +107,10 @@ export class Terminal {
       }
       await this.fileSystem.initialize();
       this.output.setFileSystem(this.fileSystem);
+      
+      // Initialize smart suggestions after fileSystem is ready
+      this.smartSuggestions = new SmartSuggestions(this.commandRegistry, this.fileSystem);
+      
       this.isLoading = false;
       
       // Set up event listeners after initialization
@@ -186,23 +201,63 @@ export class Terminal {
       const input = document.getElementById(inputId);
       if (!input) return;
 
+      // Unified input handling with integrated search
       if (e.key === 'Enter') {
+        e.preventDefault();
         const command = input.value.trim();
         if (command) {
+          // Always execute the typed command, not the suggestion
           this.executeCommand(command);
           input.value = '';
+          this.clearSuggestionDisplay();
+        }
+      } else if (e.key === 'ArrowUp' && e.ctrlKey) {
+        e.preventDefault();
+        // Ctrl+Up for smart suggestion navigation
+        if (this.suggestions.length > 0) {
+          this.navigateSuggestions(-1);
+        }
+      } else if (e.key === 'ArrowDown' && e.ctrlKey) {
+        e.preventDefault();
+        // Ctrl+Down for smart suggestion navigation
+        if (this.suggestions.length > 0) {
+          this.navigateSuggestions(1);
         }
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
+        // Up arrow for command history navigation (previous command)
         const prev = this.history.getPrevious();
-        if (prev) input.value = prev;
+        if (prev) {
+          input.value = prev;
+          // Clear smart suggestions when using history
+          this.clearSuggestionDisplay();
+        }
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
+        // Down arrow for command history navigation (next command)
         const next = this.history.getNext();
-        if (next) input.value = next;
+        if (next) {
+          input.value = next;
+          // Clear smart suggestions when using history
+          this.clearSuggestionDisplay();
+        }
       } else if (e.key === 'Tab') {
         e.preventDefault();
-        this.autoComplete(input);
+        if (this.suggestions.length > 0 && this.suggestionIndex >= 0) {
+          // Complete with selected smart suggestion
+          const selectedSuggestion = this.suggestions[this.suggestionIndex];
+          input.value = selectedSuggestion.text;
+          this.clearSuggestionDisplay();
+        } else {
+          // Fallback to normal autocompletion
+          this.autoComplete(input);
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        this.clearSuggestionDisplay();
+      } else if (e.key === 'Backspace' || e.key.length === 1) {
+        // Update smart suggestions as user types/deletes
+        setTimeout(() => this.updateSmartSuggestions(input), 0);
       }
     } catch (error) {
       this.errorHandler.handleError(error, 'keyboard_input');
@@ -220,6 +275,106 @@ export class Terminal {
     }
   }
 
+  updateSmartSuggestions(input) {
+    if (!this.smartSuggestions) {
+      this.clearSuggestionDisplay();
+      return;
+    }
+
+    const inputText = input.value.trim();
+    
+    if (inputText === '') {
+      // Show default suggestions when input is empty
+      this.suggestions = this.smartSuggestions.getDefaultSuggestions();
+      this.suggestionIndex = -1;
+      this.showSuggestionsInOutput();
+      return;
+    }
+    
+    this.suggestions = this.smartSuggestions.getSuggestions(inputText);
+    this.suggestionIndex = 0;
+    
+    if (this.suggestions.length > 0) {
+      this.showSuggestionsInOutput();
+    } else {
+      this.clearSuggestionDisplay();
+    }
+  }
+
+  clearSuggestionDisplay() {
+    this.suggestions = [];
+    this.suggestionIndex = -1;
+    
+    const existingDisplay = document.getElementById(`${this.terminalId}-suggestions-display`);
+    if (existingDisplay) {
+      existingDisplay.remove();
+    }
+  }
+
+  showSuggestionsInOutput() {
+    const suggestionsDisplayId = `${this.terminalId}-suggestions-display`;
+    let suggestionsDisplay = document.getElementById(suggestionsDisplayId);
+    
+    if (!suggestionsDisplay) {
+      suggestionsDisplay = document.createElement('div');
+      suggestionsDisplay.id = suggestionsDisplayId;
+      suggestionsDisplay.className = 'suggestions-display';
+      
+      // Insert before the current input line
+      const inputLine = this.output.contentElement.lastElementChild;
+      this.output.contentElement.insertBefore(suggestionsDisplay, inputLine);
+    }
+    
+    // Simple flat list without grouping
+    let html = '';
+    
+    this.suggestions.forEach((suggestion, index) => {
+      const isSelected = index === this.suggestionIndex;
+      const className = isSelected ? 'suggestion-item selected' : 'suggestion-item';
+      
+      html += `<div class="${className}" data-suggestion="${suggestion.text}" data-index="${index}">→ ${suggestion.text}</div>`;
+    });
+    
+    // Add navigation hint
+    if (this.suggestions.length > 0) {
+      html += `<div class="suggestion-hint">Tab: complete | Ctrl+↑↓: navigate | Esc: close</div>`;
+    }
+    
+    suggestionsDisplay.innerHTML = html;
+    
+    // Add click handlers to suggestion items
+    const suggestionItems = suggestionsDisplay.querySelectorAll('.suggestion-item');
+    suggestionItems.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const suggestionText = item.getAttribute('data-suggestion');
+        const inputId = `${this.terminalId}-content-input`;
+        const input = document.getElementById(inputId);
+        
+        if (input && suggestionText) {
+          input.value = suggestionText;
+          this.clearSuggestionDisplay();
+          input.focus();
+        }
+      });
+    });
+  }
+
+  // Unused grouping methods removed
+
+  navigateSuggestions(direction) {
+    if (this.suggestions.length === 0) return;
+    
+    this.suggestionIndex += direction;
+    if (this.suggestionIndex < 0) this.suggestionIndex = this.suggestions.length - 1;
+    if (this.suggestionIndex >= this.suggestions.length) this.suggestionIndex = 0;
+    
+    // Update the display to show the new selection
+    this.showSuggestionsInOutput();
+  }
+
   async executeCommand(commandLine) {
     try {
       // Validate input
@@ -235,29 +390,21 @@ export class Terminal {
       }
 
       const trimmed = commandLine.trim();
+      
+      // Check for command chaining with &
+      const commands = trimmed.split('&').map(cmd => cmd.trim()).filter(cmd => cmd !== '');
+      
       this.output.write(`<span class="prompt">${this.fileSystem.getPrompt()}</span>${commandLine}`);
 
-      if (trimmed === '') {
+      if (commands.length === 0) {
         // Empty command - do nothing
         return;
       }
 
-      // Try exact match first (handles "rm -rf", "ls", etc.)
-      if (this.commandRegistry.has(trimmed)) {
-        const command = this.commandRegistry.get(trimmed);
-        await command.execute([], this.context);
-      } else {
-        // Fall back to single-word command with parameters
-        const args = trimmed.split(' ');
-        const commandName = args[0];
-        const params = args.slice(1);
-        
-        if (this.commandRegistry.has(commandName)) {
-          const command = this.commandRegistry.get(commandName);
-          await command.execute(params, this.context);
-        } else {
-          this.output.write(`<span class="error">${CONFIG.ERROR_MESSAGES.COMMAND_NOT_FOUND}: ${commandName}</span>`);
-          this.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+      // Execute each command sequentially
+      for (const command of commands) {
+        if (command !== '') {
+          await this.executeForegroundProcess(command);
         }
       }
       
@@ -267,9 +414,34 @@ export class Terminal {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
       this.output.addPrompt();
-      // Remove setupEventListeners call from here since it's now in initialize
     }
   }
+
+  async executeForegroundProcess(commandLine) {
+    return this.executeForegroundProcessWithContext(commandLine, this.context);
+  }
+
+  async executeForegroundProcessWithContext(commandLine, context) {
+    // Try exact match first (handles "rm -rf", "ls", etc.)
+    if (this.commandRegistry.has(commandLine)) {
+      const command = this.commandRegistry.get(commandLine);
+      await command.execute([], context);
+    } else {
+      // Fall back to single-word command with parameters
+      const args = commandLine.split(' ');
+      const commandName = args[0];
+      const params = args.slice(1);
+      
+      if (this.commandRegistry.has(commandName)) {
+        const command = this.commandRegistry.get(commandName);
+        await command.execute(params, context);
+      } else {
+        context.output.write(`<span class="error">${CONFIG.ERROR_MESSAGES.COMMAND_NOT_FOUND}: ${commandName}</span>`);
+        context.output.write(`<span class="info">Type 'help' to see available commands</span>`);
+      }
+    }
+  }
+
 
   autoComplete(input) {
     try {
@@ -308,6 +480,7 @@ export class Terminal {
       this.errorHandler.handleError(error, 'autocomplete');
     }
   }
+
 
   /**
    * Cleanup method to prevent memory leaks

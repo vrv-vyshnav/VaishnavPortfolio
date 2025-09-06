@@ -1,0 +1,84 @@
+/* Terminal Tabs Styles */
+
+.terminal-tabs {
+    display: flex;
+    background: var(--gradient-secondary);
+    border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+    border: var(--border-primary);
+    border-bottom: none;
+    padding: 0 10px;
+    overflow-x: auto;
+}
+
+.terminal-tab {
+    padding: 12px 15px;
+    cursor: pointer;
+    border-right: var(--border-primary);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    transition: var(--transition-normal);
+    border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+    margin: 4px 2px 0 2px;
+}
+
+.terminal-tab:hover {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--color-text-primary);
+}
+
+.terminal-tab.active {
+    color: var(--color-accent-blue);
+    background: var(--gradient-primary);
+    font-weight: 600;
+    border: var(--border-primary);
+    border-bottom: none;
+}
+
+.terminal-tab:last-child {
+    border-right: none;
+}
+
+.terminal-tab.new-tab {
+    color: var(--color-accent-blue);
+    font-weight: bold;
+    border-right: none;
+    background: rgba(88, 166, 255, 0.1);
+}
+
+.terminal-tab.new-tab:hover {
+    background: rgba(88, 166, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.terminal-tab .close-tab {
+    margin-left: 10px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.terminal-tab .close-tab:hover {
+    color: #ff5f56;
+}
+
+/* Mobile Tabs */
+@media (max-width: 768px) {
+    .terminal-tab {
+        padding: 8px 12px;
+        font-size: var(--font-size-sm);
+    }
+    
+    .terminal-tabs {
+        padding: 0 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .terminal-tab {
+        padding: 6px 10px;
+        font-size: var(--font-size-xs);
+    }
+}

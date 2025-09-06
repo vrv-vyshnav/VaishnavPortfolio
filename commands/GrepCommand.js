@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class GrepCommand extends Command {
   constructor() {
-    super('grep', 'Search text in files');
+    super('grep', 'Search text in files', { category: 'Text Processing' });
   }
 
   execute(params, context) {
@@ -32,8 +32,9 @@ export class GrepCommand extends Command {
         context.output.write(`<span class="warning">No matches found for '${pattern}'</span>`);
       } else {
         matches.forEach(match => {
+          const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
           const highlighted = match.replace(
-            new RegExp(`(${pattern})`, 'gi'),
+            new RegExp(`(${escapedPattern})`, 'gi'),
             `<span class="warning">$1</span>`
           );
           context.output.write(`<span class="info">${highlighted}</span>`);

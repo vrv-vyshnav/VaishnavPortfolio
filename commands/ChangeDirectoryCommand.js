@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class ChangeDirectoryCommand extends Command {
   constructor() {
-    super('cd', 'Change directory');
+    super('cd', 'Change directory', { category: 'File System' });
   }
 
   execute(params, context) {

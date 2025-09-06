@@ -114,3 +114,5 @@ Portfolio content is managed through:
 - Modern browsers with ES6 module support
 - No build process required
 - Uses native browser APIs for DOM manipulation
+- http://127.0.0.1:5502/ server runs here
+- http://127.0.0.1:5502/ server is running on this url using live server

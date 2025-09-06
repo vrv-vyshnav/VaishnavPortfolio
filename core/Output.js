@@ -84,7 +84,7 @@ export class DOMOutput {
       const promptText = this.fileSystem ? this.fileSystem.getPrompt() : 'user@system:~$';
       promptLine.innerHTML = `
         <span class="prompt">${promptText}</span>
-        <input type="text" class="user-input" id="${inputId}" autofocus>
+        <input type="text" class="user-input" id="${inputId}" autofocus autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
         <span class="cursor">█</span>
       `;
       

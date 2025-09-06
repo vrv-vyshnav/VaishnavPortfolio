@@ -3,7 +3,7 @@ import { FileIcons } from '../utils/fileIcons.js';
 
 export class FindCommand extends Command {
   constructor() {
-    super('find', 'Find files by name');
+    super('find', 'Find files by name', { category: 'File System' });
   }
 
   execute(params, context) {

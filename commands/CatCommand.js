@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class CatCommand extends Command {
   constructor() {
-    super('cat', 'Display file contents');
+    super('cat', 'Display file contents', { category: 'File System' });
   }
 
   async execute(params, context) {
@@ -26,7 +26,32 @@ export class CatCommand extends Command {
         const html = await res.text();
         context.output.write(html);
       } catch {
-        context.output.write(`<span class="error">cat: ${fileName}: failed to load HTML content</span>`);
+        context.output.write(`<span class="error">cat: ${params[0]}: failed to load HTML content</span>`);
+      }
+      return;
+    }
+
+    if (entry.renderType === 'text') {
+      try {
+        let text = '';
+        // Check if content is a URL path or direct content
+        if (entry.content.startsWith('content/') || entry.content.startsWith('/') || entry.content.startsWith('http')) {
+          // Load text file content from URL
+          const res = await fetch(entry.content);
+          text = await res.text();
+        } else {
+          // Content is embedded directly (like project files)
+          text = entry.content || '';
+        }
+        
+        // Remove ASCII borders on mobile devices (including device rotation)
+        if (window.innerWidth <= 768) {
+          text = this.removeMobileASCIIBorders(text);
+        }
+        
+        context.output.write(`<pre class="file-content">${text}</pre>`);
+      } catch {
+        context.output.write(`<span class="error">cat: ${params[0]}: failed to load text content</span>`);
       }
       return;
     }
@@ -36,5 +61,27 @@ export class CatCommand extends Command {
       `<span class="">${entry.content || ''}</span>`
     );
         
+  }
+  
+  removeMobileASCIIBorders(text) {
+    // Remove ASCII border lines that cause horizontal overflow on mobile
+    const lines = text.split('\n');
+    const filteredLines = lines.filter(line => {
+      // Remove lines that contain only ASCII border characters
+      const trimmedLine = line.trim();
+      
+      // Match lines with only box drawing characters and spaces/dashes
+      const borderPattern = /^[┌┐└┘│─\s]+$/;
+      const isOnlyBorders = borderPattern.test(trimmedLine);
+      
+      // Also remove empty lines that are adjacent to borders for better spacing
+      if (isOnlyBorders) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    return filteredLines.join('\n');
   }
 }

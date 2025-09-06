@@ -1,0 +1,185 @@
+/* System Dashboard Component Styles */
+
+.system-dashboard {
+    width: 320px;
+    background: var(--gradient-primary);
+    border: var(--border-primary);
+    border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+    font-family: var(--font-family-mono);
+    color: var(--color-text-primary);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow-large);
+    height: 100%;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: var(--gradient-secondary);
+    padding: 12px 16px;
+    border-bottom: var(--border-primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-buttons {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+}
+
+.dashboard-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.dashboard-button:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-small);
+}
+
+.dashboard-button.close { 
+    background: var(--color-btn-close);
+}
+
+.dashboard-button.minimize { 
+    background: var(--color-btn-minimize);
+}
+
+.dashboard-button.maximize { 
+    background: var(--color-btn-maximize);
+}
+
+.dashboard-title {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-accent-blue);
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.dashboard-status {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent-green);
+    font-weight: 500;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    flex: 1;
+    padding: var(--spacing-md);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Metric Cards */
+.metric-card {
+    background: rgba(33, 38, 45, 0.8);
+    border: var(--border-primary);
+    border-radius: var(--border-radius-medium);
+    padding: var(--spacing-md);
+    transition: var(--transition-normal);
+}
+
+.metric-card:hover {
+    background: rgba(33, 38, 45, 1);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.metric-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: 0.75rem;
+}
+
+.metric-icon {
+    font-size: 16px;
+}
+
+.metric-title {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.metric-subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+/* Progress Bars */
+.memory-bar, .storage-bar {
+    height: 6px;
+    background: var(--color-bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: var(--spacing-sm) 0;
+    position: relative;
+}
+
+.memory-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent-green), var(--color-accent-orange));
+    border-radius: 3px;
+    transition: width var(--transition-slow);
+    width: 0%;
+}
+
+.storage-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-purple));
+    border-radius: 3px;
+    transition: width var(--transition-slow);
+    width: 0%;
+}
+
+/* Specific Card Colors */
+.time-card .metric-value { 
+    color: var(--color-accent-blue); 
+}
+
+.memory-card .metric-value { 
+    color: var(--color-accent-orange); 
+}
+
+.network-card .metric-value { 
+    color: var(--color-accent-green); 
+}
+
+.performance-card .metric-value { 
+    color: var(--color-accent-yellow); 
+}
+
+.storage-card .metric-value { 
+    color: var(--color-accent-purple); 
+}
+
+.device-card .metric-value { 
+    color: #ff7b72; 
+}
+
+/* Hide dashboard on mobile */
+@media (max-width: 768px) {
+    .system-dashboard {
+        display: none;
+    }
+}

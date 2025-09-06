@@ -2,7 +2,7 @@ import { Command } from '../core/Command.js';
 
 export class PrintWorkingDirectoryCommand extends Command {
   constructor() {
-    super('pwd', 'Print working directory');
+    super('pwd', 'Print working directory', { category: 'File System' });
   }
 
   execute(params, context) {

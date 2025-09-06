@@ -1,0 +1,47 @@
+  ______    _                   _   _             
+ |  ____|  | |                 | | (_)            
+ | |__   __| |_   _  ___ __ _  | |_ _  ___  _ __  
+ |  __| / _` | | | |/ __/ _` | | __| |/ _ \| '_ \ 
+ | |___| (_| | |_| | (_| (_| | | |_| | (_) | | | |
+ |______\__,_|\__,_|\___\__,_|  \__|_|\___/|_| |_|
+                                                  
+        Education
+
+=== EDUCATIONAL BACKGROUND ===
+
+SSLC     SREE NARAYANA HSS, Kerala
+  │      → Secondary School Leaving Certificate
+  ▼
+2017     Higher Secondary Education (+2) - Computer Science
+  │      → College of Applied Science, Kerala
+  ▼
+2017-19  Bachelor of Science in Computer Science (BSC)
+  │      → Calicut University, Kerala
+  │
+  │   ACADEMIC FOCUS:
+  │   • Computer Science Fundamentals
+  │   • Software Engineering Principles  
+  │   • Database Management Systems
+  │   • Web Development Technologies
+  │   • Object-Oriented Programming
+  │   • Data Structures and Algorithms
+  │  
+  │   COURSEWORK HIGHLIGHTS:
+  │   • Programming Languages: C, C++, Java, Python
+  │   • Database Systems: MySQL, Oracle
+  │   • Web Technologies: HTML, CSS, JavaScript, PHP
+  │   • Software Engineering: SDLC, Testing, Documentation
+  │   • Computer Networks: TCP/IP, Network Security
+  │   • Operating Systems: Linux, Windows Administration
+  │  
+  │   COLLEGE PROJECTS & ACHIEVEMENTS:
+  │   • Final Year Project: Let's Go Everywhere - Bus Travel Guide
+  │     - Created comprehensive bus travel application with route guidance
+  │     - Implemented real-time location tracking and ETA calculations
+  │     - Technologies: Django, MySQL, JavaScript, Location APIs
+  │   • Web Development Projects using LAMP stack
+  │   • Database design and optimization projects
+  │   • Team-based software development exercises
+  │   • Strong foundation in computer science principles
+  ▼  
+2019-22

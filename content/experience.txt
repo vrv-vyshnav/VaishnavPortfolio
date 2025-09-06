@@ -1,0 +1,77 @@
+ ______                       _                     
+|  ____|                     (_)                    
+| |__  __  ___ __   ___ _ __  _  ___ _ __   ___ ___  
+|  __| \ \/ / '_ \ / _ \ '__|| |/ _ \ '_ \ / __/ _ \ 
+| |____ >  <| |_) |  __/ |   | |  __/ | | | (_|  __/
+|______/_/\_\ .__/ \___|_|   |_|\___|_| |_|\___\___|
+            | |                                     
+            |_|                                     
+        Experience
+
+=== PROFESSIONAL EXPERIENCE ===
+
+Associate Software Developer | Eloit Innovation Private Limited
+March 2023 - Present | Kerala, India
+
+Project: Edisapp - AI-Powered School Management ERP
+Role: Core Developer
+Impact: Serving 180+ institutions across four continents
+
+KEY RESPONSIBILITIES:
+• Design and develop scalable modules using ASP.NET Core MVC and C#
+• Work on monolithic architecture with selective microservice modules
+• Build and maintain RESTful APIs for multi-platform integration
+• Collaborate with cross-functional teams in Agile/Scrum environment
+• Perform database design and optimization for high-performance applications
+• Ensure compliance with ISO 27001 and ISO 9001 standards
+
+TECHNICAL ACHIEVEMENTS:
+• Successfully contributed to a platform serving 180+ educational institutions
+• Developed high-performance, secure applications meeting international standards
+• Contributed to selective microservice modules within monolithic architecture
+• Optimized database queries resulting in 40% performance improvement
+• Applied Clean Architecture principles in personal development projects
+
+TECHNOLOGIES USED:
+• Backend: ASP.NET Core MVC, C#
+• Frontend: Vue.js, JavaScript
+• Database: MS SQL Server
+• Tools: Telerik Kendo UI, Git, Visual Studio
+• Architecture: Hybrid monolithic-microservices approach
+
+RECOGNITION:
+★ Team Achiever Award for outstanding performance and contribution
+
+Previous Projects & Learning Experience
+2020 - 2023 | Self-directed & Academic Projects
+
+BOM Manager (Component Bill of Materials Manager)
+Duration: May 2020 - June 2021
+• Developed centralized component BOM management system
+• Reduced manual effort and eliminated component duplication
+• Technologies: PHP, MySQL, Apache (LAMP Stack)
+
+
+SKILLS DEVELOPED:
+• Full-stack web development
+• Database design and optimization  
+• API development and integration
+• Project planning and execution
+• Problem-solving and analytical thinking
+
+=== CAREER PROGRESSION ===
+
+2020     Started with LAMP stack development
+  │      → Learned PHP, MySQL, Apache basics
+  ▼
+2021     Expanded to Python and Django
+  │      → Built complex web applications
+  ▼
+2022     Deepened frontend skills
+  │      → JavaScript, responsive design
+  ▼
+2023     Professional .NET development
+  │      → C#, ASP.NET Core, Clean Architecture
+  ▼
+2024     Advanced architecture patterns
+         → Microservices, Enterprise solutions
