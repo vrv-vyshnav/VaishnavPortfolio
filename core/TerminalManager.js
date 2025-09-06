@@ -162,7 +162,7 @@ export class TerminalManager {
     terminalView.innerHTML = `
       <div class="terminal-header">
         <div class="terminal-buttons">
-          <div class="terminal-button close"></div>
+          <div class="terminal-button close" data-terminal-id="${terminalId}"></div>
           <div class="terminal-button minimize"></div>
           <div class="terminal-button maximize"></div>
         </div>
@@ -174,6 +174,14 @@ export class TerminalManager {
     `;
     
     this.terminalViews.appendChild(terminalView);
+
+    // Add event listener for the close button in terminal header
+    const closeButton = terminalView.querySelector('.terminal-button.close');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        this.removeTerminal(terminalId);
+      });
+    }
 
     // Add typewriter effect for banner if present
     if (showBanner) {
@@ -190,59 +198,25 @@ export class TerminalManager {
    * Get banner HTML based on screen size
    */
   getBannerHTML() {
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile) {
-      // Simple text banner for mobile
-      return `
-        <div class="ascii-art main-banner mobile-banner">
-          <div class="banner-text">VAISHNAV</div>
-          <div class="banner-subtitle">Portfolio Terminal v2.0</div>
-        </div>`;
-    } else {
-      // Full ASCII art for desktop
-      return `
-        <pre class="ascii-art main-banner">
+    // Always show full ASCII art
+    return `
+      <pre class="ascii-art main-banner">
 ██╗   ██╗ █████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ ██╗   ██╗
 ██║   ██║██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗██║   ██║
 ██║   ██║███████║██║███████╗███████║██╔██╗ ██║███████║██║   ██║
 ╚██╗ ██╔╝██╔══██║██║╚════██║██╔══██║██║╚██╗██║██╔══██║╚██╗ ██╔╝
  ╚████╔╝ ██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║ ╚████╔╝ 
   ╚═══╝  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝  ╚═══╝  
-        </pre>`;
-    }
+      </pre>`;
   }
 
   /**
    * Animate banner with typewriter effect
    */
   animateBanner(bannerElement) {
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile) {
-      // Animate mobile banner
-      const bannerText = bannerElement.querySelector('.banner-text');
-      const subtitle = bannerElement.querySelector('.banner-subtitle');
-      
-      if (bannerText && subtitle) {
-        bannerText.style.opacity = '0';
-        subtitle.style.opacity = '0';
-        
-        typeWriter('VAISHNAV', bannerText, 80);
-        setTimeout(() => {
-          typeWriter('Portfolio Terminal v2.0', subtitle, 40);
-        }, 800);
-        
-        bannerText.style.opacity = '1';
-        setTimeout(() => {
-          subtitle.style.opacity = '1';
-        }, 800);
-      }
-    } else {
-      // Animate ASCII art with faster speed
-      const originalText = bannerElement.textContent;
-      typeWriter(originalText, bannerElement, 8);
-    }
+    // Always animate ASCII art with faster speed
+    const originalText = bannerElement.textContent;
+    typeWriter(originalText, bannerElement, 8);
   }
 
   /**

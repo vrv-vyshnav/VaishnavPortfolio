@@ -26,12 +26,44 @@ export class HelpCommand extends Command {
     output += '</div>';
     
     output += `<div class="help-footer">
-<div class="help-tips">Tips:</div>
-• Use Tab for auto-completion
-• Use ↑/↓ arrows for command history  
-• Use 'ls' to see what's available
-• Use 'cat about.txt' to learn more about me
-• Use Ctrl+R for interactive history search</div>`;
+<div class="help-section">
+  <div class="help-tips">📋 Available Content Files:</div>
+  • about.txt - Personal information and background
+  • contact.info - Professional contact information
+  • skills.conf - Technical skills and proficiency levels
+  • experience.txt - Work experience and achievements
+  • education.txt - Educational background
+</div>
+
+<div class="help-section">
+  <div class="help-tips">⌨️ Keyboard Shortcuts:</div>
+  • Tab - Auto-complete or accept suggestion
+  • ↑/↓ - Navigate command history
+  • Ctrl+↑/↓ - Navigate smart suggestions
+  • Escape - Clear suggestions
+  • Ctrl+C - Cancel current input
+</div>
+
+<div class="help-section">
+  <div class="help-tips">💡 Pro Tips:</div>
+  • Use 'ls' to explore available files and directories
+  • Use 'cat <filename>' to view file contents
+  • Use 'find <pattern>' to search for files
+  • Use 'grep <pattern> <file>' to search within files
+  • Use 'vim <file>' to edit files in vim mode
+  • Try 'tree' for a visual directory structure
+  • Smart suggestions help you discover commands
+  • Chain commands with '&' (e.g., 'ls & pwd & date')
+</div>
+
+<div class="help-section">
+  <div class="help-tips">🎯 Smart Suggestions:</div>
+  • Start typing to see intelligent command suggestions
+  • Simple list format with clean, minimal design
+  • Context-aware completions for file and directory operations
+  • Click on suggestions to select them instantly
+  • Only valid commands and existing files/directories shown
+</div></div>`;
 
     output += '</div>';
     context.output.write(output);

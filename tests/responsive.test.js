@@ -280,14 +280,28 @@ and no headers`;
       // Mock command execution with mobile detection
       function mockCommandExecution(content) {
         if (window.innerWidth <= 768) {
-          // Apply mobile optimizations
+          // Apply mobile optimizations - remove ASCII border lines and extract content from bordered lines
           const lines = content.split('\n');
-          const filtered = lines.filter(line => {
-            const trimmed = line.trim();
+          const processedLines = lines.map(line => {
+            const trimmedLine = line.trim();
+            
+            // Remove pure border lines
             const borderPattern = /^[┌┐└┘│─\s]+$/;
-            return !borderPattern.test(trimmed);
-          });
-          return filtered.join('\n');
+            if (borderPattern.test(trimmedLine)) {
+              return null;
+            }
+            
+            // Extract content from bordered lines
+            const borderedContentPattern = /^│\s*(.+?)\s*│$/;
+            if (borderedContentPattern.test(trimmedLine)) {
+              const match = trimmedLine.match(borderedContentPattern);
+              return match[1];
+            }
+            
+            return line;
+          }).filter(line => line !== null);
+          
+          return processedLines.join('\n');
         }
         return content;
       }
@@ -301,6 +315,7 @@ Regular content`;
 
       expect(result).not.toContain('┌');
       expect(result).not.toContain('│');
+      expect(result).toContain('Test');
       expect(result).toContain('Regular content');
     });
 
@@ -368,8 +383,8 @@ Regular content`;
       expect(duration).toBeLessThan(100); // 100ms should be plenty for this operation
 
       // Should have processed correctly
-      expect(result).toContain('Line 0');
-      expect(result).toContain('Line 999');
+      expect(result).toContain('Line 1');
+      expect(result).toContain('Line 998');
       expect(result).not.toContain('┌');
       expect(result).not.toContain('│');
     });

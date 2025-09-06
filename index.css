@@ -1227,7 +1227,7 @@ section{
   margin-bottom: 20px;
 }
 
-/* Search results display styles */
+/* Search results display styles (legacy) */
 .search-results-display {
   background: rgba(255, 255, 255, 0.03);
   border-left: 2px solid #58a6ff;
@@ -1274,7 +1274,94 @@ section{
   font-weight: bold;
 }
 
+/* Smart suggestions display styles */
+.suggestions-display {
+  margin: 6px 0;
+  padding: 6px 10px;
+  opacity: 0.9;
+  animation: fadeIn 0.2s ease-in;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+/* Unused group styles removed */
+
+.suggestion-item {
+  padding: 4px 8px;
+  margin: 2px 0;
+  border-radius: 3px;
+  color: #8b949e;
+  font-size: 0.9em;
+  background: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #c9d1d9;
+}
+
+.suggestion-item.selected {
+  background: rgba(88, 166, 255, 0.2);
+  color: #c9d1d9;
+  border-left: 2px solid #58a6ff;
+  padding-left: 6px;
+}
+
+/* Unused icon and description styles removed */
+
+.suggestion-hint {
+  color: #6e7681;
+  font-size: 0.7em;
+  text-align: left;
+  margin-top: 8px;
+  padding-top: 8px;
+  font-style: italic;
+}
+
+/* Responsive styles for suggestions */
+@media (max-width: 768px) {
+  .suggestions-display {
+    margin: 4px 0;
+    padding: 6px;
+    max-height: 200px;
+  }
+  
+  .suggestion-item {
+    padding: 5px 6px;
+    gap: 6px;
+  }
+  
+  .suggestion-text {
+    font-size: 0.8em;
+  }
+  
+  .suggestion-desc {
+    display: none; /* Hide descriptions on mobile */
+  }
+  
+  .suggestion-group-title {
+    font-size: 0.7em;
+    margin-bottom: 4px;
+  }
+}
+
 .no-matches {
   color: #ff7b72;
   font-style: italic;
+}
+
+/* File content display styles */
+.file-content {
+  white-space: pre;
+  overflow: scroll;
+}
+
+.search-hint {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85em;
+  margin-top: 8px;
+  padding: 4px 0;
+  text-align: left;
 }
