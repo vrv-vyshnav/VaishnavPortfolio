@@ -13,7 +13,7 @@ SSLC     SREE NARAYANA HSS, Kerala
   │      → Secondary School Leaving Certificate
   ▼
 2017     Higher Secondary Education (+2) - Computer Science
-  │      → College of Applied Science, Kerala
+  │      → SREE NARAYANA HSS , Kerala
   ▼
 2017-19  Bachelor of Science in Computer Science (BSC)
   │      → Calicut University, Kerala

@@ -55,15 +55,7 @@ export class HelpCommand extends Command {
   • Smart suggestions help you discover commands
   • Chain commands with '&' (e.g., 'ls & pwd & date')
 </div>
-
-<div class="help-section">
-  <div class="help-tips">🎯 Smart Suggestions:</div>
-  • Start typing to see intelligent command suggestions
-  • Simple list format with clean, minimal design
-  • Context-aware completions for file and directory operations
-  • Click on suggestions to select them instantly
-  • Only valid commands and existing files/directories shown
-</div></div>`;
+`;
 
     output += '</div>';
     context.output.write(output);
