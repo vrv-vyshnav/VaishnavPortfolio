@@ -150,4 +150,22 @@ getItem(path) {
     const shortPath = this.currentPath.replace(`/home/${this.userName}`, '~');
     return `${this.userName}@${this.hostName}:${shortPath}$`;
   }
+
+  isDirectory(name) {
+    const currentDir = this.getCurrentDirectory();
+    if (!currentDir || !currentDir.contents) return false;
+    const item = currentDir.contents[name];
+    return item && item.type === 'directory';
+  }
+
+  isFile(name) {
+    const currentDir = this.getCurrentDirectory();
+    if (!currentDir || !currentDir.contents) return false;
+    const item = currentDir.contents[name];
+    return item && item.type === 'file';
+  }
+
+  getCurrentPath() {
+    return this.currentPath;
+  }
 }

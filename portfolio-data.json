@@ -80,7 +80,7 @@
         },
         "resume.pdf": {
           "type": "file",
-          "renderType": "text",
+          "renderType": "binary",
           "content": "Binary resume file - Use curl -O resume.pdf to download"
         }
       }

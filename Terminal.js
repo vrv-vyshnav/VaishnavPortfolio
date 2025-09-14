@@ -12,7 +12,7 @@ import { CatCommand } from './commands/CatCommand.js';
 import { PrintWorkingDirectoryCommand } from './commands/PrintWorkingDirectoryCommand.js';
 import { WhoAmICommand } from './commands/WhoAmICommand.js';
 import { ClearCommand } from './commands/ClearCommand.js';
-// History command removed
+import { HistoryCommand } from './commands/HistoryCommand.js';
 import { TreeCommand } from './commands/TreeCommand.js';
 import { FindCommand } from './commands/FindCommand.js';
 import { GrepCommand } from './commands/GrepCommand.js';
@@ -35,6 +35,7 @@ import { EventManager } from './utils/EventManager.js';
 import { ErrorHandler } from './utils/ErrorHandler.js';
 import { SecurityManager } from './utils/security.js';
 import { SmartSuggestions } from './utils/SmartSuggestions.js';
+import { FileTypeDetector } from './utils/FileTypeDetector.js';
 import { CONFIG } from './config/constants.js';
 
 export class Terminal {
@@ -52,6 +53,7 @@ export class Terminal {
     this.output = new DOMOutput(`${terminalId}-content`);
     this.history = new HistoryService();
     this.commandRegistry = new CommandRegistry();
+    this.fileTypeDetector = new FileTypeDetector();
     this.context = new TerminalContext(this.fileSystem, this.output, this.history, this.commandRegistry, this.terminalId, this);
 
     // Initialize smart suggestions after other services
@@ -75,7 +77,7 @@ export class Terminal {
     this.commandRegistry.register(new PrintWorkingDirectoryCommand());
     this.commandRegistry.register(new WhoAmICommand());
     this.commandRegistry.register(new ClearCommand());
-    // History command registration removed
+    this.commandRegistry.register(new HistoryCommand());
     this.commandRegistry.register(new TreeCommand());
     this.commandRegistry.register(new FindCommand());
     this.commandRegistry.register(new GrepCommand());
@@ -443,6 +445,7 @@ export class Terminal {
   }
 
 
+
   autoComplete(input) {
     try {
       this.errorHandler.validateInput(input, 'object', 'input');
@@ -465,7 +468,17 @@ export class Terminal {
       } else {
         const items = this.fileSystem.list();
         const itemNames = Object.keys(items);
-        const matches = itemNames.filter(item => item.startsWith(lastPart));
+        const command = parts[0].toLowerCase();
+
+        // Apply intelligent filtering based on command type
+        let matches = itemNames.filter(item => item.startsWith(lastPart));
+
+        // Filter out inappropriate files for text-only commands
+        if (this.fileTypeDetector.isTextOnlyCommand(command)) {
+          matches = matches.filter(item => {
+            return this.fileTypeDetector.isTextFile(item);
+          });
+        }
 
         if (matches.length === 1) {
           parts[parts.length - 1] = matches[0];

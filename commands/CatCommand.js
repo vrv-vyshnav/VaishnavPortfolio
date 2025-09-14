@@ -1,4 +1,5 @@
 import { Command } from '../core/Command.js';
+import { FetchUtils } from '../utils/fetchUtils.js';
 
 export class CatCommand extends Command {
   constructor() {
@@ -22,11 +23,10 @@ export class CatCommand extends Command {
 
    if (entry.renderType === 'html') {
       try {
-        const res = await fetch(entry.content);
-        const html = await res.text();
+        const html = await FetchUtils.fetchText(entry.content);
         context.output.write(html);
-      } catch {
-        context.output.write(`<span class="error">cat: ${params[0]}: failed to load HTML content</span>`);
+      } catch (error) {
+        context.output.write(`<span class="error">cat: ${params[0]}: ${error.message}</span>`);
       }
       return;
     }
@@ -37,8 +37,7 @@ export class CatCommand extends Command {
         // Check if content is a URL path or direct content
         if (entry.content.startsWith('content/') || entry.content.startsWith('/') || entry.content.startsWith('http')) {
           // Load text file content from URL
-          const res = await fetch(entry.content);
-          text = await res.text();
+          text = await FetchUtils.fetchText(entry.content);
         } else {
           // Content is embedded directly (like project files)
           text = entry.content || '';
@@ -50,8 +49,8 @@ export class CatCommand extends Command {
         }
         
         context.output.write(`<pre class="file-content">${text}</pre>`);
-      } catch {
-        context.output.write(`<span class="error">cat: ${params[0]}: failed to load text content</span>`);
+      } catch (error) {
+        context.output.write(`<span class="error">cat: ${params[0]}: ${error.message}</span>`);
       }
       return;
     }

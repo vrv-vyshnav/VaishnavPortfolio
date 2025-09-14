@@ -113,20 +113,34 @@ class MockFileSystem {
     return null;
   }
 
-  isDirectory(path) {
-    const resolved = this.resolvePath(path);
-    const item = this.fileSystem[resolved];
-    return item && item.type === 'directory';
-  }
-
-  isFile(filename) {
-    const file = this.getFile(filename);
-    return file && file.type === 'file';
-  }
 
   getPrompt() {
     const shortPath = this.currentPath.replace('/home/' + this.userName, '~');
     return `${this.userName}@${this.hostName}:${shortPath}$`;
+  }
+
+  getCurrentDirectory() {
+    return this.fileSystem[this.currentPath];
+  }
+
+  getCurrentPath() {
+    return this.currentPath;
+  }
+
+  // Override isDirectory to work with filenames in current directory
+  isDirectory(name) {
+    const currentDir = this.getCurrentDirectory();
+    if (!currentDir || !currentDir.contents) return false;
+    const item = currentDir.contents[name];
+    return item && item.type === 'directory';
+  }
+
+  // Override isFile to work with filenames in current directory
+  isFile(name) {
+    const currentDir = this.getCurrentDirectory();
+    if (!currentDir || !currentDir.contents) return false;
+    const item = currentDir.contents[name];
+    return item && item.type === 'file';
   }
 }
 

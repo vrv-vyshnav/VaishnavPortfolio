@@ -1,29 +1,29 @@
+import { FileTypeDetector } from './FileTypeDetector.js';
+
 export class SmartSuggestions {
   constructor(commandRegistry, fileSystem) {
     this.commandRegistry = commandRegistry;
     this.fileSystem = fileSystem;
-    
+    this.fileTypeDetector = new FileTypeDetector();
+
     // Command patterns that expect file arguments
     this.fileCommands = new Set(['cat', 'head', 'tail', 'wc', 'grep', 'rm', 'vim', 'vi']);
-    
+
     // Command patterns that expect directory arguments
     this.dirCommands = new Set(['cd', 'find', 'tree']);
-    
+
     // Commands that don't need arguments
     this.standaloneCommands = new Set(['help', 'clear', 'pwd', 'whoami', 'date', 'ls', 'exit']);
-    
-    // Common command patterns
+
+    // Common command patterns (context-independent)
     this.commonPatterns = [
       'ls -la',
-      'cat about.txt',
-      'cat skills.conf',
-      'cat experience.txt',
-      'cd projects',
       'find .',
       'tree',
       'help'
     ];
   }
+
 
   getSuggestions(input) {
     if (!input || input.length === 0) {
@@ -54,13 +54,32 @@ export class SmartSuggestions {
   }
 
   getDefaultSuggestions() {
-    return [
+    const suggestions = [
       { text: 'help', type: 'command' },
       { text: 'ls', type: 'command' },
-      { text: 'cat about.txt', type: 'pattern' },
-      { text: 'cat skills.conf', type: 'pattern' },
       { text: 'tree', type: 'command' }
     ];
+
+    // Add context-aware file suggestions
+    const files = this.fileSystem.list();
+    const fileNames = Object.keys(files).filter(name => files[name].type === 'file');
+
+    // Prioritize common text files if they exist in current directory
+    const priorityFiles = ['about.txt', 'skills.conf', 'experience.txt', 'README.md'];
+    for (const fileName of priorityFiles) {
+      if (fileNames.includes(fileName) && this.fileTypeDetector.isTextFile(fileName)) {
+        suggestions.push({ text: `cat ${fileName}`, type: 'pattern', priority: 8 });
+        break; // Only add one file suggestion to keep it concise
+      }
+    }
+
+    // Add directory navigation if not in root
+    const currentPath = this.fileSystem.getCurrentDirectory();
+    if (currentPath && this.fileSystem.currentPath !== '/home/vaishnav/portfolio') {
+      suggestions.push({ text: 'cd ..', type: 'pattern', priority: 6 });
+    }
+
+    return suggestions;
   }
 
   getCommandSuggestions(inputLower) {
@@ -75,13 +94,49 @@ export class SmartSuggestions {
   }
 
   getPatternSuggestions(inputLower) {
-    return this.commonPatterns
+    const suggestions = [];
+
+    // Add static common patterns
+    const staticPatterns = this.commonPatterns
       .filter(pattern => pattern.toLowerCase().startsWith(inputLower))
       .map(pattern => ({
         text: pattern,
         type: 'pattern',
         priority: 5
       }));
+
+    suggestions.push(...staticPatterns);
+
+    // Add dynamic context-aware patterns
+    const files = this.fileSystem.list();
+    const fileNames = Object.keys(files).filter(name => files[name].type === 'file');
+    const dirNames = Object.keys(files).filter(name => files[name].type === 'directory');
+
+    // Generate cat patterns for existing text files only
+    for (const fileName of fileNames) {
+      const catPattern = `cat ${fileName}`;
+      if (catPattern.toLowerCase().startsWith(inputLower) && this.fileTypeDetector.isTextFile(fileName)) {
+        suggestions.push({
+          text: catPattern,
+          type: 'pattern',
+          priority: 7
+        });
+      }
+    }
+
+    // Generate cd patterns for existing directories
+    for (const dirName of dirNames) {
+      const cdPattern = `cd ${dirName}`;
+      if (cdPattern.toLowerCase().startsWith(inputLower)) {
+        suggestions.push({
+          text: cdPattern,
+          type: 'pattern',
+          priority: 6
+        });
+      }
+    }
+
+    return suggestions;
   }
 
   getArgumentSuggestions(command, args, fullInput) {
@@ -122,11 +177,20 @@ export class SmartSuggestions {
     const currentDir = this.fileSystem.getCurrentDirectory();
     const files = this.fileSystem.list();
     const lastArg = args.length > 0 ? args[args.length - 1] : '';
-    
+    const command = fullInput.trim().split(' ')[0].toLowerCase();
+
     return Object.keys(files)
       .filter(name => {
         const item = files[name];
-        return item.type === 'file' && name.toLowerCase().startsWith(lastArg.toLowerCase());
+        if (item.type !== 'file') return false;
+        if (!name.toLowerCase().startsWith(lastArg.toLowerCase())) return false;
+
+        // Apply command-specific filtering
+        if (this.fileTypeDetector.isTextOnlyCommand(command)) {
+          return this.fileTypeDetector.isTextFile(name);
+        }
+
+        return true;
       })
       .map(fileName => {
         const baseParts = fullInput.trim().split(' ');

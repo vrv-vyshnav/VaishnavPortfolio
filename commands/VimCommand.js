@@ -1,5 +1,6 @@
 import { Command } from '../core/Command.js';
 import { VimEditor } from '../core/VimEditor.js';
+import { FetchUtils } from '../utils/fetchUtils.js';
 
 // Simple cache for file contents
 const contentCache = new Map();
@@ -47,15 +48,13 @@ export class VimCommand extends Command {
       try {
         if (entry.renderType === 'html') {
           // Convert HTML to plain text for vim viewing
-          const res = await fetch(entry.content);
-          const html = await res.text();
+          const html = await FetchUtils.fetchText(entry.content);
           content = this.convertHtmlToText(html);
         } else if (entry.renderType === 'text') {
           // Check if content is a URL path or direct content
           if (entry.content.startsWith('content/') || entry.content.startsWith('/') || entry.content.startsWith('http')) {
             // Load text file content from URL
-            const res = await fetch(entry.content);
-            content = await res.text();
+            content = await FetchUtils.fetchText(entry.content);
           } else {
             // Content is embedded directly (like project files)
             content = entry.content || '';
