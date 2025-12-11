@@ -25,11 +25,10 @@ export class SwitchTabCommand extends Command {
     }
 
     const success = terminalManager.switchToTabByNumber(tabNumber);
-    if (success) {
-      context.output.write(`<span class="success">Switched to Tab ${tabNumber}</span>`);
-    } else {
-      context.output.write(`<span class="error">Warning: Tab ${tabNumber} does not exist. `);
+    if (!success) {
+      context.output.write(`<span class="error">Tab ${tabNumber} does not exist.</span>`);
     }
+    // Tab switched silently on success
   }
 
 }

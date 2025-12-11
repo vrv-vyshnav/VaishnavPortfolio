@@ -16,3 +16,4 @@
 
 /* Content-specific Styles */
 @import './components/terminal-content.css';
+@import './components/demo-modal.css';

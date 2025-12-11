@@ -28,8 +28,10 @@ import { NewTabCommand } from './commands/NewTabCommand.js';
 import { SwitchTabCommand } from './commands/SwitchTabCommand.js';
 import { ListTabsCommand } from './commands/ListTabsCommand.js';
 import { VimCommand, ViCommand } from './commands/VimCommand.js';
+import { DemoCommand } from './commands/DemoCommand.js';
 
 // Utility imports
+import { DemoStorage } from './utils/DemoStorage.js';
 import { typeWriter } from './utils/typeWriter.js';
 import { EventManager } from './utils/EventManager.js';
 import { ErrorHandler } from './utils/ErrorHandler.js';
@@ -94,6 +96,7 @@ export class Terminal {
     this.commandRegistry.register(new ListTabsCommand());
     this.commandRegistry.register(new VimCommand());
     this.commandRegistry.register(new ViCommand());
+    this.commandRegistry.register(new DemoCommand());
 
   }
 
@@ -156,7 +159,13 @@ export class Terminal {
       setTimeout(() => {
         this.output.write(`<span class="success">${CONFIG.SUCCESS_MESSAGES.TERMINAL_READY}</span>`);
         this.output.addPrompt();
-        // Remove setupEventListeners call from here since it's now in initialize
+
+        setTimeout(() => {
+          if (DemoStorage.isFirstVisit()) {
+            DemoStorage.markVisited();
+            this.executeCommand('demo');
+          }
+        }, 500);
       }, CONFIG.INIT_DELAY);
     } else {
       this.errorHandler.handleError(

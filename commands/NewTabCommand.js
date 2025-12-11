@@ -13,8 +13,7 @@ export class NewTabCommand extends Command {
     }
 
     const newTerminalId = terminalManager.createTerminal();
-    const tabNumber = terminalManager.getTabNumber(newTerminalId);
-    context.output.write(`<span class="success">New terminal created and switched to Tab ${tabNumber}</span>`);
+    // Tab created silently
   }
 
 }

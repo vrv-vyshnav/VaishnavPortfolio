@@ -28,7 +28,15 @@ export const CONFIG = {
         DEFAULT_PATH: '/home/vaishnav/portfolio',
         DATA_FILE: 'portfolio-data.json'
     },
-    
+
+    // Demo configuration
+    DEMO: {
+        TYPING_SPEED_EXPLANATION: 15,    // ms per character for explanations
+        TYPING_SPEED_COMMAND: 30,         // ms per character for commands
+        PAUSE_AFTER_EXPLANATION: 500,    // ms pause after explanation
+        PAUSE_AFTER_TYPING: 500           // ms pause after typing command
+    },
+
     // Security configuration
     SECURITY: {
         ALLOWED_HTML_TAGS: ['span', 'div', 'a', 'br', 'p', 'pre', 'section'],
@@ -47,7 +55,7 @@ export const CONFIG = {
     
     // Success messages
     SUCCESS_MESSAGES: {
-        TERMINAL_READY: 'Terminal initialized. Type \'help\' for available commands.',
+        TERMINAL_READY: 'Terminal initialized. Type \'help\' for available commands or \'demo\' for interactive demo.',
         COMMAND_EXECUTED: 'Command executed successfully'
     }
 }; 
