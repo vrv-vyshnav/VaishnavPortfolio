@@ -116,16 +116,6 @@ export class DemoModal {
   createOverlay() {
     this.overlayElement = document.createElement('div');
     this.overlayElement.className = 'demo-tour-overlay';
-    this.overlayElement.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 9998;
-      animation: fadeIn 0.3s ease-out;
-    `;
     document.body.appendChild(this.overlayElement);
   }
 
@@ -478,12 +468,22 @@ export class DemoModal {
     }
 
     if (this.overlayElement) {
+      // Immediately disable pointer events to prevent blocking
+      this.overlayElement.style.pointerEvents = 'none';
       this.overlayElement.style.opacity = '0';
+
       setTimeout(() => {
         if (this.overlayElement && this.overlayElement.parentNode) {
           this.overlayElement.parentNode.removeChild(this.overlayElement);
         }
         this.overlayElement = null;
+
+        // Clean up any stray demo elements
+        document.querySelectorAll('.demo-tour-overlay, .demo-tooltip, .demo-command-tooltip').forEach(el => {
+          if (el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        });
 
         // Resolve promise AFTER overlay is fully removed
         if (this.resolvePromise) {

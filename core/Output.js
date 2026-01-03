@@ -96,6 +96,15 @@ export class DOMOutput {
         newInput.focus();
       }
       this.scrollToBottom();
+
+      // Additional delayed focus and scroll for reliability
+      setTimeout(() => {
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.focus();
+        }
+        this.scrollToBottom();
+      }, 50);
     } catch (error) {
       console.error('Error adding prompt:', error);
     }
@@ -108,11 +117,16 @@ export class DOMOutput {
       this.contentElement = document.getElementById(this.contentId);
 
       if (this.contentElement) {
-        // Use requestAnimationFrame to ensure DOM has updated before scrolling
+        // Use double requestAnimationFrame for more reliable scrolling
+        // First frame: DOM updates are applied
         requestAnimationFrame(() => {
-          if (this.contentElement) {
-            this.contentElement.scrollTop = this.contentElement.scrollHeight;
-          }
+          // Second frame: Layout is calculated
+          requestAnimationFrame(() => {
+            this.contentElement = document.getElementById(this.contentId);
+            if (this.contentElement) {
+              this.contentElement.scrollTop = this.contentElement.scrollHeight;
+            }
+          });
         });
       }
     } catch (error) {

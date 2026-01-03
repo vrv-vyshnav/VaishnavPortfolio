@@ -420,11 +420,17 @@ export class Terminal {
       }
       
       this.history.add(commandLine);
-      
+
     } catch (error) {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
       this.output.addPrompt();
+
+      // Additional scroll after a short delay to ensure prompt is visible
+      // Especially important for commands that output a lot of content
+      setTimeout(() => {
+        this.output.scrollToBottom();
+      }, 100);
     }
   }
 

@@ -17,11 +17,17 @@ export class DemoCommand extends Command {
       const modal = new DemoModal(terminalManager);
       const result = await modal.show();
 
+      // Wait a bit for DOM to fully settle after modal closes
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Execute help command after modal is fully closed
       const helpCommand = context.commandRegistry.get('help');
       if (helpCommand) {
         await helpCommand.execute([], context);
       }
+
+      // Additional delay to ensure help output is rendered
+      await new Promise(resolve => setTimeout(resolve, 50));
     } catch (error) {
       console.error('Demo tour error:', error);
       context.output.write('<span class="error">Demo failed: ' + error.message + '</span>');
