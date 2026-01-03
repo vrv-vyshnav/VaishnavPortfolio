@@ -420,11 +420,23 @@ export class Terminal {
       }
       
       this.history.add(commandLine);
-      
+
     } catch (error) {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
-      this.output.addPrompt();
+      const isDemoActive = window.DemoManager && window.DemoManager.isAnyDemoActive && window.DemoManager.isAnyDemoActive();
+
+      if (!isDemoActive) {
+        this.output.addPrompt();
+
+        setTimeout(() => {
+          this.output.scrollToBottom();
+        }, 150);
+
+        setTimeout(() => {
+          this.output.scrollToBottom();
+        }, 300);
+      }
     }
   }
 
@@ -523,8 +535,6 @@ export class Terminal {
       if (this.initTimeout) {
         clearTimeout(this.initTimeout);
       }
-      
-      console.log('Terminal cleanup completed');
     } catch (error) {
       console.error('Error during terminal cleanup:', error);
     }

@@ -4,10 +4,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
   z-index: 9998;
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.4s ease-out;
   transition: opacity 0.3s ease-out;
+  backdrop-filter: blur(4px);
 }
 
 .demo-tooltip {
@@ -23,15 +24,17 @@
   max-width: 800px;
   width: 90%;
   max-height: 90vh;
-  animation: fadeIn 0.3s ease-out;
+  animation: popupFromCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .demo-command-content {
   background: linear-gradient(145deg, #161b22, #1a1f2e);
   border: 1px solid #30363d;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+              0 0 0 1px rgba(88, 166, 255, 0.1),
+              0 0 40px rgba(0, 255, 0, 0.05);
   font-family: 'JetBrains Mono', monospace;
   max-height: 90vh;
   overflow-y: auto;
@@ -100,10 +103,17 @@
   color: #000;
 }
 
-.demo-btn-primary:hover {
+.demo-btn-primary:hover:not(:disabled) {
   background: #58a6ff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+}
+
+.demo-btn-primary:disabled {
+  background: #666;
+  color: #333;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .demo-btn-secondary {
@@ -112,8 +122,15 @@
   border: 1px solid #58a6ff;
 }
 
-.demo-btn-secondary:hover {
+.demo-btn-secondary:hover:not(:disabled) {
   background: rgba(88, 166, 255, 0.1);
+}
+
+.demo-btn-secondary:disabled {
+  color: #666;
+  border-color: #666;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .demo-tooltip-hint {
@@ -138,6 +155,21 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes popupFromCenter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -276,10 +308,16 @@
 @media (prefers-reduced-motion: reduce) {
   .demo-tour-overlay,
   .demo-tooltip,
+  .demo-command-tooltip,
   .demo-highlight,
   .demo-btn-primary,
   .demo-btn-secondary {
-    animation: none;
+    animation: none !important;
     transition: none;
+  }
+
+  .demo-command-tooltip {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
