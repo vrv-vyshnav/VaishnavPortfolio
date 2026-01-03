@@ -17,6 +17,7 @@ export class DemoCommand extends Command {
       const modal = new DemoModal(terminalManager);
       const result = await modal.show();
 
+      // Execute help command after modal is fully closed
       const helpCommand = context.commandRegistry.get('help');
       if (helpCommand) {
         await helpCommand.execute([], context);

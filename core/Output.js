@@ -38,7 +38,7 @@ export class DOMOutput {
       if (currentInput) currentInput.remove();
 
       this.contentElement.appendChild(output);
-      // this.scrollToBottom();
+      this.scrollToBottom();
     } catch (error) {
       console.error('Error writing to terminal:', error);
       // Fallback to plain text if HTML sanitization fails
@@ -46,7 +46,7 @@ export class DOMOutput {
       output.className = 'output';
       output.textContent = text;
       this.contentElement.appendChild(output);
-      // this.scrollToBottom();
+      this.scrollToBottom();
     }
   }
 
@@ -89,12 +89,13 @@ export class DOMOutput {
       `;
       
       this.contentElement.appendChild(promptLine);
-      
+
+      // Focus input and scroll to bottom
       const newInput = document.getElementById(inputId);
       if (newInput) {
         newInput.focus();
       }
-      // this.scrollToBottom();
+      this.scrollToBottom();
     } catch (error) {
       console.error('Error adding prompt:', error);
     }
@@ -102,15 +103,20 @@ export class DOMOutput {
 
   // Scroll the terminal content to the bottom
   scrollToBottom() {
-    // try {
-    //   // Re-fetch the element in case it was recreated
-    //   this.contentElement = document.getElementById(this.contentId);
-    //   
-    //   if (this.contentElement) {
-    //     this.contentElement.scrollTop = this.contentElement.scrollHeight;
-    //   }
-    // } catch (error) {
-    //   console.error('Error scrolling to bottom:', error);
-    // }
+    try {
+      // Re-fetch the element in case it was recreated
+      this.contentElement = document.getElementById(this.contentId);
+
+      if (this.contentElement) {
+        // Use requestAnimationFrame to ensure DOM has updated before scrolling
+        requestAnimationFrame(() => {
+          if (this.contentElement) {
+            this.contentElement.scrollTop = this.contentElement.scrollHeight;
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error scrolling to bottom:', error);
+    }
   }
 }

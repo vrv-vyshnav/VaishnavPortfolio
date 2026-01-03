@@ -484,18 +484,28 @@ export class DemoModal {
           this.overlayElement.parentNode.removeChild(this.overlayElement);
         }
         this.overlayElement = null;
+
+        // Resolve promise AFTER overlay is fully removed
+        if (this.resolvePromise) {
+          this.resolvePromise({
+            skipped,
+            completed: !skipped
+          });
+          this.resolvePromise = null;
+        }
       }, 300);
+    } else {
+      // No overlay, resolve immediately
+      if (this.resolvePromise) {
+        this.resolvePromise({
+          skipped,
+          completed: !skipped
+        });
+        this.resolvePromise = null;
+      }
     }
 
     this.removeEventListeners();
-
-    if (this.resolvePromise) {
-      this.resolvePromise({
-        skipped,
-        completed: !skipped
-      });
-      this.resolvePromise = null;
-    }
   }
 
   delay(ms) {
