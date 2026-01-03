@@ -79,14 +79,6 @@ export class RealSystemMetrics {
       if (memoryFill) {
         memoryFill.style.width = `${percentage}%`;
       }
-      
-      // Debug output
-      console.log('Memory Debug:', {
-        used: usedMB,
-        total: totalMB,
-        limit: limitMB,
-        percentage: percentage
-      });
     } else {
       this.updateElement('memory-usage', 'N/A');
       this.updateElement('memory-details', 'Chrome/Edge only');
@@ -162,17 +154,8 @@ export class RealSystemMetrics {
         
         const storageFill = document.getElementById('storage-fill');
         if (storageFill) {
-          storageFill.style.width = `${Math.max(2, percentage)}%`; // Min 2% for visibility
+          storageFill.style.width = `${Math.max(2, percentage)}%`;
         }
-        
-        // Debug output
-        console.log('Storage Debug:', {
-          usedMB: usedMB,
-          quotaGB: quotaGB,
-          percentage: percentage,
-          usedBytes: usedBytes,
-          quotaBytes: quotaBytes
-        });
       } catch (error) {
         console.error('Storage API error:', error);
         this.updateElement('storage-used', 'Error');

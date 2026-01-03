@@ -103,10 +103,17 @@
   color: #000;
 }
 
-.demo-btn-primary:hover {
+.demo-btn-primary:hover:not(:disabled) {
   background: #58a6ff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+}
+
+.demo-btn-primary:disabled {
+  background: #666;
+  color: #333;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .demo-btn-secondary {
@@ -115,8 +122,15 @@
   border: 1px solid #58a6ff;
 }
 
-.demo-btn-secondary:hover {
+.demo-btn-secondary:hover:not(:disabled) {
   background: rgba(88, 166, 255, 0.1);
+}
+
+.demo-btn-secondary:disabled {
+  color: #666;
+  border-color: #666;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .demo-tooltip-hint {

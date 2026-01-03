@@ -424,13 +424,19 @@ export class Terminal {
     } catch (error) {
       this.errorHandler.handleError(error, 'command_execution');
     } finally {
-      this.output.addPrompt();
+      const isDemoActive = window.DemoManager && window.DemoManager.isAnyDemoActive && window.DemoManager.isAnyDemoActive();
 
-      // Additional scroll after a short delay to ensure prompt is visible
-      // Especially important for commands that output a lot of content
-      setTimeout(() => {
-        this.output.scrollToBottom();
-      }, 100);
+      if (!isDemoActive) {
+        this.output.addPrompt();
+
+        setTimeout(() => {
+          this.output.scrollToBottom();
+        }, 150);
+
+        setTimeout(() => {
+          this.output.scrollToBottom();
+        }, 300);
+      }
     }
   }
 
@@ -529,8 +535,6 @@ export class Terminal {
       if (this.initTimeout) {
         clearTimeout(this.initTimeout);
       }
-      
-      console.log('Terminal cleanup completed');
     } catch (error) {
       console.error('Error during terminal cleanup:', error);
     }

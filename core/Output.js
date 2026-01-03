@@ -2,22 +2,19 @@ import { SecurityManager } from '../utils/security.js';
 
 export class DOMOutput {
   constructor(contentId) {
-    this.contentId = contentId;  // Store the content ID
+    this.contentId = contentId;
     this.contentElement = document.getElementById(contentId);
-    this.fileSystem = null;  // Will hold the file system instance
+    this.fileSystem = null;
   }
 
-  // Set the file system to interact with
   setFileSystem(fileSystem) {
     this.fileSystem = fileSystem;
   }
 
-  // Write text to the terminal
   write(text) {
     try {
-      // Re-fetch the element in case it was recreated
       this.contentElement = document.getElementById(this.contentId);
-      
+
       if (!this.contentElement) {
         console.error('Content element not found');
         return;
@@ -41,7 +38,6 @@ export class DOMOutput {
       this.scrollToBottom();
     } catch (error) {
       console.error('Error writing to terminal:', error);
-      // Fallback to plain text if HTML sanitization fails
       const output = document.createElement('div');
       output.className = 'output';
       output.textContent = text;
@@ -50,13 +46,10 @@ export class DOMOutput {
     }
   }
 
-
-  // Clear the terminal content
   clear() {
     try {
-      // Re-fetch the element in case it was recreated
       this.contentElement = document.getElementById(this.contentId);
-      
+
       if (this.contentElement) {
         this.contentElement.innerHTML = '';
       }
@@ -65,21 +58,23 @@ export class DOMOutput {
     }
   }
 
-  // Add the command prompt with input field
   addPrompt() {
     try {
-      // Re-fetch the element in case it was recreated
       this.contentElement = document.getElementById(this.contentId);
-      
+
       if (!this.contentElement) {
         console.error('Content element not found');
         return;
       }
 
+      const existingPrompt = this.contentElement.querySelector('.command-line');
+      if (existingPrompt) {
+        existingPrompt.remove();
+      }
+
       const promptLine = document.createElement('div');
       promptLine.className = 'command-line';
-      
-      // Generate a unique ID for the input field based on the content ID
+
       const inputId = `${this.contentId}-input`;
       const promptText = this.fileSystem ? this.fileSystem.getPrompt() : 'user@system:~$';
       promptLine.innerHTML = `
@@ -87,40 +82,44 @@ export class DOMOutput {
         <input type="text" class="user-input" id="${inputId}" autofocus autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
         <span class="cursor">█</span>
       `;
-      
+
       this.contentElement.appendChild(promptLine);
 
-      // Focus input and scroll to bottom
       const newInput = document.getElementById(inputId);
       if (newInput) {
         newInput.focus();
+        newInput.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
       this.scrollToBottom();
 
-      // Additional delayed focus and scroll for reliability
       setTimeout(() => {
         const input = document.getElementById(inputId);
         if (input) {
           input.focus();
+          input.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
         this.scrollToBottom();
-      }, 50);
+      }, 100);
+
+      setTimeout(() => {
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.focus();
+          input.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+        this.scrollToBottom();
+      }, 200);
     } catch (error) {
       console.error('Error adding prompt:', error);
     }
   }
 
-  // Scroll the terminal content to the bottom
   scrollToBottom() {
     try {
-      // Re-fetch the element in case it was recreated
       this.contentElement = document.getElementById(this.contentId);
 
       if (this.contentElement) {
-        // Use double requestAnimationFrame for more reliable scrolling
-        // First frame: DOM updates are applied
         requestAnimationFrame(() => {
-          // Second frame: Layout is calculated
           requestAnimationFrame(() => {
             this.contentElement = document.getElementById(this.contentId);
             if (this.contentElement) {
@@ -132,5 +131,52 @@ export class DOMOutput {
     } catch (error) {
       console.error('Error scrolling to bottom:', error);
     }
+  }
+
+  ensurePromptVisible() {
+    return new Promise((resolve) => {
+      try {
+        this.contentElement = document.getElementById(this.contentId);
+
+        if (!this.contentElement) {
+          console.error('Content element not found');
+          resolve();
+          return;
+        }
+
+        const existingPrompt = this.contentElement.querySelector('.command-line');
+        if (existingPrompt) {
+          this.scrollToBottom();
+          setTimeout(() => this.scrollToBottom(), 50);
+          resolve();
+          return;
+        }
+
+        const observer = new MutationObserver(() => {
+          const prompt = this.contentElement.querySelector('.command-line');
+          if (prompt) {
+            observer.disconnect();
+            this.scrollToBottom();
+            setTimeout(() => this.scrollToBottom(), 50);
+            resolve();
+          }
+        });
+
+        observer.observe(this.contentElement, {
+          childList: true,
+          subtree: true
+        });
+
+        setTimeout(() => {
+          observer.disconnect();
+          this.scrollToBottom();
+          resolve();
+        }, 500);
+      } catch (error) {
+        console.error('Error ensuring prompt visible:', error);
+        this.scrollToBottom();
+        resolve();
+      }
+    });
   }
 }

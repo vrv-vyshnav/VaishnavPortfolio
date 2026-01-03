@@ -1,5 +1,5 @@
 import { Command } from '../core/Command.js';
-import { DemoModal } from '../utils/DemoModal.js';
+import { DemoManager } from '../utils/DemoManager.js';
 
 export class DemoCommand extends Command {
   constructor() {
@@ -14,20 +14,29 @@ export class DemoCommand extends Command {
     }
 
     try {
-      const modal = new DemoModal(terminalManager);
-      const result = await modal.show();
+      const result = await DemoManager.startDemo(terminalManager);
 
-      // Wait a bit for DOM to fully settle after modal closes
+      if (result && result.forced) {
+        return;
+      }
+
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Execute help command after modal is fully closed
       const helpCommand = context.commandRegistry.get('help');
       if (helpCommand) {
         await helpCommand.execute([], context);
       }
 
-      // Additional delay to ensure help output is rendered
       await new Promise(resolve => setTimeout(resolve, 50));
+
+      if (context.output && context.output.addPrompt) {
+        context.output.addPrompt();
+        setTimeout(() => {
+          if (context.output.scrollToBottom) {
+            context.output.scrollToBottom();
+          }
+        }, 50);
+      }
     } catch (error) {
       console.error('Demo tour error:', error);
       context.output.write('<span class="error">Demo failed: ' + error.message + '</span>');

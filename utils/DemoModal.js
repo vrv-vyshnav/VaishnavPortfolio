@@ -9,6 +9,8 @@ export class DemoModal {
     this.tooltipElement = null;
     this.escapeHandler = null;
     this.resolvePromise = null;
+    this.isTransitioning = false;
+    this.cleanupTimer = null;
 
     this.steps = [
       {
@@ -329,13 +331,11 @@ export class DemoModal {
         fileSystem: terminal.fileSystem,
 
         write: function(text) {
-          console.log('Mock write called:', text);
           capturedOutputs.push(text);
 
           this.contentElement = document.getElementById(this.contentId);
 
           if (!this.contentElement) {
-            console.error('Temp container not found!');
             return;
           }
 
@@ -372,8 +372,6 @@ export class DemoModal {
 
       terminal.output = mockOutput;
 
-      console.log('Executing command:', command);
-
       const args = command.split(' ');
       const commandName = args[0];
       const params = args.slice(1);
@@ -408,9 +406,6 @@ export class DemoModal {
 
       document.body.removeChild(tempContainer);
 
-      console.log('Total captured outputs:', capturedOutputs.length);
-      console.log('Temp container HTML:', capturedHTML);
-
       if (capturedHTML.trim()) {
         outputDiv.innerHTML = capturedHTML;
       } else if (capturedOutputs.length > 0) {
@@ -425,8 +420,27 @@ export class DemoModal {
   }
 
   nextStep() {
+    if (this.isTransitioning) {
+      return;
+    }
+
+    this.isTransitioning = true;
+
+    const nextBtn = document.getElementById('demo-next-btn');
+    const skipBtn = document.getElementById('demo-skip-btn');
+    if (nextBtn) nextBtn.disabled = true;
+    if (skipBtn) skipBtn.disabled = true;
+
     this.currentStep++;
     this.showStep(this.currentStep);
+
+    setTimeout(() => {
+      this.isTransitioning = false;
+      const nextBtn = document.getElementById('demo-next-btn');
+      const skipBtn = document.getElementById('demo-skip-btn');
+      if (nextBtn) nextBtn.disabled = false;
+      if (skipBtn) skipBtn.disabled = false;
+    }, 300);
   }
 
   skip() {
@@ -468,44 +482,91 @@ export class DemoModal {
     }
 
     if (this.overlayElement) {
-      // Immediately disable pointer events to prevent blocking
       this.overlayElement.style.pointerEvents = 'none';
       this.overlayElement.style.opacity = '0';
 
-      setTimeout(() => {
-        if (this.overlayElement && this.overlayElement.parentNode) {
-          this.overlayElement.parentNode.removeChild(this.overlayElement);
-        }
-        this.overlayElement = null;
-
-        // Clean up any stray demo elements
-        document.querySelectorAll('.demo-tour-overlay, .demo-tooltip, .demo-command-tooltip').forEach(el => {
-          if (el.parentNode) {
-            el.parentNode.removeChild(el);
-          }
-        });
-
-        // Resolve promise AFTER overlay is fully removed
-        if (this.resolvePromise) {
-          this.resolvePromise({
-            skipped,
-            completed: !skipped
-          });
-          this.resolvePromise = null;
-        }
+      this.cleanupTimer = setTimeout(() => {
+        this.finalizeCleanup(skipped);
       }, 300);
     } else {
-      // No overlay, resolve immediately
-      if (this.resolvePromise) {
-        this.resolvePromise({
-          skipped,
-          completed: !skipped
-        });
-        this.resolvePromise = null;
-      }
+      this.finalizeCleanup(skipped);
     }
 
     this.removeEventListeners();
+  }
+
+  finalizeCleanup(skipped) {
+    if (this.overlayElement && this.overlayElement.parentNode) {
+      this.overlayElement.parentNode.removeChild(this.overlayElement);
+    }
+    this.overlayElement = null;
+
+    document.querySelectorAll('.demo-tour-overlay, .demo-tooltip, .demo-command-tooltip').forEach(el => {
+      if (el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    });
+
+    if (this.resolvePromise) {
+      this.resolvePromise({
+        skipped,
+        completed: !skipped
+      });
+      this.resolvePromise = null;
+    }
+
+    this.cleanupTimer = null;
+  }
+
+  forceClose() {
+    if (this.cleanupTimer) {
+      clearTimeout(this.cleanupTimer);
+      this.cleanupTimer = null;
+    }
+
+    this.isActive = false;
+
+    document.querySelectorAll('.demo-highlight').forEach(el => {
+      el.classList.remove('demo-highlight');
+    });
+
+    if (this.tooltipElement && this.tooltipElement.parentNode) {
+      this.tooltipElement.parentNode.removeChild(this.tooltipElement);
+      this.tooltipElement = null;
+    }
+
+    if (this.overlayElement && this.overlayElement.parentNode) {
+      this.overlayElement.parentNode.removeChild(this.overlayElement);
+      this.overlayElement = null;
+    }
+
+    document.querySelectorAll('.demo-tour-overlay, .demo-tooltip, .demo-command-tooltip').forEach(el => {
+      if (el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    });
+
+    this.removeEventListeners();
+
+    if (this.resolvePromise) {
+      this.resolvePromise({
+        skipped: true,
+        forced: true,
+        completed: false
+      });
+      this.resolvePromise = null;
+    }
+  }
+
+  reset() {
+    this.currentStep = 0;
+    this.isActive = false;
+    this.overlayElement = null;
+    this.tooltipElement = null;
+    this.escapeHandler = null;
+    this.resolvePromise = null;
+    this.isTransitioning = false;
+    this.cleanupTimer = null;
   }
 
   delay(ms) {
